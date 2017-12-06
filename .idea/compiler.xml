@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="comparator_main" target="1.8" />
+      <module name="comparator_test" target="1.8" />
+      <module name="fetcher_main" target="1.8" />
+      <module name="fetcher_test" target="1.8" />
+      <module name="mosti_main" target="1.8" />
+      <module name="mosti_test" target="1.8" />
+      <module name="notifier_main" target="1.8" />
+      <module name="notifier_test" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/comparator.iml" filepath="$PROJECT_DIR$/.idea/modules/comparator.iml" group="comparator" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/comparator/comparator_main.iml" filepath="$PROJECT_DIR$/.idea/modules/comparator/comparator_main.iml" group="comparator" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/comparator/comparator_test.iml" filepath="$PROJECT_DIR$/.idea/modules/comparator/comparator_test.iml" group="comparator" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/fetcher/fetcher.iml" filepath="$PROJECT_DIR$/.idea/modules/fetcher/fetcher.iml" group="fetcher" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/fetcher/fetcher_main.iml" filepath="$PROJECT_DIR$/.idea/modules/fetcher/fetcher_main.iml" group="fetcher" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/fetcher/fetcher_test.iml" filepath="$PROJECT_DIR$/.idea/modules/fetcher/fetcher_test.iml" group="fetcher" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mosti.iml" filepath="$PROJECT_DIR$/.idea/modules/mosti.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mosti_main.iml" filepath="$PROJECT_DIR$/.idea/modules/mosti_main.iml" group="mosti" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mosti_test.iml" filepath="$PROJECT_DIR$/.idea/modules/mosti_test.iml" group="mosti" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/notifier.iml" filepath="$PROJECT_DIR$/.idea/modules/notifier.iml" group="notifier" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/notifier/notifier_main.iml" filepath="$PROJECT_DIR$/.idea/modules/notifier/notifier_main.iml" group="notifier" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/notifier/notifier_test.iml" filepath="$PROJECT_DIR$/.idea/modules/notifier/notifier_test.iml" group="notifier" />
+    </modules>
+  </component>
+</project>
