@@ -4,7 +4,7 @@ import io.reactivex.disposables.Disposable;
 public class FetcherObserver implements Observer{
     @Override
     public void onSubscribe(Disposable d) {
-        
+
     }
 
     @Override
