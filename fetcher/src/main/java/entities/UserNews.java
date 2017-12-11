@@ -1,6 +1,8 @@
 package entities;
 
 import java.util.List;
+import model.Article;
+import model.Tweet;
 
 public class UserNews {
     private Long userId;

@@ -3,11 +3,14 @@ package model;
 import javax.persistence.*;
 import java.util.Set;
 
+@Entity
+@Table(name = Tag.TABLE_NAME)
 public class Tag {
+    public static final String TABLE_NAME = "tag";
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
-    @Column(name = Tag.Columns.ID)
+    @Column(name = Columns.ID)
     private long id;
 
 
@@ -15,10 +18,14 @@ public class Tag {
     private String tagName;
 
 
+    @ManyToMany(mappedBy = "tags")
+    private Set<Tweet> tweets;
+
+
     @ManyToMany
     @JoinTable(
             name = "user_tag",
-            joinColumns = @JoinColumn(name=Columns.ID,referencedColumnName = User.Columns.ID),
+            joinColumns = @JoinColumn(name = Columns.ID, referencedColumnName = User.Columns.ID),
             inverseJoinColumns = @JoinColumn(name = User.Columns.ID, referencedColumnName = Columns.ID)
     )
     private Set<User> users;

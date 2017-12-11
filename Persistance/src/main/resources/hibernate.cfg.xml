@@ -7,9 +7,9 @@
     <session-factory>
         <!-- Database connection settings -->
         <property name="connection.driver_class">org.postgresql.Driver</property>
-        <property name="connection.url">jdbc:postgresql://localhost:5433/hibernatedb</property>
+        <property name="connection.url">jdbc:postgresql://localhost:5433/mostidb</property>
         <property name="connection.username">postgres</property>
-        <property name="connection.password">password</property>
+        <property name="connection.password">postgres</property>
 
         <!-- JDBC connection pool (use the built-in) -->
         <property name="connection.pool_size">1</property>
@@ -26,6 +26,11 @@
 
         <!-- Drop and re-create the database schema on startup -->
         <property name="hbm2ddl.auto">create</property>
+
+        <!-- Class mappings -->
+        <mapping class="model.Tweet"/>
+        <mapping class="model.User"/>
+        <mapping class="model.Tag"/>
 
     </session-factory>
 </hibernate-configuration>
