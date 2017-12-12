@@ -2,4 +2,5 @@ rootProject.name = 'mosti'
 include 'comparator'
 include 'fetcher'
 include 'notifier'
+include 'Persistance'
 
