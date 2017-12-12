@@ -1,5 +1,6 @@
 package dao;
 
+import model.Article;
 import model.Tweet;
 import model.User;
 
@@ -27,6 +28,20 @@ public class UserDao extends GenericDao<User> {
     public Iterable<Tweet> getTweets(User user){
         return null;
     }
+
+    public Iterable<Article> getArticles(User user){
+        return null;
+    }
+
+    public Iterable<Article> getArticlesToSend(User user){
+        return null;
+    }
+
+    public Iterable<Article> getArticlesToSend(long userId){
+        return null;
+    }
+
+
 
 
 }

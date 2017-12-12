@@ -1,11 +1,12 @@
 package model;
 
-
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(name = Tag.TABLE_NAME)
+@Table(name = Keyword.TABLE_NAME, uniqueConstraints = {
+        @UniqueConstraint(columnNames = Keyword.Columns.WORD)
+})
 public class Keyword {
     public static final String TABLE_NAME = "keyword";
 
@@ -36,24 +37,32 @@ public class Keyword {
         return word;
     }
 
-    public void setWord(String word) {
-        this.word = word;
-    }
-
     public Set<Article> getArticles() {
         return articles;
-    }
-
-    public void setArticles(Set<Article> articles) {
-        this.articles = articles;
     }
 
     public Set<User> getUsers() {
         return users;
     }
 
+    public void setWord(String word) {
+        this.word = word;
+    }
+
+    public void setArticles(Set<Article> articles) {
+        this.articles = articles;
+    }
+
     public void setUsers(Set<User> users) {
         this.users = users;
+    }
+
+    public void setArticle(Article article) {
+        this.articles.add(article);
+    }
+
+    public void setUser(User user) {
+        this.users.add(user);
     }
 
     public Keyword() {

@@ -4,7 +4,9 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(name = Tag.TABLE_NAME)
+@Table(name = Tag.TABLE_NAME, uniqueConstraints = {
+        @UniqueConstraint(columnNames = Tag.Columns.TAGNAME)
+})
 public class Tag {
     public static final String TABLE_NAME = "tag";
 
@@ -21,31 +23,6 @@ public class Tag {
     @ManyToMany(mappedBy = "tags")
     private Set<Tweet> tweets;
 
-
-    public String getTagName() {
-        return tagName;
-    }
-
-    public void setTagName(String tagName) {
-        this.tagName = tagName;
-    }
-
-    public Set<Tweet> getTweets() {
-        return tweets;
-    }
-
-    public void setTweets(Set<Tweet> tweets) {
-        this.tweets = tweets;
-    }
-
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
-
     @ManyToMany
     @JoinTable(
             name = "user_tag",
@@ -54,8 +31,39 @@ public class Tag {
     )
     private Set<User> users;
 
-
     public Tag() {
+    }
+
+    public String getTagName() {
+        return tagName;
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public Set<Tweet> getTweets() {
+        return tweets;
+    }
+
+    public void setTagName(String tagName) {
+        this.tagName = tagName;
+    }
+
+    public void setTweets(Set<Tweet> tweets) {
+        this.tweets = tweets;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
+    }
+
+    public void setTweet(Tweet tweet) {
+        this.tweets.add(tweet);
+    }
+
+    public void setUser(User user) {
+        this.users.add(user);
     }
 
 
