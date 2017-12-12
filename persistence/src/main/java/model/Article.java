@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = Article.TABLE_NAME)
-public class Article {
+public class Article implements News {
     public static final String TABLE_NAME = "article";
 
 
@@ -98,6 +98,11 @@ public class Article {
 
     public void setKeyword(Keyword keyword) {
         this.keywords.add(keyword);
+    }
+
+    @Override
+    public String toOutputFormat() {
+        return this.toString();
     }
 
 

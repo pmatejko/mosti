@@ -2,18 +2,17 @@ package entities;
 
 import java.util.List;
 import model.Article;
+import model.News;
 import model.Tweet;
 
 public class UserNews {
     private Long userId;
-    private List<Article> articleList;
-    private List<Tweet> tweetList;
+    private List<News> newsList;
 
 
-    public UserNews(Long userId, List<Article> articleList, List<Tweet> tweetList) {
+    public UserNews(Long userId, List<News> articleList) {
         this.userId = userId;
-        this.articleList = articleList;
-        this.tweetList = tweetList;
+        this.newsList = articleList;
     }
 
 
@@ -25,19 +24,11 @@ public class UserNews {
         this.userId = userId;
     }
 
-    public List<Article> getArticleList() {
-        return articleList;
+    public List<News> getNewsList() {
+        return newsList;
     }
 
-    public void setArticleList(List<Article> articleList) {
-        this.articleList = articleList;
-    }
-
-    public List<Tweet> getTweetList() {
-        return tweetList;
-    }
-
-    public void setTweetList(List<Tweet> tweetList) {
-        this.tweetList = tweetList;
+    public void setNewsList(List<News> newsList) {
+        this.newsList = newsList;
     }
 }
