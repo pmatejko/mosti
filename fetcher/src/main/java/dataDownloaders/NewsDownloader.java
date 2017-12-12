@@ -1,4 +1,4 @@
-package entities.DataDownloaders;
+package dataDownloaders;
 
 import javax.json.JsonObject;
 import java.io.IOException;
