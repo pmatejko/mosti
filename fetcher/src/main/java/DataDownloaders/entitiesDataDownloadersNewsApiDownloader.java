@@ -1,4 +1,4 @@
-package entities.DataDownloaders;
+package DataDownloaders;
 
 import java.net.*;
 import java.io.*;
