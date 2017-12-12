@@ -7,7 +7,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = Tweet.TABLE_NAME)
-public class Tweet {
+public class Tweet implements News{
     public static final String TABLE_NAME = "tweet";
 
 
@@ -90,6 +90,11 @@ public class Tweet {
 
     public void setTag(Tag tag) {
         this.tags.add(tag);
+    }
+
+    @Override
+    public String toOutputFormat() {
+        return this.toString();
     }
 
 

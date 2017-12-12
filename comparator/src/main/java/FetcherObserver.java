@@ -1,32 +1,28 @@
+import dao.INewsDao;
 import entities.UserNews;
-import interfaces.IComparator;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import model.Article;
+import model.News;
 import model.Tweet;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class FetcherObserver implements Observer<UserNews>{
-    private IComparator<Article> articleIComparator;  // will be injected by guice
-    private IComparator<Tweet>   tweetIComparator;   // will be injected by guice
+    private INewsDao newsDao; //guice
 
     @Override
     public void onSubscribe(Disposable d) {
-
     }
 
     @Override
     public void onNext(UserNews userNews) {
-        List<Article> articleList = userNews.getArticleList()
+        List<News> newsList = userNews.getNewsList()
                 .stream()
-                .filter(articleIComparator::compareIfNew)
+                .filter(newsDao::isNew)
                 .collect(Collectors.toList());
-        List<Tweet> tweetList = userNews.getTweetList()
-                .stream()
-                .filter(tweetIComparator::compareIfNew)
-                .collect(Collectors.toList());
+
     }
 
 
