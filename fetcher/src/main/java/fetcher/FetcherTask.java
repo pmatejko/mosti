@@ -1,10 +1,10 @@
 package fetcher;
 
-import entities.Article;
-import entities.Tweet;
 import entities.UserNews;
 import entities.UserSubscription;
 import io.reactivex.Observer;
+import model.Article;
+import model.Tweet;
 
 import java.util.List;
 import java.util.TimerTask;

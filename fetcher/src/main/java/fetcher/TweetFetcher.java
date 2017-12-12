@@ -1,7 +1,7 @@
 package fetcher;
 
-import entities.Tweet;
 import entities.TwitterSubscription;
+import model.Tweet;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package fetcher;
 
-import entities.Article;
 import entities.NewsSiteSubscription;
+import model.Article;
 
 import java.util.List;
 
