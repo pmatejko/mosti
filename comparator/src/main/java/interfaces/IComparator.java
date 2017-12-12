@@ -1,4 +1,5 @@
 package interfaces;
 
-public interface IComparator {
+public interface IComparator<T> {
+    public boolean compareIfNew(T object);
 }

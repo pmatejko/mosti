@@ -3,6 +3,7 @@ package model;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -24,10 +25,10 @@ public class User {
     private Date interval;
 
     @ManyToMany(mappedBy = "users")
-    private Set<Tag> tags;
+    private Set<Tag> tags = new HashSet<>();
 
     @ManyToMany(mappedBy = "users")
-    private Set<Keyword> keywords;
+    private Set<Keyword> keywords = new HashSet<>();
 
 
     public User() {
