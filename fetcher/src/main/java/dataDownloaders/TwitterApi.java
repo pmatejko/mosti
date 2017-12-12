@@ -1,4 +1,4 @@
-package entities.DataDownloaders;
+package dataDownloaders;
 
 import com.github.scribejava.core.builder.api.DefaultApi10a;
 import com.github.scribejava.core.model.OAuth1RequestToken;
