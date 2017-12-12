@@ -1,6 +1,7 @@
 package model;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -21,7 +22,7 @@ public class Keyword {
 
 
     @ManyToMany(mappedBy = "keywords")
-    private Set<Article> articles;
+    private Set<Article> articles = new HashSet<>();
 
 
     @ManyToMany
@@ -30,7 +31,7 @@ public class Keyword {
             joinColumns = @JoinColumn(name = Columns.ID, referencedColumnName = User.Columns.ID),
             inverseJoinColumns = @JoinColumn(name = User.Columns.ID, referencedColumnName = Columns.ID)
     )
-    private Set<User> users;
+    private Set<User> users = new HashSet<>();
 
 
     public String getWord() {

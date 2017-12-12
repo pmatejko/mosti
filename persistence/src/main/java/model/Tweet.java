@@ -2,6 +2,7 @@ package model;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -34,7 +35,7 @@ public class Tweet {
             joinColumns = @JoinColumn(name = Columns.ID, referencedColumnName = Tag.Columns.ID),
             inverseJoinColumns = @JoinColumn(name = Tag.Columns.ID, referencedColumnName = Columns.ID)
     )
-    private Set<Tag> tags;
+    private Set<Tag> tags = new HashSet<>();
 
 
     public Tweet() {

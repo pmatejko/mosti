@@ -1,6 +1,7 @@
 package model;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -21,7 +22,7 @@ public class Tag {
 
 
     @ManyToMany(mappedBy = "tags")
-    private Set<Tweet> tweets;
+    private Set<Tweet> tweets = new HashSet<>();
 
     @ManyToMany
     @JoinTable(
@@ -29,7 +30,7 @@ public class Tag {
             joinColumns = @JoinColumn(name = Columns.ID, referencedColumnName = User.Columns.ID),
             inverseJoinColumns = @JoinColumn(name = User.Columns.ID, referencedColumnName = Columns.ID)
     )
-    private Set<User> users;
+    private Set<User> users = new HashSet<>();
 
     public Tag() {
     }

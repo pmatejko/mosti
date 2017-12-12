@@ -1,6 +1,7 @@
 package model;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
 
@@ -36,7 +37,7 @@ public class Article {
             joinColumns = @JoinColumn(name = Columns.ID, referencedColumnName = Keyword.Columns.ID),
             inverseJoinColumns = @JoinColumn(name = Keyword.Columns.ID, referencedColumnName = Columns.ID)
     )
-    private Set<Keyword> keywords;
+    private Set<Keyword> keywords = new HashSet<>();
 
     public Article() {
 
