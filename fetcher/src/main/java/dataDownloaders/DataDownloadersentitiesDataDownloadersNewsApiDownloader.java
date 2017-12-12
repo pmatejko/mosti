@@ -1,4 +1,4 @@
-package DataDownloaders;
+package dataDownloaders;
 
 import java.net.*;
 import java.io.*;
