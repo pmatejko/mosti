@@ -7,14 +7,9 @@ import javax.mail.internet.AddressException;
 
 public class SendEmail {
 	
-	public static void main(String[] args) {
-		SendEmail.send("aa", "aa");
-	}
-	
-	public static void send(String title, String content) {    
-		System.out.println("im here");
+	public static void send(String title, String content, String mail) {  
 		try {
-			GoogleMail.Send("smalcerztest", "plemionaa", "smalcerzszymonn@gmail.com", "od szymonga", "kasia jest supix");
+			GoogleMail.Send("smalcerztest", "plemionaa", mail, title, content);
 		} catch (AddressException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
