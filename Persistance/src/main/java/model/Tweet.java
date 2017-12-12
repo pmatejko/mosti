@@ -27,9 +27,51 @@ public class Tweet  {
     @Column(name=Columns.TIMESTAMP,nullable = false)
     private Date timestamp;
 
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public String getAuthor() {
+
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
+    }
+
     @ManyToMany
     @JoinTable(
             name = "tag_tweet",
+
             joinColumns= @JoinColumn(name = Columns.ID, referencedColumnName = Tag.Columns.ID),
             inverseJoinColumns = @JoinColumn(name = Tag.Columns.ID, referencedColumnName = Columns.ID)
     )

@@ -31,6 +31,8 @@
         <mapping class="model.Tweet"/>
         <mapping class="model.User"/>
         <mapping class="model.Tag"/>
+        <mapping class="model.Article"/>
+        <mapping class="model.Keyword"/>
 
     </session-factory>
 </hibernate-configuration>

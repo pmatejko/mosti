@@ -22,6 +22,30 @@ public class Tag {
     private Set<Tweet> tweets;
 
 
+    public String getTagName() {
+        return tagName;
+    }
+
+    public void setTagName(String tagName) {
+        this.tagName = tagName;
+    }
+
+    public Set<Tweet> getTweets() {
+        return tweets;
+    }
+
+    public void setTweets(Set<Tweet> tweets) {
+        this.tweets = tweets;
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
+    }
+
     @ManyToMany
     @JoinTable(
             name = "user_tag",

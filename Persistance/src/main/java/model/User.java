@@ -24,6 +24,40 @@ public class User {
     @ManyToMany(mappedBy = "users")
     private Set<Tag> tags;
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Date getInterval() {
+        return interval;
+    }
+
+    public void setInterval(Date interval) {
+        this.interval = interval;
+    }
+
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
+    }
+
+    public Set<Keyword> getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(Set<Keyword> keywords) {
+        this.keywords = keywords;
+    }
+
+    @ManyToMany(mappedBy = "users")
+    private Set<Keyword> keywords;
 
 
     public User() {
