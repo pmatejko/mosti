@@ -1,4 +1,4 @@
-package entities.DataDownloaders;
+package dataDownloaders;
 
 import java.io.StringReader;
 import java.util.Scanner;
