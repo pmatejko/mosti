@@ -1,9 +1,6 @@
-import java.util.ArrayList;
-import java.util.Iterator;
-
-import notifier.SendEmail;
-import notifier.User.User;
 import notifier.senders.MailSender;
+import notifier.senders.Sendable;
+
 
 public class ExampleTest {
 	
@@ -11,9 +8,14 @@ public class ExampleTest {
 		
 		
 		
-		MailSender mailSender = new MailSender("configGmail.json");
-		mailSender.Send("smalcerzszymonn@gmail.com", "asd", "asd");
-		///home/szymcio/workspace/mosti/notifier/src/main/resources/configGmail.txt
+		
+		
+		@SuppressWarnings("unused")
+		Sendable mailSender = new MailSender("configGmail.json");
+		mailSender.send("smalcerzszymonn@gmail.com", "asddsa", "asddsa");
+//		sms sender ma limit 5ciu wyslan z czego : 3 wykorzystane, wiec lepiej nie wysylac 
+//		Sendable smsSender = new SmsSender();
+//		smsSender.Send("48500703398", "sms", "wyslalo sie");
 		
 		
 //		ArrayList<String> tagsOfSzymon = new ArrayList<>();

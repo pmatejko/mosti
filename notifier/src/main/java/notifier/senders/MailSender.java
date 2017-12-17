@@ -51,6 +51,10 @@ public class MailSender implements Sendable{
 			this.port = (String) jsonObject.get("port");
 			
 			System.out.println(nick);
+			System.out.println(password);
+			System.out.println(host);
+			System.out.println(port);
+
 			
 			reader.close();
 			
@@ -62,7 +66,7 @@ public class MailSender implements Sendable{
 	}
 
 	@SuppressWarnings("restriction")
-	public void Send(String contact, String title, String message) {
+	public void send(String contact, String title, String message) {
         Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
         final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
 
