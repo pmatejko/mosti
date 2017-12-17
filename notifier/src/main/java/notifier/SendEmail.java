@@ -17,5 +17,5 @@ public class SendEmail {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		}
+	}
 }
