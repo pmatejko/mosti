@@ -1,6 +1,6 @@
 package dao;
 
-import model.Article;
+import model.News;
 import model.Keyword;
 
 import java.util.Optional;
@@ -14,7 +14,7 @@ public class KeywordDao extends GenericDao<Keyword>{
         return null;
     }
 
-    public Iterable<Article> getArticles(Keyword keyword){
+    public Iterable<News> getNews(Keyword keyword){
         return null;
     }
 

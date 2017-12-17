@@ -1,16 +1,14 @@
-import dao.INewsDao;
+import dao.NewsDao;
 import entities.UserNews;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
-import model.Article;
 import model.News;
-import model.Tweet;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class FetcherObserver implements Observer<UserNews>{
-    private INewsDao newsDao; //guice
+    private NewsDao newsDao; //guice
 
     @Override
     public void onSubscribe(Disposable d) {

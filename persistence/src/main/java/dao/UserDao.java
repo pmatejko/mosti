@@ -1,7 +1,6 @@
 package dao;
 
-import model.Article;
-import model.Tweet;
+import model.News;
 import model.User;
 
 import java.util.Date;
@@ -13,33 +12,15 @@ public class UserDao extends GenericDao<User> {
         return null;
     }
 
-    public Optional<User> getUserById(long userID){
+    public Iterable<News> getNews(User user){
         return null;
     }
 
-    public Iterable<Tweet> getTweetsToSend(User user){
-    return null;
-    }
-
-    public Iterable<Tweet> getTweetsToSend(long userId){
+    public Iterable<News> getNewsToSend(User user){
         return null;
     }
 
-    public Iterable<Tweet> getTweets(User user){
-        return null;
-    }
 
-    public Iterable<Article> getArticles(User user){
-        return null;
-    }
-
-    public Iterable<Article> getArticlesToSend(User user){
-        return null;
-    }
-
-    public Iterable<Article> getArticlesToSend(long userId){
-        return null;
-    }
 
 
 
