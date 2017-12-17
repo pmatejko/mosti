@@ -1,21 +1,17 @@
-import entities.UserNews;
+import com.google.inject.Singleton;
+import model.UserNewsDTO;
 import interfaces.INotifierObservable;
 import io.reactivex.Observable;
 
-public class UserNewsSupplier implements INotifierObservable<UserNews> {
-    private final static UserNewsSupplier INSTANCE = new UserNewsSupplier();
+@Singleton
+public class UserNewsSupplier implements INotifierObservable<UserNewsDTO> {
 
-    private Observable<UserNews> supplier;
+    private Observable<UserNewsDTO> supplier;
 
-    public static UserNewsSupplier getINSTANCE() {
-        return INSTANCE;
-    }
-    public UserNewsSupplier(){
-        supplier = Observable.empty();
-    }
+
 
     @Override
-    public Observable<UserNews> getUserNews() {
+    public Observable<UserNewsDTO> getUserNews() {
         return supplier;
     }
 }
