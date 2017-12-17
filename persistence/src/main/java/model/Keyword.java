@@ -2,6 +2,8 @@ package model;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -22,7 +24,7 @@ public class Keyword {
 
 
     @ManyToMany(mappedBy = "keywords")
-    private Set<Article> articles = new HashSet<>();
+    private List<News> news = new LinkedList<>();
 
 
     @ManyToMany
@@ -31,18 +33,19 @@ public class Keyword {
             joinColumns = @JoinColumn(name = Columns.ID, referencedColumnName = User.Columns.ID),
             inverseJoinColumns = @JoinColumn(name = User.Columns.ID, referencedColumnName = Columns.ID)
     )
-    private Set<User> users = new HashSet<>();
+    private List<User> users = new LinkedList<>();
 
+    public long getId() { return id; }
 
     public String getWord() {
         return word;
     }
 
-    public Set<Article> getArticles() {
-        return articles;
+    public List<News> getNews() {
+        return news;
     }
 
-    public Set<User> getUsers() {
+    public List<User> getUsers() {
         return users;
     }
 
@@ -50,16 +53,16 @@ public class Keyword {
         this.word = word;
     }
 
-    public void setArticles(Set<Article> articles) {
-        this.articles = articles;
+    public void setNews(List<News> news) {
+        this.news = news;
     }
 
-    public void setUsers(Set<User> users) {
+    public void setUsers(List<User> users) {
         this.users = users;
     }
 
-    public void setArticle(Article article) {
-        this.articles.add(article);
+    public void setArticle(News news) {
+        this.news.add(news);
     }
 
     public void setUser(User user) {

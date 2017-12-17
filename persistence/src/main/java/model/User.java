@@ -2,9 +2,7 @@ package model;
 
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = User.TABLE_NAME, uniqueConstraints = {
@@ -24,11 +22,12 @@ public class User {
     @Column(name = Columns.INTERVAL, nullable = false)
     private Date interval;
 
-    @ManyToMany(mappedBy = "users")
-    private Set<Tag> tags = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Preferences> preferences= new LinkedList<>();
 
     @ManyToMany(mappedBy = "users")
-    private Set<Keyword> keywords = new HashSet<>();
+    private List<Keyword> keywords = new LinkedList<>();
 
 
     public User() {
@@ -42,11 +41,7 @@ public class User {
         return interval;
     }
 
-    public Set<Tag> getTags() {
-        return tags;
-    }
-
-    public Set<Keyword> getKeywords() {
+    public List<Keyword> getKeywords() {
         return keywords;
     }
 
@@ -58,16 +53,10 @@ public class User {
         this.interval = interval;
     }
 
-    public void setTags(Set<Tag> tags) {
-        this.tags = tags;
-    }
+    public long getId() { return id; }
 
-    public void setKeywords(Set<Keyword> keywords) {
+    public void setKeywords(List<Keyword> keywords) {
         this.keywords = keywords;
-    }
-
-    public void setTag(Tag tag) {
-        this.tags.add(tag);
     }
 
     public void setKeyword(Keyword keyword) {
