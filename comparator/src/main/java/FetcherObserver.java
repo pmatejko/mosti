@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class FetcherObserver implements Observer<UserNews>{
+    
     private INewsDao newsDao; //guice
 
     @Override
