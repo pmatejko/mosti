@@ -1,12 +1,12 @@
 package notifier.informer;
 
-import notifier.User.User;
+import model.UserNewsDTO;
 
 public class Informer {
 	
 	
 	public void informUser(UserNewsDTO userNewsDTO) {
-		User user = userNewsDTO.getUser();
+		Object obj = userNewsDTO.getUser();
 	}
 	
 }
