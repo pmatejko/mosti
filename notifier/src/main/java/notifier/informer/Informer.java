@@ -53,7 +53,7 @@ public class Informer {
 		}
 	}
 	
-	public static Informer getInformer() {
+	public static Informer getInstanceOfInformer() {
 		return informer;
 	}
 	
