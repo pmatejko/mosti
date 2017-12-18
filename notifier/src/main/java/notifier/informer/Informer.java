@@ -1,4 +1,4 @@
-package informer;
+package notifier.informer;
 
 import notifier.User.User;
 
