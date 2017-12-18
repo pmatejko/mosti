@@ -1,13 +1,15 @@
 package entities;
 
-import java.util.List;
+
 import model.News;
 
-public class UserNews {
-    private List<News> newsList;
+import java.util.List;
+
+public class NewsDTO {
+    private final List<News> newsList;
 
 
-    public UserNews(Long userId, List<News> newsList) {
+    public NewsDTO(List<News> newsList) {
         this.newsList = newsList;
     }
 
@@ -16,7 +18,12 @@ public class UserNews {
         return newsList;
     }
 
-    public void setNewsList(List<News> newsList) {
-        this.newsList = newsList;
+    public void addNews(News news){
+        this.newsList.add(news);
     }
+
+
 }
+
+
+
