@@ -13,4 +13,7 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     compile group: 'org.hibernate', name: 'hibernate-core', version: '5.2.12.Final'
     compile group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.1.7'
+    // https://mvnrepository.com/artifact/com.google.inject/guice
+    compile group: 'com.google.inject', name: 'guice', version: '4.0'
+
 }
