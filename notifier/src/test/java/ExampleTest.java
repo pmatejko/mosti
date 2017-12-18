@@ -14,7 +14,7 @@ public class ExampleTest {
 		Sendable mailSender = new MailSender("configGmail.json");
 		mailSender.send("smalcerzszymonn@gmail.com", "asddsa", "asddsa");
 //		sms sender ma limit 5ciu wyslan z czego : 3 wykorzystane, wiec lepiej nie wysylac 
-//		Sendable smsSender = new SmsSender();
+//		Sendable smsSender = new SmsSender("configVianettSms");
 //		smsSender.Send("48500703398", "sms", "wyslalo sie");
 		
 		
