@@ -1,8 +1,10 @@
 package model;
 
-import model.User;
+
 import java.util.LinkedList;
 import java.util.List;
+
+import notifier.User.User;
 
 public class UserNewsDTO {
     private final User user;

@@ -35,6 +35,11 @@ public class User {
 		}
 	}
 	
+	
+	public Iterator<WayOfNotifying> getWaysOfNotifying(){
+		return this.waysOfNotifying.iterator();
+	}
+	
 	public void removeWayOfNotifying(WayOfNotifying way) {
 		this.waysOfNotifying.remove(way);
 	}
