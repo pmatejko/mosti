@@ -48,6 +48,10 @@ public class News {
 
     public long getId() { return id; }
 
+    public boolean hasKeywords(){
+        return !keywords.isEmpty();
+    }
+
     public String getNewsSite() {
         return newsSite;
     }

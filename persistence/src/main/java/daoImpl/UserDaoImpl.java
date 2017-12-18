@@ -1,12 +1,15 @@
 package daoImpl;
 
+import dao.GenericDao;
+import dao.UserDao;
 import model.News;
 import model.User;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
-public class UserDao extends GenericDao<User> {
+public class UserDaoImpl extends GenericDao<User> implements UserDao{
 
     public Optional<User> create(String name, Date interval) {
         return null;
@@ -16,13 +19,13 @@ public class UserDao extends GenericDao<User> {
         return null;
     }
 
-    public Iterable<News> getNewsToSend(User user){
+    @Override
+    public List<User> getUsersToNotify() {
         return null;
     }
 
-
-
-
-
+    public List<News> getNewsToSend(User user){
+        return null;
+    }
 
 }
