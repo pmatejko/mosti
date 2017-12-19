@@ -2,7 +2,7 @@ package Comparator;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import entities.NewsDTO;
+import dto.NewsDTO;
 import interfaces.IComparator;
 
 @Singleton

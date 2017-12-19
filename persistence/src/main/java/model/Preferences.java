@@ -1,11 +1,15 @@
 package model;
 
-import org.hibernate.annotations.Columns;
+import fetcher.DataProvider;
 
 import javax.persistence.*;
+import java.util.LinkedList;
+import java.util.List;
 
 @Entity
-@Table(name = Preferences.TABLE_NAME)
+@Table(name = Preferences.TABLE_NAME, uniqueConstraints = {
+        @UniqueConstraint(columnNames = {Preferences.Columns.NEWS_SOURCE, Preferences.Columns.KEYWORD, Preferences.Columns.DATA_PROVIDER})
+})
 public class Preferences {
     public static final String TABLE_NAME = "preferences";
 
@@ -14,46 +18,60 @@ public class Preferences {
     @Column(name = Columns.ID)
     private long id;
 
-    @Column(name = Columns.DATA_SOURCE)
-    private String data_source;
+    @Column(name = Columns.KEYWORD)
+    private String keyword;
 
-    @Column(name = Columns.USER_ID)
-    private long user_id;
+    @Column(name = Columns.NEWS_SOURCE)
+    private String newsSource;
 
     @Column(name = Columns.DATA_PROVIDER)
-    private String data_provider;
+    @Enumerated(EnumType.STRING)
+    private DataProvider dataProvider;
 
-    @ManyToOne
-    @JoinColumn(name = User.Columns.ID)
-    private User user;
+    @ManyToMany
+    @JoinTable(
+            name = "user_preferences",
+            joinColumns = @JoinColumn(name = Preferences.Columns.ID, referencedColumnName = User.Columns.ID),
+            inverseJoinColumns = @JoinColumn(name = User.Columns.ID, referencedColumnName = Preferences.Columns.ID)
+    )
+    private List<User> users = new LinkedList<>();
+
 
     public Preferences() {
     }
 
-    public Preferences(String data_source, long user_id, String data_provider) {
-        this.data_source = data_source;
-        this.user_id = user_id;
-        this.data_provider = data_provider;
+    public Preferences(String newsSource, DataProvider dataProvider) {
+        this.newsSource = newsSource;
+        this.dataProvider = dataProvider;
     }
+
 
     public long getId() { return id; }
 
-    public String getData_source() { return data_source; }
+    public void setId(long id) {
+        this.id = id;
+    }
 
-    public void setData_source(String data_source) { this.data_source = data_source; }
+    public String getNewsSource() { return newsSource; }
 
-    public long getUser_id() { return user_id; }
+    public void setNewsSource(String newsSource) { this.newsSource = newsSource; }
 
-    public void setUser_id(long user_id) { this.user_id = user_id; }
+    public DataProvider getDataProvider() { return dataProvider; }
 
-    public String getData_provider() { return data_provider; }
+    public void setDataProvider(DataProvider dataProvider) { this.dataProvider = dataProvider; }
 
-    public void setData_provider(String data_provider) { this.data_provider = data_provider; }
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+    }
 
     public static class Columns {
         public static final String ID = "id";
-        public static final String DATA_SOURCE = "data_source";
-        public static final String USER_ID = "user_id";
+        public static final String KEYWORD = "keyword";
+        public static final String NEWS_SOURCE = "news_source";
         public static final String DATA_PROVIDER = "data_provider";
     }
 

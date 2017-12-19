@@ -1,4 +1,4 @@
-package entities;
+package dto;
 
 
 import model.News;
@@ -21,8 +21,6 @@ public class NewsDTO {
     public void addNews(News news){
         this.newsList.add(news);
     }
-
-
 }
 
 
