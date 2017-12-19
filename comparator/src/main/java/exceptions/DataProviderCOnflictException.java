@@ -1,7 +1,7 @@
 package exceptions;
 
 
-import fetcher.DataProvider;
+import model.DataProvider;
 
 public class DataProviderCOnflictException extends Exception {
     public DataProviderCOnflictException(DataProvider provider1, DataProvider provider2) {
