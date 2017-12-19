@@ -1,8 +1,8 @@
 package fetcher.impl;
 
-import dto.SubscriptionDTO;
 import interfaces.Fetcher;
 import model.News;
+import model.Preferences;
 
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -25,8 +25,8 @@ public class NewsAPIFetcher implements Fetcher {
     private static final String apiKey = "apiKey=cc36659c4c784994a77282ce4e4dc1ed";
 
     @Override
-    public List<News> fetch(SubscriptionDTO subscription) throws IOException {
-        String queryString = buildQueryString(subscription);
+    public List<News> fetch(Preferences preferences) throws IOException {
+        String queryString = buildQueryString(preferences);
 
         URL apiQueryUrl = new URL(queryString);
         BufferedReader in = new BufferedReader(new InputStreamReader(apiQueryUrl.openStream()));
@@ -37,25 +37,25 @@ public class NewsAPIFetcher implements Fetcher {
         in.close();
 
         JsonArray jsonArticles = page.getJsonArray("articles");
-        return parseJsonArticleArray(jsonArticles, subscription);
+        return parseJsonArticleArray(jsonArticles, preferences);
     }
 
-    private String buildQueryString(SubscriptionDTO subscription) {
+    private String buildQueryString(Preferences preferences) {
         StringBuilder stringBuilder = new StringBuilder(100);
         stringBuilder.append(apiUrl);
 
-        if (subscription.getKeyword() != null) {
+        if (preferences.getKeyword() != null) {
             stringBuilder.append("q=");
-            stringBuilder.append(subscription.getKeyword());
+            stringBuilder.append(preferences.getKeyword());
         }
 
-        if (subscription.getKeyword() != null && subscription.getNewsSource() != null) {
+        if (preferences.getKeyword() != null && preferences.getNewsSource() != null) {
             stringBuilder.append("&");
         }
 
-        if (subscription.getNewsSource() != null) {
+        if (preferences.getNewsSource() != null) {
             stringBuilder.append("sources=");
-            stringBuilder.append(subscription.getNewsSource());
+            stringBuilder.append(preferences.getNewsSource());
         }
 
         stringBuilder.append("&");
@@ -64,7 +64,7 @@ public class NewsAPIFetcher implements Fetcher {
         return stringBuilder.toString();
     }
 
-    private List<News> parseJsonArticleArray(JsonArray jsonArticles, SubscriptionDTO subscription) {
+    private List<News> parseJsonArticleArray(JsonArray jsonArticles, Preferences preferences) {
         List<News> articles = new LinkedList<>();
 
         for (JsonValue jsonValue : jsonArticles) {
@@ -75,7 +75,7 @@ public class NewsAPIFetcher implements Fetcher {
                 String content = jsonArticle.getString("title") + " " + jsonArticle.getString("description");
                 Date timestamp = Date.from(Instant.from(ISO_DATE_TIME.parse(jsonArticle.getString("publishedAt"))));
 
-                articles.add(new News(subscription.getNewsSource(), subscription.getKeyword(), url, content, timestamp));
+                articles.add(new News(preferences, url, content, timestamp));
             }
         }
 
