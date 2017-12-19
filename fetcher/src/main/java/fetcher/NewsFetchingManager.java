@@ -1,28 +1,28 @@
 package fetcher;
 
-import entities.UserNews;
-import entities.UserSubscription;
+import dto.NewsDTO;
 import interfaces.FetchingManager;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.subjects.PublishSubject;
+import model.Preferences;
 
 import java.util.*;
 
-public class NewsFetchingManager implements FetchingManager<UserNews> {
+public class NewsFetchingManager implements FetchingManager<NewsDTO> {
     private final static NewsFetchingManager INSTANCE = new NewsFetchingManager();
 
-    private final Observer<UserNews> userNewsObserver;
-    private final Observable<UserNews> userNewsObservable;
+    private final Observer<NewsDTO> newsObserver;
+    private final Observable<NewsDTO> newsObservable;
 
     private final Timer timer = new Timer();
     private final Map<Long, FetcherTask> userActiveTasksMap = new HashMap<>();
 
 
     private NewsFetchingManager() {
-        PublishSubject<UserNews> userNewsSubject = PublishSubject.create();
-        userNewsObservable = userNewsSubject;
-        userNewsObserver = userNewsSubject;
+        PublishSubject<NewsDTO> newsSubject = PublishSubject.create();
+        newsObservable = newsSubject;
+        newsObserver = newsSubject;
     }
 
     public static NewsFetchingManager getInstance() {
@@ -31,22 +31,22 @@ public class NewsFetchingManager implements FetchingManager<UserNews> {
 
 
     @Override
-    public Observable<UserNews> getObservable() {
-        return userNewsObservable;
+    public Observable<NewsDTO> getObservable() {
+        return newsObservable;
     }
 
-    public void addUserSubscription(UserSubscription subscription) {
-        FetcherTask task = new FetcherTask(userNewsObserver, subscription);
-        timer.schedule(task, 0, subscription.getInterval());
-        userActiveTasksMap.put(subscription.getUserId(), task);
+    public void addSubscription(Preferences preferences) {
+        FetcherTask task = new FetcherTask(newsObserver, preferences);
+        timer.schedule(task, 0, preferences.getDataProvider().getMillisecondInterval());
+        userActiveTasksMap.put(preferences.getId(), task);
     }
 
-    public void cancelUserSubscription(long userId) {
-        FetcherTask task = userActiveTasksMap.get(userId);
+    public void cancelSubscription(Preferences preferences) {
+        FetcherTask task = userActiveTasksMap.get(preferences.getId());
 
         if (task != null) {
             task.cancel();
-            userActiveTasksMap.remove(userId);
+            userActiveTasksMap.remove(preferences.getId());
         }
     }
 

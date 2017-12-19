@@ -1,33 +1,33 @@
 package fetcher;
 
-import entities.UserNews;
-import entities.UserSubscription;
+import dto.NewsDTO;
+import dto.SubscriptionDTO;
 import io.reactivex.Observer;
-import model.Article;
-import model.Tweet;
+import model.News;
+import model.Preferences;
 
 import java.util.List;
 import java.util.TimerTask;
 
 public class FetcherTask extends TimerTask {
-    private Observer<UserNews> userNewsObserver;
-    private UserSubscription subscription;
+    private final Observer<NewsDTO> newsObserver;
+    private final DataProvider dataProvider;
+    private final SubscriptionDTO subscription;
 
 
-    public FetcherTask(Observer<UserNews> userNewsObserver,
-                       UserSubscription subscription) {
-        this.userNewsObserver = userNewsObserver;
-        this.subscription = subscription;
+    public FetcherTask(Observer<NewsDTO> newsObserver, Preferences preferences) {
+        this.newsObserver = newsObserver;
+        this.dataProvider = preferences.getDataProvider();
+        this.subscription = new SubscriptionDTO(preferences);
     }
 
 
     @Override
     public void run() {
-        List<Article> articles = ArticleFetcher.getInstance().fetch(subscription.getNewsSiteSubscriptions());
-        List<Tweet> tweets = TweetFetcher.getInstance().fetch(subscription.getTwitterSubscriptions());
+        List<News> newsList = dataProvider.fetch(subscription);
 
-        UserNews userNews = new UserNews(subscription.getUserId(), articles, tweets);
-        userNewsObserver.onNext(userNews);
+        NewsDTO newsDTO = new NewsDTO(newsList);
+        newsObserver.onNext(newsDTO);
     }
 
 }
