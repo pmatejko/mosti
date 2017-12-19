@@ -1,20 +1,23 @@
+
 import java.io.IOException;
 
 import javax.mail.MessagingException;
 
 import org.json.simple.parser.ParseException;
 
+import exceptions.BadLengthTelephoneNumberException;
 import notifier.senders.MailSender;
 import notifier.senders.Sendable;
 
 
 public class ExampleTest {
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws BadLengthTelephoneNumberException {
 		
 		
 		
 		
+
 		System.out.println(System.currentTimeMillis());
 		
 		
@@ -27,6 +30,12 @@ public class ExampleTest {
 		}
 //		sms sender ma limit 5ciu wyslan z czego : 3 wykorzystane, wiec lepiej nie wysylac 
 //		Sendable smsSender = new SmsSender("configVianettSms.json");
+
+		
+
+//		sms sender ma limit 5ciu wyslan z czego : 3 wykorzystane, wiec lepiej nie wysylac 
+//		Sendable smsSender = new SmsSender("configVianettSms");
+
 //		smsSender.Send("48500703398", "sms", "wyslalo sie");
 		
 		

@@ -1,5 +1,6 @@
 package notifier.informer;
 
+
 import java.io.IOException;
 import java.util.List;
 
@@ -7,11 +8,14 @@ import javax.mail.MessagingException;
 
 import org.json.simple.parser.ParseException;
 
+import exceptions.BadLengthTelephoneNumberException;
 import model.News;
 import model.User;
 import model.UserNewsDTO;
 import notifier.message.Message;
 import notifier.message.UglyMessage;
+
+
 import notifier.senders.MailSender;
 import notifier.senders.Sendable;
 import notifier.senders.SmsSender;
@@ -33,6 +37,15 @@ public class Informer {
 			e.printStackTrace();
 		}
 		
+
+		
+		try {
+			this.gmailMailSender = new MailSender("configGmail.json");
+			this.vianettSmsSender = new SmsSender("configVianettSms.json");
+		} catch (IOException | ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	
@@ -50,7 +63,12 @@ public class Informer {
 		
 			//we want to send with appropriate sender
 			try {
-				gmailMailSender.send(user.getEmail(), "mail about your iterests", message);
+				try {
+					gmailMailSender.send(user.getEmail(), "mail about your iterests", message);
+				} catch (BadLengthTelephoneNumberException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			} catch (MessagingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -58,6 +76,9 @@ public class Informer {
 
 			
 		//END    TODO
+		
+
+		
 		
 	}
 	
