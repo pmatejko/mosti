@@ -8,52 +8,47 @@ import javax.persistence.*;
 public class News {
     public static final String TABLE_NAME = "news";
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
     @Column(name = Columns.ID)
     private long id;
 
-    @Column(name = Columns.NEWSSITE, nullable = false)
-    private String newsSite;
+    @Column(name = Columns.NEWS_SOURCE)
+    private String newsSource;
+
+    @Column(name = Columns.KEYWORD)
+    private String keyword;
 
     @Column(name = Columns.URL, nullable = false)
     private String url;
 
-    @Column(name = Columns.CONTENT)
+    @Column(name = Columns.CONTENT, nullable = false)
     private String content;
 
     @Column(name = Columns.TIMESTAMP, nullable = false)
     private Date timestamp;
 
-    @ManyToMany
-    @JoinTable(
-            name = "keyword_news",
-            joinColumns = @JoinColumn(name = Columns.ID, referencedColumnName = Keyword.Columns.ID),
-            inverseJoinColumns = @JoinColumn(name = Keyword.Columns.ID, referencedColumnName = Columns.ID)
-    )
-    private List<Keyword> keywords = new LinkedList<>();
 
     public News() {
-
     }
 
-
-    public News(String title, String newsSite, String url, String content, Date timestamp) {
+    public News(String newsSource, String keyword, String url, String content, Date timestamp) {
+        this.newsSource = newsSource;
+        this.keyword = keyword;
         this.url = url;
         this.content = content;
         this.timestamp = timestamp;
-        this.newsSite = newsSite;
     }
+
 
     public long getId() { return id; }
 
-    public boolean hasKeywords(){
-        return !keywords.isEmpty();
+    public String getNewsSource() {
+        return newsSource;
     }
 
-    public String getNewsSite() {
-        return newsSite;
+    public String getKeyword() {
+        return keyword;
     }
 
     public String getUrl() {
@@ -68,8 +63,16 @@ public class News {
         return timestamp;
     }
 
-    public void setNewsSite(String newsSite) {
-        this.newsSite = newsSite;
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setNewsSource(String newsSource) {
+        this.newsSource = newsSource;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 
     public void setUrl(String url) {
@@ -84,12 +87,9 @@ public class News {
         this.timestamp = timestamp;
     }
 
-    public void setKeywords(List<Keyword> keywords) {
-        this.keywords = keywords;
-    }
 
-    public void setKeyword(Keyword keyword) {
-        this.keywords.add(keyword);
+    public boolean hasKeyword(){
+        return keyword != null;
     }
 
     public String toOutputFormat() {
@@ -99,7 +99,8 @@ public class News {
 
     public static class Columns {
         public static final String ID = "id";
-        public static final String NEWSSITE = "newsSite";
+        public static final String NEWS_SOURCE = "newsSource";
+        public static final String KEYWORD = "keyword";
         public static final String URL = "url";
         public static final String CONTENT = "content";
         public static final String TIMESTAMP = "timestamp";

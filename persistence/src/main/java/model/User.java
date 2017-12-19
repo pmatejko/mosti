@@ -22,16 +22,15 @@ public class User {
     @Column(name = Columns.INTERVAL, nullable = false)
     private Date interval;
 
-
-    @OneToMany(mappedBy = "user")
-    private List<Preferences> preferences= new LinkedList<>();
-
     @ManyToMany(mappedBy = "users")
-    private List<Keyword> keywords = new LinkedList<>();
+    private List<Preferences> preferences = new LinkedList<>();
 
 
     public User() {
     }
+
+
+    public long getId() { return id; }
 
     public String getEmail() {
         return email;
@@ -41,8 +40,12 @@ public class User {
         return interval;
     }
 
-    public List<Keyword> getKeywords() {
-        return keywords;
+    public List<Preferences> getPreferences() {
+        return preferences;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public void setEmail(String email) {
@@ -53,15 +56,18 @@ public class User {
         this.interval = interval;
     }
 
-    public long getId() { return id; }
-
-    public void setKeywords(List<Keyword> keywords) {
-        this.keywords = keywords;
+    public void setPreferences(List<Preferences> preferences) {
+        this.preferences = preferences;
     }
 
-    public void setKeyword(Keyword keyword) {
-        this.keywords.add(keyword);
+    public void addPreferences(Preferences preferences) {
+        this.preferences.add(preferences);
     }
+
+    public void removePreferences(Preferences preferences) {
+        this.preferences.remove(preferences);
+    }
+
 
 
     public static class Columns {

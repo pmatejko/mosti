@@ -1,5 +1,6 @@
 package fetcher;
 
+import com.google.inject.Singleton;
 import dto.NewsDTO;
 import interfaces.FetchingManager;
 import io.reactivex.Observable;
@@ -9,24 +10,19 @@ import model.Preferences;
 
 import java.util.*;
 
-public class NewsFetchingManager implements FetchingManager<NewsDTO> {
-    private final static NewsFetchingManager INSTANCE = new NewsFetchingManager();
-
+@Singleton
+public class SubscriptionService implements FetchingManager<NewsDTO> {
     private final Observer<NewsDTO> newsObserver;
     private final Observable<NewsDTO> newsObservable;
 
     private final Timer timer = new Timer();
-    private final Map<Long, FetcherTask> userActiveTasksMap = new HashMap<>();
+    private final Map<Long, FetcherTask> activeTasksMap = new HashMap<>();
 
 
-    private NewsFetchingManager() {
+    private SubscriptionService() {
         PublishSubject<NewsDTO> newsSubject = PublishSubject.create();
         newsObservable = newsSubject;
         newsObserver = newsSubject;
-    }
-
-    public static NewsFetchingManager getInstance() {
-        return INSTANCE;
     }
 
 
@@ -38,15 +34,15 @@ public class NewsFetchingManager implements FetchingManager<NewsDTO> {
     public void addSubscription(Preferences preferences) {
         FetcherTask task = new FetcherTask(newsObserver, preferences);
         timer.schedule(task, 0, preferences.getDataProvider().getMillisecondInterval());
-        userActiveTasksMap.put(preferences.getId(), task);
+        activeTasksMap.put(preferences.getId(), task);
     }
 
     public void cancelSubscription(Preferences preferences) {
-        FetcherTask task = userActiveTasksMap.get(preferences.getId());
+        FetcherTask task = activeTasksMap.get(preferences.getId());
 
         if (task != null) {
             task.cancel();
-            userActiveTasksMap.remove(preferences.getId());
+            activeTasksMap.remove(preferences.getId());
         }
     }
 
