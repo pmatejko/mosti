@@ -1,10 +1,10 @@
 package interfaces;
 
-import dto.SubscriptionDTO;
 import model.News;
+import model.Preferences;
 
 import java.util.List;
 
 public interface Fetcher {
-    List<News> fetch(SubscriptionDTO subscription) throws Exception;
+    List<News> fetch(Preferences preferences) throws Exception;
 }

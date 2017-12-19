@@ -12,6 +12,8 @@ import java.util.List;
 })
 public class Preferences {
     public static final String TABLE_NAME = "preferences";
+    public static final String NEWS_PREFERENCES_JUNCTION_TABLE_NAME = "news_preferences";
+    public static final String USER_PREFERENCES_JUNCTION_TABLE_NAME = "user_preferences";
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
@@ -30,7 +32,15 @@ public class Preferences {
 
     @ManyToMany
     @JoinTable(
-            name = "user_preferences",
+            name = NEWS_PREFERENCES_JUNCTION_TABLE_NAME,
+            joinColumns = @JoinColumn(name = Preferences.Columns.ID, referencedColumnName = News.Columns.ID),
+            inverseJoinColumns = @JoinColumn(name = News.Columns.ID, referencedColumnName = Preferences.Columns.ID)
+    )
+    private List<News> news = new LinkedList<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = USER_PREFERENCES_JUNCTION_TABLE_NAME,
             joinColumns = @JoinColumn(name = Preferences.Columns.ID, referencedColumnName = User.Columns.ID),
             inverseJoinColumns = @JoinColumn(name = User.Columns.ID, referencedColumnName = Preferences.Columns.ID)
     )
@@ -67,6 +77,23 @@ public class Preferences {
     public void setKeyword(String keyword) {
         this.keyword = keyword;
     }
+
+    public List<News> getNews() {
+        return news;
+    }
+
+    public void setNews(List<News> news) {
+        this.news = news;
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
 
     public static class Columns {
         public static final String ID = "id";

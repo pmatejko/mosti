@@ -13,11 +13,9 @@ public class News {
     @Column(name = Columns.ID)
     private long id;
 
-    @Column(name = Columns.NEWS_SOURCE)
-    private String newsSource;
-
-    @Column(name = Columns.KEYWORD)
-    private String keyword;
+    @Column(name = Columns.PREFERENCES)
+    @ManyToMany(mappedBy = Preferences.NEWS_PREFERENCES_JUNCTION_TABLE_NAME)
+    private List<Preferences> preferences = new LinkedList<>();
 
     @Column(name = Columns.URL, nullable = false)
     private String url;
@@ -32,9 +30,8 @@ public class News {
     public News() {
     }
 
-    public News(String newsSource, String keyword, String url, String content, Date timestamp) {
-        this.newsSource = newsSource;
-        this.keyword = keyword;
+    public News(Preferences preferences, String url, String content, Date timestamp) {
+        this.preferences.add(preferences);
         this.url = url;
         this.content = content;
         this.timestamp = timestamp;
@@ -42,14 +39,6 @@ public class News {
 
 
     public long getId() { return id; }
-
-    public String getNewsSource() {
-        return newsSource;
-    }
-
-    public String getKeyword() {
-        return keyword;
-    }
 
     public String getUrl() {
         return url;
@@ -67,14 +56,6 @@ public class News {
         this.id = id;
     }
 
-    public void setNewsSource(String newsSource) {
-        this.newsSource = newsSource;
-    }
-
-    public void setKeyword(String keyword) {
-        this.keyword = keyword;
-    }
-
     public void setUrl(String url) {
         this.url = url;
     }
@@ -89,7 +70,7 @@ public class News {
 
 
     public boolean hasKeyword(){
-        return keyword != null;
+        return preferences.get(0).getKeyword() != null;
     }
 
     public String toOutputFormat() {
@@ -99,8 +80,7 @@ public class News {
 
     public static class Columns {
         public static final String ID = "id";
-        public static final String NEWS_SOURCE = "newsSource";
-        public static final String KEYWORD = "keyword";
+        public static final String PREFERENCES = "preferences";
         public static final String URL = "url";
         public static final String CONTENT = "content";
         public static final String TIMESTAMP = "timestamp";
