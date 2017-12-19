@@ -1,9 +1,12 @@
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.io.IOException;
 
-import notifier.SendEmail;
-import notifier.User.User;
+import javax.mail.MessagingException;
+
+import org.json.simple.parser.ParseException;
+
 import notifier.senders.MailSender;
+import notifier.senders.Sendable;
+
 
 public class ExampleTest {
 	
@@ -11,9 +14,20 @@ public class ExampleTest {
 		
 		
 		
-		MailSender mailSender = new MailSender("configGmail.json");
-		mailSender.Send("smalcerzszymonn@gmail.com", "asd", "asd");
-		///home/szymcio/workspace/mosti/notifier/src/main/resources/configGmail.txt
+		
+		System.out.println(System.currentTimeMillis());
+		
+		
+		try {
+			Sendable mailSender = new MailSender("configGmail.json");
+			mailSender.send("smalcerzszymonn@gmail.com", "asddsa", "asddsa");
+		} catch (MessagingException | IOException | ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+//		sms sender ma limit 5ciu wyslan z czego : 3 wykorzystane, wiec lepiej nie wysylac 
+//		Sendable smsSender = new SmsSender("configVianettSms.json");
+//		smsSender.Send("48500703398", "sms", "wyslalo sie");
 		
 		
 //		ArrayList<String> tagsOfSzymon = new ArrayList<>();
