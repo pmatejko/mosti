@@ -22,7 +22,7 @@ public class User {
     @Column(name = Columns.INTERVAL, nullable = false)
     private Date interval;
 
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(mappedBy = Preferences.USER_PREFERENCES_JUNCTION_TABLE_NAME)
     private List<Preferences> preferences = new LinkedList<>();
 
 

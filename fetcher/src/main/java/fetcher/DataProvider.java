@@ -1,33 +1,21 @@
 package fetcher;
 
-import dto.SubscriptionDTO;
-import model.News;
-
-import java.util.List;
+import fetcher.impl.NewsAPIFetcher;
+import fetcher.impl.TwitterAPIFetcher;
+import interfaces.Fetcher;
 
 public enum DataProvider {
-    TWITTER_API(1000 * 60 * 10) {
-        @Override
-        public List<News> fetch(SubscriptionDTO subscription) {
-            return null;
-        }
-    },
+    TWITTER_API(new TwitterAPIFetcher(), 1000 * 60 * 10),
+    NEWS_API(new NewsAPIFetcher(), 1000 * 60 * 15);
 
-    NEWS_API(1000 * 60 * 15) {
-        @Override
-        public List<News> fetch(SubscriptionDTO subscription) {
-            return null;
-        }
-    };
+    /*******************************************************/
 
-    /******************************************************************************************
-     ******************************************************************************************
-     ******************************************************************************************/
-
+    private final Fetcher fetcher;
     private final long millisecondInterval;
 
 
-    DataProvider(long millisecondInterval) {
+    DataProvider(Fetcher fetcher, long millisecondInterval) {
+        this.fetcher = fetcher;
         this.millisecondInterval = millisecondInterval;
     }
 
@@ -36,5 +24,7 @@ public enum DataProvider {
         return millisecondInterval;
     }
 
-    public abstract List<News> fetch(SubscriptionDTO subscription);
+    public Fetcher getFetcher() {
+        return fetcher;
+    }
 }
