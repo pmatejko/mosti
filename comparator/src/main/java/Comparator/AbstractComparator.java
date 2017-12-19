@@ -11,7 +11,7 @@ public abstract class AbstractComparator implements IComparator {
         this.news = news;
     }
     @Override
-    public Iterable<User> assignUsersByKeywords() {
+    public Iterable<User> assignUsersByPreferences() {
         return null;
     }
 
