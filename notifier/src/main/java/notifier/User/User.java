@@ -6,9 +6,13 @@ import java.util.Iterator;
 public class User {
 	
 	private String email;
+	private String telephoneNumber;
 	private String name;
 	private String surname;
 	private ArrayList<String> tags;
+	
+	public enum WayOfNotifying{SMS, EMAIL};
+	private ArrayList<WayOfNotifying> waysOfNotifying;
 	
 	
 	
@@ -19,6 +23,29 @@ public class User {
 		this.surname = surname;
 		this.tags = new ArrayList<>();
 		this.tags = tags;
+	}
+	
+	public void setTelephoneNumber(String telephoneNumber) {
+		this.telephoneNumber = telephoneNumber;
+	}
+	
+	public void addWayOfNotifying(WayOfNotifying way) {
+		if(!this.waysOfNotifying.contains(way)) {
+			this.waysOfNotifying.add(way);
+		}
+	}
+	
+	
+	public Iterator<WayOfNotifying> getWaysOfNotifying(){
+		return this.waysOfNotifying.iterator();
+	}
+	
+	public void removeWayOfNotifying(WayOfNotifying way) {
+		this.waysOfNotifying.remove(way);
+	}
+	
+	public String getTelephoneNumber() {
+		return this.telephoneNumber;
 	}
 	
 	public void addTag(String tag) {
