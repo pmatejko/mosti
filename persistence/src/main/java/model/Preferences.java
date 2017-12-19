@@ -23,9 +23,11 @@ public class Preferences {
     @Column(name = Columns.KEYWORD)
     private String keyword;
 
+    // for example BBC, Bloomberg
     @Column(name = Columns.NEWS_SOURCE)
     private String newsSource;
 
+    // for example newsApi or Twitter
     @Column(name = Columns.DATA_PROVIDER)
     @Enumerated(EnumType.STRING)
     private DataProvider dataProvider;
