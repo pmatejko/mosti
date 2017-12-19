@@ -1,0 +1,2 @@
+nick : smalcerztest
+password : plemionaa

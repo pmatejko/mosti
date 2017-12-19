@@ -1,42 +1,33 @@
 package fetcher;
 
-import entities.UserNews;
-import entities.UserSubscription;
+import dto.NewsDTO;
+import dto.SubscriptionDTO;
 import io.reactivex.Observer;
-import model.Article;
 import model.News;
-import model.Tweet;
+import model.Preferences;
 
-import java.io.IOException;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.TimerTask;
 
 public class FetcherTask extends TimerTask {
-    private final NewsFetcher newsFetcher;
-    private Observer<UserNews> userNewsObserver;
-    private UserSubscription subscription;
+    private final Observer<NewsDTO> newsObserver;
+    private final DataProvider dataProvider;
+    private final SubscriptionDTO subscription;
 
 
-    public FetcherTask(Observer<UserNews> userNewsObserver,
-                       UserSubscription subscription) {
-        this.userNewsObserver = userNewsObserver;
-        this.subscription = subscription;
-
-        this.newsFetcher = new NewsFetcher();
+    public FetcherTask(Observer<NewsDTO> newsObserver, Preferences preferences) {
+        this.newsObserver = newsObserver;
+        this.dataProvider = preferences.getDataProvider();
+        this.subscription = new SubscriptionDTO(preferences);
     }
 
 
     @Override
     public void run() {
-        try {
-            List<News> news = newsFetcher.fetch(subscription);
-            UserNews userNews = new UserNews(subscription.getUserId(), news);
+        List<News> newsList = dataProvider.fetch(subscription);
 
-            userNewsObserver.onNext(userNews);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        NewsDTO newsDTO = new NewsDTO(newsList);
+        newsObserver.onNext(newsDTO);
     }
 
 }
