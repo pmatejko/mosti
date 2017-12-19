@@ -10,11 +10,17 @@ public class NewsComparator extends  AbstractComparator{
 
     @Override
     public void process() {
+        if (isUsed() && isNew())
+            newsDao.create(news);
 
     }
 
     @Override
     public boolean isNew() {
-        return false;
+        Iterable<News> otherNews = newsDao.findByUrl(news);
+        for(News newsPiece : otherNews)
+            if (newsPiece.getContent().equals(news.getContent()))
+                return false;
+        return true;
     }
 }

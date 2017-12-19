@@ -1,9 +1,12 @@
 package Comparator;
 
+import exceptions.DataProviderCOnflictException;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import model.News;
 import dto.NewsDTO;
-import interfaces.IComparator;
+
+
 
 @Singleton
 public class ComparatorManager {
@@ -12,8 +15,14 @@ public class ComparatorManager {
     private ComparatorFactory comparatorFactory;
 
     public void process(NewsDTO news){
-       news.getNewsList().stream()
-               .map(comparatorFactory::createComparator)
-               .forEach(IComparator::process);
+        for (News newsPiece: news.getNewsList()) {
+            try {
+                comparatorFactory
+                        .createComparator(newsPiece)
+                        .process();
+            } catch (DataProviderCOnflictException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

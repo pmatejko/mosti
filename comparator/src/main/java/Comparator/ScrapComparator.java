@@ -10,7 +10,7 @@ public class ScrapComparator extends AbstractComparator{
     }
 
     @Override
-    public void process() {
+    public void  process() {
 
     }
 
