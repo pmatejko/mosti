@@ -1,7 +1,9 @@
 package model;
 
+
 import java.util.LinkedList;
 import java.util.List;
+
 
 public class UserNewsDTO {
     private final User user;

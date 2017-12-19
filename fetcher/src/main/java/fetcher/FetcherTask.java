@@ -1,8 +1,9 @@
 package fetcher;
 
-import Comparator.ComparatorManager;
 import com.google.inject.Inject;
 import dto.NewsDTO;
+import interfaces.Fetcher;
+import io.reactivex.Observer;
 import model.News;
 import model.Preferences;
 
@@ -11,7 +12,9 @@ import java.util.TimerTask;
 
 public class FetcherTask extends TimerTask {
     @Inject
-    private ComparatorManager comparatorManager;
+    private Observer<NewsDTO> newsObserver;
+    @Inject
+    private FetcherFactory fetcherFactory;
 
     private final Preferences preferences;
 
@@ -24,13 +27,11 @@ public class FetcherTask extends TimerTask {
     @Override
     public void run() {
         try {
-            List<News> newsList = preferences
-                    .getDataProvider()
-                    .getFetcher()
-                    .fetch(preferences);
+            Fetcher fetcher = fetcherFactory.createFetcher(preferences.getDataProvider());
+            List<News> newsList = fetcher.fetch(preferences);
 
             NewsDTO newsDTO = new NewsDTO(newsList);
-            comparatorManager.process(newsDTO);
+            newsObserver.onNext(newsDTO);
         } catch (Exception e) {
             e.printStackTrace();
         }
