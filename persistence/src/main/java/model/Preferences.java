@@ -1,7 +1,5 @@
 package model;
 
-import fetcher.DataProvider;
-
 import javax.persistence.*;
 import java.util.LinkedList;
 import java.util.List;
