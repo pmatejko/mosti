@@ -26,8 +26,6 @@ public class NewsAPIFetcher implements Fetcher {
 
     @Override
     public List<News> fetch(SubscriptionDTO subscription) throws IOException {
-        List<News> articles = new LinkedList<>();
-
         String queryString = buildQueryString(subscription);
 
         URL apiQueryUrl = new URL(queryString);
@@ -35,13 +33,11 @@ public class NewsAPIFetcher implements Fetcher {
         JsonReader reader = Json.createReader(in);
         JsonObject page = reader.readObject();
 
-        JsonArray jsonArticles = page.getJsonArray("articles");
-        articles.addAll(parseJsonArticleArray(jsonArticles, subscription));
-
         reader.close();
         in.close();
 
-        return articles;
+        JsonArray jsonArticles = page.getJsonArray("articles");
+        return parseJsonArticleArray(jsonArticles, subscription);
     }
 
     private String buildQueryString(SubscriptionDTO subscription) {

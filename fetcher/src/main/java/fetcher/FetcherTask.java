@@ -24,10 +24,14 @@ public class FetcherTask extends TimerTask {
 
     @Override
     public void run() {
-        List<News> newsList = dataProvider.fetch(subscription);
+        try {
+            List<News> newsList = dataProvider.getFetcher().fetch(subscription);
 
-        NewsDTO newsDTO = new NewsDTO(newsList);
-        newsObserver.onNext(newsDTO);
+            NewsDTO newsDTO = new NewsDTO(newsList);
+            newsObserver.onNext(newsDTO);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }
