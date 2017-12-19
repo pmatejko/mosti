@@ -3,21 +3,25 @@ package fetcher;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import dto.NewsDTO;
+import interfaces.IFetchingManager;
 import io.reactivex.Observable;
-import io.reactivex.Observer;
-import io.reactivex.subjects.PublishSubject;
 import model.Preferences;
 
 import java.util.*;
 
 @Singleton
-public class SubscriptionService {
+public class FetchingManager implements IFetchingManager {
     @Inject
     private Observable<NewsDTO> newsObservable;
 
     private final Timer timer = new Timer();
     private final Map<Long, FetcherTask> activeTasksMap = new HashMap<>();
 
+
+    @Override
+    public Observable<NewsDTO> getNewsObservable() {
+        return newsObservable;
+    }
 
     public void addSubscription(Preferences preferences) {
         FetcherTask task = new FetcherTask(preferences);
@@ -33,5 +37,4 @@ public class SubscriptionService {
             activeTasksMap.remove(preferences.getId());
         }
     }
-
 }
