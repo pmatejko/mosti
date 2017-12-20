@@ -4,9 +4,10 @@ import exceptions.UnsupportedDataProviderException;
 import fetcher.impl.NewsAPIFetcher;
 import fetcher.impl.TwitterAPIFetcher;
 import interfaces.Fetcher;
+import interfaces.IFetcherFactory;
 import model.DataProvider;
 
-public class FetcherFactory {
+public class FetcherFactory implements IFetcherFactory {
 
     public Fetcher createFetcher(DataProvider dataProvider) {
         switch (dataProvider) {

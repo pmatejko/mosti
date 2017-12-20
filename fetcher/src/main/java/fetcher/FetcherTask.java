@@ -3,6 +3,7 @@ package fetcher;
 import com.google.inject.Inject;
 import dto.NewsDTO;
 import interfaces.Fetcher;
+import interfaces.IFetcherFactory;
 import io.reactivex.Observer;
 import model.News;
 import model.Preferences;
@@ -14,7 +15,7 @@ public class FetcherTask extends TimerTask {
     @Inject
     private Observer<NewsDTO> newsObserver;
     @Inject
-    private FetcherFactory fetcherFactory;
+    private IFetcherFactory fetcherFactory;
 
     private final Preferences preferences;
 
