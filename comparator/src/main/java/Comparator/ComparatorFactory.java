@@ -2,8 +2,8 @@ package Comparator;
 
 
 import exceptions.DataProviderCOnflictException;
-import fetcher.DataProvider;
 import interfaces.IComparator;
+import model.DataProvider;
 import model.News;
 import model.Preferences;
 

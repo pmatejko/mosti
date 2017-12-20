@@ -1,13 +1,13 @@
 package daoImpl;
 
 
+import dao.GenericDao;
 import dao.NewsDao;
 import model.News;
-import model.User;
 
 import java.util.Optional;
 
-public class NewsDaoImpl extends GenericDao implements NewsDao{
+public class NewsDaoImpl extends GenericDao<News> implements NewsDao{
 
     @Override
     public Optional<News> create(News news) {

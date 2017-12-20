@@ -1,4 +1,4 @@
-package exceptions;
+package notifier.exceptions;
 
 public class BadLengthTelephoneNumberException extends Exception{
 
@@ -9,5 +9,6 @@ public class BadLengthTelephoneNumberException extends Exception{
 
 	public BadLengthTelephoneNumberException() {
 		super("Telephone number too short or too long!");
+
 	}
 }

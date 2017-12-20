@@ -3,13 +3,9 @@ package Daemon;
 import com.google.inject.Inject;
 import dao.NewsDao;
 import dao.UserDao;
-import model.News;
-import model.User;
 import model.UserNewsDTO;
-import org.javatuples.Pair;
-import org.javatuples.Tuple;
 
-import java.util.List;
+
 import java.util.TimerTask;
 
 

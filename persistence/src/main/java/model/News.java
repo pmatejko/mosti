@@ -3,6 +3,8 @@ package model;
 import java.util.*;
 import javax.persistence.*;
 
+import model.Preferences;
+
 @Entity
 @Table(name = News.TABLE_NAME)
 public class News {
