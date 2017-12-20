@@ -13,7 +13,7 @@ public class NotifierDeamon {
     @Inject
     private PublishSubject<UserNewsDTO> userNews;
 
-    public Observable<UserNewsDTO> getUserNews() {
+    public Observable<UserNewsDTO> getUserNewsObservable() {
         return userNews;
     }
 
