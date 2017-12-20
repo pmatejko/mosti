@@ -3,6 +3,8 @@ package Daemon;
 import com.google.inject.Inject;
 import dao.NewsDao;
 import dao.UserDao;
+import io.reactivex.Observer;
+import io.reactivex.subjects.PublishSubject;
 import model.News;
 import model.User;
 import model.UserNewsDTO;
@@ -15,17 +17,14 @@ import java.util.TimerTask;
 
 public class NotifyTask extends TimerTask {
     @Inject
-    UserDao userDao;
+    private UserDao userDao;
     @Inject
-    NewsDao newsDao;
-//    @Inject
-//    Informer informer
-
+    private PublishSubject<UserNewsDTO> userNews;
 
     @Override
     public void run() {
         userDao.getUsersToNotify().stream()
-        .map(user -> new UserNewsDTO(user,userDao.getNewsToSend(user)));
-//                .forEach(informer::informUser);
+        .map(user -> new UserNewsDTO(user,userDao.getNewsToSend(user)))
+        .forEach(userNews::onNext);
     }
 }
