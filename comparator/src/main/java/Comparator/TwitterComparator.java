@@ -1,6 +1,7 @@
 package Comparator;
 
 
+import com.google.inject.Inject;
 import model.News;
 
 public class TwitterComparator extends AbstractComparator{

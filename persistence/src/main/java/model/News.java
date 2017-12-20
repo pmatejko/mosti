@@ -41,6 +41,15 @@ public class News {
         return preferences;
     }
 
+    public News(String url, String content) {
+        this.url = url;
+        this.content = content;
+    }
+
+    public void addPreference(Preferences preference){
+        preferences.add(preference);
+    }
+
     public long getId() { return id; }
 
     public String getUrl() {

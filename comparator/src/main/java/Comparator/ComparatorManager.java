@@ -1,11 +1,11 @@
 package Comparator;
 
-import exceptions.DataProviderCOnflictException;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import dto.NewsDTO;
+import exceptions.DataProviderCOnflictException;
 import fetcher.FetchingManager;
 import model.News;
-import dto.NewsDTO;
 
 
 

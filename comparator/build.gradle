@@ -17,6 +17,11 @@ dependencies {
     compile group: 'com.google.inject', name: 'guice', version: '4.0'
     // https://mvnrepository.com/artifact/org.javatuples/javatuples
     compile group: 'org.javatuples', name: 'javatuples', version: '1.2'
+    // https://mvnrepository.com/artifact/org.mockito/mockito-core
+    testCompile group: 'org.mockito', name: 'mockito-core', version: '2.1.0'
+// https://mvnrepository.com/artifact/com.google.inject.extensions/guice-assistedinject
+    compile group: 'com.google.inject.extensions', name: 'guice-assistedinject', version: '4.0'
+
 
 
 }
