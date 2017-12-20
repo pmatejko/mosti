@@ -1,6 +1,8 @@
 package fetcher.impl;
 
+import exceptions.FetchingException;
 import interfaces.Fetcher;
+import model.DataProvider;
 import model.News;
 import model.Preferences;
 
@@ -25,19 +27,23 @@ public class NewsAPIFetcher implements Fetcher {
     private static final String apiKey = "apiKey=cc36659c4c784994a77282ce4e4dc1ed";
 
     @Override
-    public List<News> fetch(Preferences preferences) throws IOException {
-        String queryString = buildQueryString(preferences);
+    public List<News> fetch(Preferences preferences) throws FetchingException {
+        try {
+            String queryString = buildQueryString(preferences);
 
-        URL apiQueryUrl = new URL(queryString);
-        BufferedReader in = new BufferedReader(new InputStreamReader(apiQueryUrl.openStream()));
-        JsonReader reader = Json.createReader(in);
-        JsonObject page = reader.readObject();
+            URL apiQueryUrl = new URL(queryString);
+            BufferedReader in = new BufferedReader(new InputStreamReader(apiQueryUrl.openStream()));
+            JsonReader reader = Json.createReader(in);
+            JsonObject page = reader.readObject();
 
-        reader.close();
-        in.close();
+            reader.close();
+            in.close();
 
-        JsonArray jsonArticles = page.getJsonArray("articles");
-        return parseJsonArticleArray(jsonArticles, preferences);
+            JsonArray jsonArticles = page.getJsonArray("articles");
+            return parseJsonArticleArray(jsonArticles, preferences);
+        } catch (IOException e) {
+            throw new FetchingException(e);
+        }
     }
 
     private String buildQueryString(Preferences preferences) {
@@ -80,5 +86,18 @@ public class NewsAPIFetcher implements Fetcher {
         }
 
         return articles;
+    }
+
+
+
+    public static void main(String[] args) throws Exception {
+        NewsAPIFetcher articleFetcher = new NewsAPIFetcher();
+
+        Preferences preferences = new Preferences("bitcoin", "vice-news", DataProvider.NEWS_API);
+        List<News> articles = articleFetcher.fetch(preferences);
+
+        for (News article : articles) {
+            System.out.println(article.getUrl() + "\n" + article.getTimestamp() + "\n" + article.getContent() + "\n");
+        }
     }
 }
