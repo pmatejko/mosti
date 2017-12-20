@@ -16,7 +16,7 @@ public class FetcherFactory implements IFetcherFactory {
             case TWITTER_API:
                 return new TwitterAPIFetcher();
             default:
-                throw new UnsupportedDataProviderException();
+                throw new UnsupportedDataProviderException(dataProvider.name() + " is not implemented");
         }
     }
 }

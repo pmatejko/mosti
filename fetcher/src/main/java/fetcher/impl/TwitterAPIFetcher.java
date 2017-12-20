@@ -4,6 +4,7 @@ import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.builder.api.DefaultApi10a;
 import com.github.scribejava.core.model.*;
 import com.github.scribejava.core.oauth.OAuth10aService;
+import exceptions.FetchingException;
 import interfaces.Fetcher;
 import model.News;
 import model.Preferences;
@@ -30,23 +31,27 @@ public class TwitterAPIFetcher implements Fetcher {
 
 
     @Override
-    public List<News> fetch(Preferences preferences) throws IOException, InterruptedException, ExecutionException, ParseException {
-        String queryString = buildQueryString(preferences);
+    public List<News> fetch(Preferences preferences) throws FetchingException {
+        try {
+            String queryString = buildQueryString(preferences);
 
-        if(accessToken == null)
-            authorize();
+            if (accessToken == null)
+                authorize();
 
-        final OAuthRequest request = new OAuthRequest(Verb.GET, queryString);
-        service.signRequest(accessToken, request);
-        final Response response = service.execute(request);
+            final OAuthRequest request = new OAuthRequest(Verb.GET, queryString);
+            service.signRequest(accessToken, request);
+            final Response response = service.execute(request);
 
-        JsonReader reader = Json.createReader(new StringReader(response.getBody()));
-        JsonObject tweets = reader.readObject();
-        reader.close();
+            JsonReader reader = Json.createReader(new StringReader(response.getBody()));
+            JsonObject tweets = reader.readObject();
+            reader.close();
 
-        JsonArray jsonTweets = tweets.getJsonArray("statuses");
+            JsonArray jsonTweets = tweets.getJsonArray("statuses");
 
-        return parseJsonTweetsArray(jsonTweets, preferences);
+            return parseJsonTweetsArray(jsonTweets, preferences);
+        } catch (IOException | ExecutionException | ParseException | InterruptedException e) {
+            throw new FetchingException(e);
+        }
     }
 
     private String buildQueryString(Preferences preferences) throws UnsupportedEncodingException {
@@ -162,25 +167,25 @@ public class TwitterAPIFetcher implements Fetcher {
         }
     }
 
-//    public static void main(String args[]) {
-//        try {
-//            TwitterAPIFetcher x = new TwitterAPIFetcher();
-//
-//            Preferences preferences = new Preferences();
-//            preferences.setKeyword("Audi");
-//            //preferences.setNewsSource("Audi");
-//            List<News> lista = x.fetch(preferences);
-//
-//            for (News tweet: lista) {
-//                System.out.println(tweet.getUrl());
-//                System.out.println(tweet.getContent());
-//                System.out.println(tweet.getTimestamp());
-//                System.out.println();
-//            }
-//        }
-//        catch(Exception e){
-//            System.out.println("Exception!");
-//            e.printStackTrace();
-//        }
-//    }
+    public static void main(String args[]) {
+        try {
+            TwitterAPIFetcher x = new TwitterAPIFetcher();
+
+            Preferences preferences = new Preferences();
+            //preferences.setKeyword("Audi");
+            preferences.setNewsSource("realDonaldTrump");
+            List<News> lista = x.fetch(preferences);
+
+            for (News tweet: lista) {
+                System.out.println(tweet.getUrl());
+                System.out.println(tweet.getContent());
+                System.out.println(tweet.getTimestamp());
+                System.out.println();
+            }
+        }
+        catch(Exception e){
+            System.out.println("Exception!");
+            e.printStackTrace();
+        }
+    }
 }

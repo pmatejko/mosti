@@ -34,6 +34,7 @@ public class FetcherTask extends TimerTask {
             NewsDTO newsDTO = new NewsDTO(newsList);
             newsObserver.onNext(newsDTO);
         } catch (Exception e) {
+            // TODO - for example retry after some time
             e.printStackTrace();
         }
     }

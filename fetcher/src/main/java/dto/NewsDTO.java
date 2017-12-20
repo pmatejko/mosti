@@ -3,6 +3,7 @@ package dto;
 
 import model.News;
 
+import java.util.Collections;
 import java.util.List;
 
 public class NewsDTO {
@@ -10,7 +11,7 @@ public class NewsDTO {
 
 
     public NewsDTO(List<News> newsList) {
-        this.newsList = newsList;
+        this.newsList = Collections.unmodifiableList(newsList);
     }
 
 
