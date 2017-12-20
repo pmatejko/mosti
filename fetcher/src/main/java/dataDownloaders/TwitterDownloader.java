@@ -58,4 +58,8 @@ public final class TwitterDownloader implements NewsDownloader {
         return page;
     }
 
+    public boolean haveAccessToken(){
+        return this.accessToken != null;
+    }
+
 }
