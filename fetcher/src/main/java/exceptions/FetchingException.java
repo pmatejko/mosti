@@ -6,6 +6,10 @@ public class FetchingException extends Exception {
         super(cause);
     }
 
+    public FetchingException(String message) {
+        super(message);
+    }
+
     public FetchingException(String message, Throwable cause) {
         super(message, cause);
     }
