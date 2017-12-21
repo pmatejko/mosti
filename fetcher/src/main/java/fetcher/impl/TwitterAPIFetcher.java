@@ -1,90 +1,146 @@
 package fetcher.impl;
 
-import com.github.scribejava.core.builder.ServiceBuilder;
-import com.github.scribejava.core.builder.api.DefaultApi10a;
-import com.github.scribejava.core.model.*;
-import com.github.scribejava.core.oauth.OAuth10aService;
 import exceptions.FetchingException;
 import interfaces.Fetcher;
+import model.DataProvider;
 import model.News;
 import model.Preferences;
 
 import javax.json.*;
-import java.io.IOException;
-import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
+import java.io.*;
+import java.net.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 
 public class TwitterAPIFetcher implements Fetcher {
-    private static final String apiUrl = "https://api.twitter.com/1.1/search/tweets.json?q=";
+    private static final String API_URL = "https://api.twitter.com/1.1/search/tweets.json?q=";
+    private static final String BEARER_TOKEN_URL = "https://api.twitter.com/oauth2/token";
+    private static String ACCESS_TOKEN;
 
-    private static OAuth1AccessToken accessToken = null;
-    private final OAuth10aService service = new ServiceBuilder("A3HiwxEgAvPVTfrgrbh759dzj")
-            .apiSecret("yFWPALPeQJsElynktj8SYnfxpWiNZRFegZAJKFAr9TyN3S602D")
-            .build(TwitterApi.instance());
+    private static final String POST = "POST";
+    private static final String GET = "GET";
 
+    private static final String AUTHORIZATION = "Authorization";
+    private static final String CONTENT_TYPE = "Content-Type";
+    private static final String CONTENT_LENGTH = "Content-Length";
+
+    private static final String BASIC = "Basic ";
+    private static final String BEARER = "Bearer ";
+    private static final String CONTENT_TYPE_VALUE = "application/x-www-form-urlencoded;charset=UTF-8";
+    private static final String BEARER_REQUEST_BODY = "grant_type=client_credentials";
+
+
+    public TwitterAPIFetcher() {
+        try {
+            String base64Credentials = createEncodedCredentials("consumer key",
+                    "consumer secret");
+
+            HttpURLConnection connection = createAccessTokenConnection(base64Credentials);
+
+            ACCESS_TOKEN = getAccessToken(connection);
+        } catch (IOException | FetchingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String createEncodedCredentials(String key, String secret) throws UnsupportedEncodingException {
+        String consumerKey = URLEncoder.encode(key, UTF_8.toString());
+        String consumerSecret = URLEncoder.encode(secret, UTF_8.toString());
+        String credentials = consumerKey + ":" + consumerSecret;
+
+        return Base64.getEncoder().encodeToString(credentials.getBytes());
+    }
+
+    private HttpURLConnection createAccessTokenConnection(String base64Credentials) throws IOException {
+        HttpURLConnection connection = (HttpURLConnection) new URL(BEARER_TOKEN_URL).openConnection();
+        byte[] requestBody = BEARER_REQUEST_BODY.getBytes(UTF_8.toString());
+        connection.setRequestMethod(POST);
+        connection.setRequestProperty(AUTHORIZATION, BASIC + base64Credentials);
+        connection.setRequestProperty(CONTENT_TYPE, CONTENT_TYPE_VALUE);
+        connection.setRequestProperty(CONTENT_LENGTH, String.valueOf(requestBody.length));
+        connection.setDoOutput(true);
+
+        OutputStream os = connection.getOutputStream();
+        os.write(requestBody);
+        os.close();
+
+        connection.connect();
+        return connection;
+    }
+
+    private String getAccessToken(HttpURLConnection connection) throws IOException, FetchingException {
+        if (connection.getResponseCode() == 200) {
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            JsonReader jsonReader = Json.createReader(bufferedReader);
+            JsonObject response = jsonReader.readObject();
+            jsonReader.close();
+
+            if ("bearer".equals(response.getString("token_type"))) {
+                return response.getString("access_token");
+            }
+        }
+
+        throw new FetchingException(connection.getResponseCode() + " - Cannot acquire TwitterAPI access token");
+    }
 
     @Override
     public List<News> fetch(Preferences preferences) throws FetchingException {
         try {
             String queryString = buildQueryString(preferences);
 
-            if (accessToken == null)
-                authorize();
+            HttpURLConnection connection = createQueryConnection(queryString);
 
-            final OAuthRequest request = new OAuthRequest(Verb.GET, queryString);
-            service.signRequest(accessToken, request);
-            final Response response = service.execute(request);
-
-            JsonReader reader = Json.createReader(new StringReader(response.getBody()));
-            JsonObject tweets = reader.readObject();
-            reader.close();
-
-            JsonArray jsonTweets = tweets.getJsonArray("statuses");
+            JsonObject jsonResponse = getJsonResponse(connection);
+            JsonArray jsonTweets = jsonResponse.getJsonArray("statuses");
 
             return parseJsonTweetsArray(jsonTweets, preferences);
-        } catch (IOException | ExecutionException | ParseException | InterruptedException e) {
+        } catch (IOException | ParseException e) {
             throw new FetchingException(e);
         }
     }
 
     private String buildQueryString(Preferences preferences) throws UnsupportedEncodingException {
-        StringBuilder stringBuilder = new StringBuilder(100);
-        stringBuilder.append(apiUrl);
+        StringBuilder queryBuilder = new StringBuilder(100);
 
         if (preferences.getKeyword() != null) {
-            stringBuilder.append(URLEncoder.encode(preferences.getKeyword(), StandardCharsets.UTF_8.toString()));
+            queryBuilder.append(preferences.getKeyword());
         }
 
-        if(preferences.getNewsSource() != null){
-            stringBuilder.append(URLEncoder.encode(" from:" + preferences.getNewsSource(), StandardCharsets.UTF_8.toString()));
+        if (preferences.getKeyword() != null && preferences.getNewsSource() != null) {
+            queryBuilder.append(" ");
         }
 
-        return stringBuilder.toString();
+        if (preferences.getNewsSource() != null){
+            queryBuilder.append("from:");
+            queryBuilder.append(preferences.getNewsSource());
+        }
+
+        String encodedQuery = URLEncoder.encode(queryBuilder.toString(), UTF_8.toString());
+
+        return API_URL + encodedQuery;
     }
 
-    private void authorize() throws IOException, InterruptedException, ExecutionException{
-        final Scanner in = new Scanner(System.in);
+    private HttpURLConnection createQueryConnection(String queryString) throws IOException {
+        URL url = new URL(queryString);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod(GET);
+        connection.setRequestProperty(AUTHORIZATION, BEARER + ACCESS_TOKEN);
 
-        // Obtain the Request Token
-        final OAuth1RequestToken requestToken = service.getRequestToken();
+        connection.connect();
+        return connection;
+    }
 
-        //to trzeba zmienic, przy autentykacji trzeba przekopiowac kod z neta
-        System.out.println("Now go and authorize ScribeJava here:");
-        System.out.println(service.getAuthorizationUrl(requestToken));
-        System.out.println("And paste the verifier here");
-        System.out.print(">>");
+    private JsonObject getJsonResponse(HttpURLConnection connection) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        JsonReader jsonReader = Json.createReader(bufferedReader);
+        JsonObject response = jsonReader.readObject();
+        jsonReader.close();
 
-        final String oauthVerifier = in.nextLine();
-
-        // Trade the Request Token and Verfier for the Access Token
-        accessToken = service.getAccessToken(requestToken, oauthVerifier);
+        return response;
     }
 
     private List<News> parseJsonTweetsArray(JsonArray jsonArticles, Preferences preferences) throws ParseException {
@@ -98,7 +154,8 @@ public class TwitterAPIFetcher implements Fetcher {
 
                 String url = "https://twitter.com/statuses/" + jsonArticle.getString("id_str");
                 String content = jsonArticle.getString("text");
-                Date timestamp =  new SimpleDateFormat(dateFormat, Locale.ENGLISH).parse(jsonArticle.getString("created_at"));
+                Date timestamp = new SimpleDateFormat(dateFormat, Locale.ENGLISH)
+                        .parse(jsonArticle.getString("created_at"));
 
                 tweets.add(new News(preferences, url, content, timestamp));
             }
@@ -109,83 +166,29 @@ public class TwitterAPIFetcher implements Fetcher {
 
 
 
-    private static class TwitterApi extends DefaultApi10a {
-        private static final String AUTHORIZE_URL = "https://api.twitter.com/oauth/authorize?oauth_token=%s";
-        private static final String REQUEST_TOKEN_RESOURCE = "api.twitter.com/oauth/request_token";
-        private static final String ACCESS_TOKEN_RESOURCE = "api.twitter.com/oauth/access_token";
-
-        protected TwitterApi() {
-        }
-
-        private static class InstanceHolder {
-            private static final TwitterApi INSTANCE = new TwitterApi();
-        }
-
-        public static TwitterApi instance() {
-            return TwitterApi.InstanceHolder.INSTANCE;
-        }
-
-        @Override
-        public String getAccessTokenEndpoint() {
-            return "https://" + ACCESS_TOKEN_RESOURCE;
-        }
-
-        @Override
-        public String getRequestTokenEndpoint() {
-            return "https://" + REQUEST_TOKEN_RESOURCE;
-        }
-
-        @Override
-        public String getAuthorizationUrl(OAuth1RequestToken requestToken) {
-            return String.format(AUTHORIZE_URL, requestToken.getToken());
-        }
-
-        /**
-         * Twitter 'friendlier' authorization endpoint for OAuth.
-         *
-         * Uses SSL.
-         */
-        public static class Authenticate extends TwitterApi {
-
-            private static final String AUTHENTICATE_URL = "https://api.twitter.com/oauth/authenticate?oauth_token=%s";
-
-            private Authenticate() {
-            }
-
-            private static class InstanceHolder {
-                private static final Authenticate INSTANCE = new Authenticate();
-            }
-
-            public static Authenticate instance() {
-                return Authenticate.InstanceHolder.INSTANCE;
-            }
-
-            @Override
-            public String getAuthorizationUrl(OAuth1RequestToken requestToken) {
-                return String.format(AUTHENTICATE_URL, requestToken.getToken());
-            }
-        }
-    }
-
-    public static void main(String args[]) {
-        try {
-            TwitterAPIFetcher x = new TwitterAPIFetcher();
-
-            Preferences preferences = new Preferences();
-            //preferences.setKeyword("Audi");
-            preferences.setNewsSource("realDonaldTrump");
-            List<News> lista = x.fetch(preferences);
-
-            for (News tweet: lista) {
-                System.out.println(tweet.getUrl());
-                System.out.println(tweet.getContent());
-                System.out.println(tweet.getTimestamp());
-                System.out.println();
-            }
-        }
-        catch(Exception e){
-            System.out.println("Exception!");
-            e.printStackTrace();
-        }
+    public static void main(String args[]) throws FetchingException {
+        TwitterAPIFetcher fetcher = new TwitterAPIFetcher();
+        Preferences p = new Preferences("america", "realDonaldTrump", DataProvider.TWITTER_API);
+        List<News> l = fetcher.fetch(p);
+        l.forEach(System.out::println);
+//        try {
+//            TwitterAPIFetcher x = new TwitterAPIFetcher();
+//
+//            Preferences preferences = new Preferences();
+//            //preferences.setKeyword("Audi");
+//            preferences.setNewsSource("realDonaldTrump");
+//            List<News> lista = x.fetch(preferences);
+//
+//            for (News tweet: lista) {
+//                System.out.println(tweet.getUrl());
+//                System.out.println(tweet.getContent());
+//                System.out.println(tweet.getTimestamp());
+//                System.out.println();
+//            }
+//        }
+//        catch(Exception e){
+//            System.out.println("Exception!");
+//            e.printStackTrace();
+//        }
     }
 }

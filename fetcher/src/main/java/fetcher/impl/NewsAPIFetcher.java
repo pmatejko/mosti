@@ -35,9 +35,7 @@ public class NewsAPIFetcher implements Fetcher {
             BufferedReader in = new BufferedReader(new InputStreamReader(apiQueryUrl.openStream()));
             JsonReader reader = Json.createReader(in);
             JsonObject page = reader.readObject();
-
             reader.close();
-            in.close();
 
             JsonArray jsonArticles = page.getJsonArray("articles");
             return parseJsonArticleArray(jsonArticles, preferences);

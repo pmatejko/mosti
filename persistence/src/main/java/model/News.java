@@ -77,6 +77,13 @@ public class News {
         return this.toString();
     }
 
+    @Override
+    public String toString() {
+        return url + "\n"
+                + timestamp + "\n"
+                + content + "\n"
+                + preferences.size() + "\n";
+    }
 
     public static class Columns {
         public static final String ID = "id";
