@@ -4,8 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import exceptions.FetchingException;
 import interfaces.Fetcher;
-import interfaces.IPropertiesManager;
-import model.DataProvider;
+import interfaces.PropertiesManager;
 import model.News;
 import model.Preferences;
 
@@ -15,13 +14,12 @@ import java.net.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Singleton
 public class TwitterAPIFetcher implements Fetcher {
-    private final String ACCESS_TOKEN;
-
     private static final String API_URL = "https://api.twitter.com/1.1/search/tweets.json?q=";
     private static final String BEARER_TOKEN_URL = "https://api.twitter.com/oauth2/token";
 
@@ -38,14 +36,15 @@ public class TwitterAPIFetcher implements Fetcher {
     private static final String BEARER_REQUEST_BODY = "grant_type=client_credentials";
     private static final String TWITTER_DATE_FORMAT = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
 
+
+    private final String ACCESS_TOKEN;
+
+
     @Inject
-    private IPropertiesManager propertiesManager;
-
-
-    public TwitterAPIFetcher() {
+    public TwitterAPIFetcher(PropertiesManager propertiesManager) {
         try {
-            String consumerKey = propertiesManager.getProperty(IPropertiesManager.Keys.TWITTER_API_KEY);
-            String consumerSecret = propertiesManager.getProperty(IPropertiesManager.Keys.TWITTER_API_SECRET);
+            String consumerKey = propertiesManager.getProperty(PropertiesManager.Keys.TWITTER_API_KEY);
+            String consumerSecret = propertiesManager.getProperty(PropertiesManager.Keys.TWITTER_API_SECRET);
             String base64Credentials = createEncodedCredentials(consumerKey, consumerSecret);
 
             HttpURLConnection connection = createAccessTokenConnection(base64Credentials);
@@ -168,14 +167,5 @@ public class TwitterAPIFetcher implements Fetcher {
         }
 
         return tweets;
-    }
-
-
-
-    public static void main(String args[]) throws FetchingException {
-        TwitterAPIFetcher fetcher = new TwitterAPIFetcher();
-        Preferences p = new Preferences("america", "realDonaldTrump", DataProvider.TWITTER_API);
-        List<News> l = fetcher.fetch(p);
-        l.forEach(System.out::println);
     }
 }

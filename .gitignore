@@ -37,6 +37,7 @@ hs_err_pid*
 .gradle/
 build/
 bin/
+**/out
 
 # Properties file with API keys
 data-provider.properties

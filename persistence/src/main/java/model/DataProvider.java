@@ -1,8 +1,8 @@
 package model;
 
 public enum DataProvider {
-    TWITTER_API(1000 * 60 * 10),
-    NEWS_API(1000 * 60 * 15);
+    TWITTER_API(1000 * 60 * 15),
+    NEWS_API(1000 * 60 * 10);
 
     /*******************************************************/
 

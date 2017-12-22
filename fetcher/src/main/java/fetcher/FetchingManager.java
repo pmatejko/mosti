@@ -3,6 +3,7 @@ package fetcher;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import dto.NewsDTO;
+import interfaces.FetcherTaskFactory;
 import interfaces.IFetchingManager;
 import io.reactivex.Observable;
 import model.Preferences;
@@ -13,6 +14,8 @@ import java.util.*;
 public class FetchingManager implements IFetchingManager {
     @Inject
     private Observable<NewsDTO> newsObservable;
+    @Inject
+    private FetcherTaskFactory fetcherTaskFactory;
 
     private final Timer timer = new Timer();
     private final Map<Long, FetcherTask> activeTasksMap = new HashMap<>();
@@ -24,7 +27,7 @@ public class FetchingManager implements IFetchingManager {
     }
 
     public void addSubscription(Preferences preferences) {
-        FetcherTask task = new FetcherTask(preferences);
+        FetcherTask task = fetcherTaskFactory.create(preferences);
         timer.schedule(task, 0, preferences.getDataProvider().getMillisecondInterval());
         activeTasksMap.put(preferences.getId(), task);
     }
