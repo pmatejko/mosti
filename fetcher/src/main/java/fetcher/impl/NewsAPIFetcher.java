@@ -1,10 +1,14 @@
 package fetcher.impl;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import exceptions.FetchingException;
 import interfaces.Fetcher;
+import interfaces.IPropertiesManager;
 import model.DataProvider;
 import model.News;
 import model.Preferences;
+import util.PropertiesManager;
 
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -22,9 +26,20 @@ import java.util.List;
 
 import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
 
+@Singleton
 public class NewsAPIFetcher implements Fetcher {
-    private static final String apiUrl = "https://newsapi.org/v2/everything?";
-    private static final String apiKey = "apiKey=cc36659c4c784994a77282ce4e4dc1ed";
+    private final String API_KEY;
+
+    private static final String API_URL = "https://newsapi.org/v2/everything?";
+
+    @Inject
+    private IPropertiesManager propertiesManager;
+
+
+    public NewsAPIFetcher() {
+        API_KEY = propertiesManager.getProperty(IPropertiesManager.Keys.NEWS_API_KEY);
+    }
+
 
     @Override
     public List<News> fetch(Preferences preferences) throws FetchingException {
@@ -46,7 +61,7 @@ public class NewsAPIFetcher implements Fetcher {
 
     private String buildQueryString(Preferences preferences) {
         StringBuilder stringBuilder = new StringBuilder(100);
-        stringBuilder.append(apiUrl);
+        stringBuilder.append(API_URL);
 
         if (preferences.getKeyword() != null) {
             stringBuilder.append("q=");
@@ -63,7 +78,7 @@ public class NewsAPIFetcher implements Fetcher {
         }
 
         stringBuilder.append("&");
-        stringBuilder.append(apiKey);
+        stringBuilder.append(API_KEY);
 
         return stringBuilder.toString();
     }
