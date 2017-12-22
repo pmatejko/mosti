@@ -37,6 +37,9 @@ public class News {
         this.timestamp = timestamp;
     }
 
+    public List<Preferences> getPreferences() {
+        return preferences;
+    }
 
     public long getId() { return id; }
 

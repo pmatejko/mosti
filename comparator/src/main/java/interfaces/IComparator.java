@@ -6,8 +6,7 @@ import model.User;
 
 public interface IComparator {
     void process();
-    Iterable<User> assignUsersByKeywords();
+    boolean isUsed();
     boolean isNew();
-    void save();
 
 }
