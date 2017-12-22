@@ -1,6 +1,6 @@
 package interfaces;
 
-public interface IPropertiesManager {
+public interface PropertiesManager {
     String getProperty(String key);
 
     class Keys {

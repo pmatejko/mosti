@@ -4,11 +4,9 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import exceptions.FetchingException;
 import interfaces.Fetcher;
-import interfaces.IPropertiesManager;
-import model.DataProvider;
+import interfaces.PropertiesManager;
 import model.News;
 import model.Preferences;
-import util.PropertiesManager;
 
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -28,16 +26,14 @@ import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
 
 @Singleton
 public class NewsAPIFetcher implements Fetcher {
-    private final String API_KEY;
-
     private static final String API_URL = "https://newsapi.org/v2/everything?";
 
+    private final String API_KEY;
+
+
     @Inject
-    private IPropertiesManager propertiesManager;
-
-
-    public NewsAPIFetcher() {
-        API_KEY = propertiesManager.getProperty(IPropertiesManager.Keys.NEWS_API_KEY);
+    public NewsAPIFetcher(PropertiesManager propertiesManager) {
+        API_KEY = propertiesManager.getProperty(PropertiesManager.Keys.NEWS_API_KEY);
     }
 
 
@@ -77,7 +73,7 @@ public class NewsAPIFetcher implements Fetcher {
             stringBuilder.append(preferences.getNewsSource());
         }
 
-        stringBuilder.append("&");
+        stringBuilder.append("&apiKey=");
         stringBuilder.append(API_KEY);
 
         return stringBuilder.toString();
@@ -99,18 +95,5 @@ public class NewsAPIFetcher implements Fetcher {
         }
 
         return articles;
-    }
-
-
-
-    public static void main(String[] args) throws Exception {
-        NewsAPIFetcher articleFetcher = new NewsAPIFetcher();
-
-        Preferences preferences = new Preferences("bitcoin", "vice-news", DataProvider.NEWS_API);
-        List<News> articles = articleFetcher.fetch(preferences);
-
-        for (News article : articles) {
-            System.out.println(article.getUrl() + "\n" + article.getTimestamp() + "\n" + article.getContent() + "\n");
-        }
     }
 }

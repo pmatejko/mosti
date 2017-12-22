@@ -81,8 +81,7 @@ public class News {
     public String toString() {
         return url + "\n"
                 + timestamp + "\n"
-                + content + "\n"
-                + preferences.size() + "\n";
+                + content;
     }
 
     public static class Columns {

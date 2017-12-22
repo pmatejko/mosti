@@ -1,19 +1,20 @@
 package util;
 
 import com.google.inject.Singleton;
-import interfaces.IPropertiesManager;
+import interfaces.PropertiesManager;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
 @Singleton
-public class PropertiesManager implements IPropertiesManager {
+public class DefaultPropertiesManager implements PropertiesManager {
     private static final String DATA_PROVIDER_PROPERTIES_FILE_NAME = "data-provider.properties";
 
-    private final Properties properties;
+    private Properties properties;
 
-    public PropertiesManager() {
+
+    public DefaultPropertiesManager() {
         try {
             InputStream dataProviderPropertiesStream = Thread.currentThread()
                     .getContextClassLoader()
@@ -26,6 +27,7 @@ public class PropertiesManager implements IPropertiesManager {
                     DATA_PROVIDER_PROPERTIES_FILE_NAME + " file", e);
         }
     }
+
 
     @Override
     public String getProperty(String key) {
