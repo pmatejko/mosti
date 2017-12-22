@@ -1,7 +1,10 @@
 package fetcher.impl;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import exceptions.FetchingException;
 import interfaces.Fetcher;
+import interfaces.IPropertiesManager;
 import model.DataProvider;
 import model.News;
 import model.Preferences;
@@ -15,11 +18,12 @@ import java.util.*;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-
+@Singleton
 public class TwitterAPIFetcher implements Fetcher {
+    private final String ACCESS_TOKEN;
+
     private static final String API_URL = "https://api.twitter.com/1.1/search/tweets.json?q=";
     private static final String BEARER_TOKEN_URL = "https://api.twitter.com/oauth2/token";
-    private static String ACCESS_TOKEN;
 
     private static final String POST = "POST";
     private static final String GET = "GET";
@@ -32,18 +36,40 @@ public class TwitterAPIFetcher implements Fetcher {
     private static final String BEARER = "Bearer ";
     private static final String CONTENT_TYPE_VALUE = "application/x-www-form-urlencoded;charset=UTF-8";
     private static final String BEARER_REQUEST_BODY = "grant_type=client_credentials";
+    private static final String TWITTER_DATE_FORMAT = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
+
+    @Inject
+    private IPropertiesManager propertiesManager;
 
 
     public TwitterAPIFetcher() {
         try {
-            String base64Credentials = createEncodedCredentials("consumer key",
-                    "consumer secret");
+            String consumerKey = propertiesManager.getProperty(IPropertiesManager.Keys.TWITTER_API_KEY);
+            String consumerSecret = propertiesManager.getProperty(IPropertiesManager.Keys.TWITTER_API_SECRET);
+            String base64Credentials = createEncodedCredentials(consumerKey, consumerSecret);
 
             HttpURLConnection connection = createAccessTokenConnection(base64Credentials);
 
             ACCESS_TOKEN = getAccessToken(connection);
         } catch (IOException | FetchingException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+
+    @Override
+    public List<News> fetch(Preferences preferences) throws FetchingException {
+        try {
+            String queryString = buildQueryString(preferences);
+
+            HttpURLConnection connection = createQueryConnection(queryString);
+
+            JsonObject jsonResponse = getJsonResponse(connection);
+            JsonArray jsonTweets = jsonResponse.getJsonArray("statuses");
+
+            return parseJsonTweetsArray(jsonTweets, preferences);
+        } catch (IOException | ParseException e) {
+            throw new FetchingException(e);
         }
     }
 
@@ -57,6 +83,7 @@ public class TwitterAPIFetcher implements Fetcher {
 
     private HttpURLConnection createAccessTokenConnection(String base64Credentials) throws IOException {
         HttpURLConnection connection = (HttpURLConnection) new URL(BEARER_TOKEN_URL).openConnection();
+
         byte[] requestBody = BEARER_REQUEST_BODY.getBytes(UTF_8.toString());
         connection.setRequestMethod(POST);
         connection.setRequestProperty(AUTHORIZATION, BASIC + base64Credentials);
@@ -74,33 +101,23 @@ public class TwitterAPIFetcher implements Fetcher {
 
     private String getAccessToken(HttpURLConnection connection) throws IOException, FetchingException {
         if (connection.getResponseCode() == 200) {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            JsonReader jsonReader = Json.createReader(bufferedReader);
-            JsonObject response = jsonReader.readObject();
-            jsonReader.close();
+            JsonObject response = getJsonResponse(connection);
 
             if ("bearer".equals(response.getString("token_type"))) {
                 return response.getString("access_token");
             }
         }
 
-        throw new FetchingException(connection.getResponseCode() + " - Cannot acquire TwitterAPI access token");
+        throw new FetchingException(connection.getResponseCode() + " - cannot acquire TwitterAPI access token");
     }
 
-    @Override
-    public List<News> fetch(Preferences preferences) throws FetchingException {
-        try {
-            String queryString = buildQueryString(preferences);
+    private JsonObject getJsonResponse(HttpURLConnection connection) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        JsonReader jsonReader = Json.createReader(bufferedReader);
+        JsonObject response = jsonReader.readObject();
+        jsonReader.close();
 
-            HttpURLConnection connection = createQueryConnection(queryString);
-
-            JsonObject jsonResponse = getJsonResponse(connection);
-            JsonArray jsonTweets = jsonResponse.getJsonArray("statuses");
-
-            return parseJsonTweetsArray(jsonTweets, preferences);
-        } catch (IOException | ParseException e) {
-            throw new FetchingException(e);
-        }
+        return response;
     }
 
     private String buildQueryString(Preferences preferences) throws UnsupportedEncodingException {
@@ -134,19 +151,8 @@ public class TwitterAPIFetcher implements Fetcher {
         return connection;
     }
 
-    private JsonObject getJsonResponse(HttpURLConnection connection) throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        JsonReader jsonReader = Json.createReader(bufferedReader);
-        JsonObject response = jsonReader.readObject();
-        jsonReader.close();
-
-        return response;
-    }
-
     private List<News> parseJsonTweetsArray(JsonArray jsonArticles, Preferences preferences) throws ParseException {
         List<News> tweets = new LinkedList<>();
-
-        String dateFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
 
         for (JsonValue jsonValue : jsonArticles) {
             if (jsonValue.getValueType() == JsonValue.ValueType.OBJECT) {
@@ -154,7 +160,7 @@ public class TwitterAPIFetcher implements Fetcher {
 
                 String url = "https://twitter.com/statuses/" + jsonArticle.getString("id_str");
                 String content = jsonArticle.getString("text");
-                Date timestamp = new SimpleDateFormat(dateFormat, Locale.ENGLISH)
+                Date timestamp = new SimpleDateFormat(TWITTER_DATE_FORMAT, Locale.ENGLISH)
                         .parse(jsonArticle.getString("created_at"));
 
                 tweets.add(new News(preferences, url, content, timestamp));
@@ -171,24 +177,5 @@ public class TwitterAPIFetcher implements Fetcher {
         Preferences p = new Preferences("america", "realDonaldTrump", DataProvider.TWITTER_API);
         List<News> l = fetcher.fetch(p);
         l.forEach(System.out::println);
-//        try {
-//            TwitterAPIFetcher x = new TwitterAPIFetcher();
-//
-//            Preferences preferences = new Preferences();
-//            //preferences.setKeyword("Audi");
-//            preferences.setNewsSource("realDonaldTrump");
-//            List<News> lista = x.fetch(preferences);
-//
-//            for (News tweet: lista) {
-//                System.out.println(tweet.getUrl());
-//                System.out.println(tweet.getContent());
-//                System.out.println(tweet.getTimestamp());
-//                System.out.println();
-//            }
-//        }
-//        catch(Exception e){
-//            System.out.println("Exception!");
-//            e.printStackTrace();
-//        }
     }
 }
