@@ -20,7 +20,6 @@
         <!-- Enable Hibernate's automatic session context management -->
         <property name="current_session_context_class">thread</property>
 
-
         <!-- Echo all executed SQL to stdout -->
         <property name="show_sql">true</property>
 
@@ -28,11 +27,9 @@
         <property name="hbm2ddl.auto">create</property>
 
         <!-- Class mappings -->
-        <mapping class="model.Tweet"/>
         <mapping class="model.User"/>
-        <mapping class="model.Tag"/>
-        <mapping class="model.Article"/>
-        <mapping class="model.Keyword"/>
+        <mapping class="model.News"/>
+        <mapping class="model.Preferences"/>
 
     </session-factory>
 </hibernate-configuration>

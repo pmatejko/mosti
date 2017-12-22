@@ -2,9 +2,7 @@ package model;
 
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = User.TABLE_NAME, uniqueConstraints = {
@@ -24,15 +22,15 @@ public class User {
     @Column(name = Columns.INTERVAL, nullable = false)
     private Date interval;
 
-    @ManyToMany(mappedBy = "users")
-    private Set<Tag> tags = new HashSet<>();
-
-    @ManyToMany(mappedBy = "users")
-    private Set<Keyword> keywords = new HashSet<>();
+    @ManyToMany(mappedBy = Preferences.USER_PREFERENCES_JUNCTION_TABLE_NAME)
+    private List<Preferences> preferences = new LinkedList<>();
 
 
     public User() {
     }
+
+
+    public long getId() { return id; }
 
     public String getEmail() {
         return email;
@@ -42,12 +40,12 @@ public class User {
         return interval;
     }
 
-    public Set<Tag> getTags() {
-        return tags;
+    public List<Preferences> getPreferences() {
+        return preferences;
     }
 
-    public Set<Keyword> getKeywords() {
-        return keywords;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public void setEmail(String email) {
@@ -58,21 +56,18 @@ public class User {
         this.interval = interval;
     }
 
-    public void setTags(Set<Tag> tags) {
-        this.tags = tags;
+    public void setPreferences(List<Preferences> preferences) {
+        this.preferences = preferences;
     }
 
-    public void setKeywords(Set<Keyword> keywords) {
-        this.keywords = keywords;
+    public void addPreferences(Preferences preferences) {
+        this.preferences.add(preferences);
     }
 
-    public void setTag(Tag tag) {
-        this.tags.add(tag);
+    public void removePreferences(Preferences preferences) {
+        this.preferences.remove(preferences);
     }
 
-    public void setKeyword(Keyword keyword) {
-        this.keywords.add(keyword);
-    }
 
 
     public static class Columns {

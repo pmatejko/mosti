@@ -1,18 +1,5 @@
-group 'pl.edu.agh'
-version '1.0-SNAPSHOT'
-
-apply plugin: 'java'
-
-sourceCompatibility = 1.8
-
-repositories {
-    mavenCentral()
-}
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-    compile group: 'org.hibernate', name: 'hibernate-core', version: '5.2.12.Final'
-    compile group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.1.7'
     compile group: 'org.glassfish', name: 'javax.json', version: '1.0.4'
-    compile group: 'com.github.scribejava', name: 'scribejava-core', version: '5.0.0'
+    compile project(":persistence")
 }

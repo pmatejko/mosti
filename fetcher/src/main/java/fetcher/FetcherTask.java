@@ -1,33 +1,43 @@
 package fetcher;
 
-import entities.UserNews;
-import entities.UserSubscription;
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
+import dto.NewsDTO;
+import interfaces.Fetcher;
+import interfaces.FetcherProvider;
 import io.reactivex.Observer;
-import model.Article;
-import model.Tweet;
+import model.News;
+import model.Preferences;
 
 import java.util.List;
 import java.util.TimerTask;
 
 public class FetcherTask extends TimerTask {
-    private Observer<UserNews> userNewsObserver;
-    private UserSubscription subscription;
+    private final Observer<NewsDTO> newsObserver;
+    private final FetcherProvider fetcherProvider;
+    private final Preferences preferences;
 
 
-    public FetcherTask(Observer<UserNews> userNewsObserver,
-                       UserSubscription subscription) {
-        this.userNewsObserver = userNewsObserver;
-        this.subscription = subscription;
+    @Inject
+    public FetcherTask(Observer<NewsDTO> newsObserver, FetcherProvider fetcherProvider,
+                       @Assisted Preferences preferences) {
+        this.newsObserver = newsObserver;
+        this.fetcherProvider = fetcherProvider;
+        this.preferences = preferences;
     }
 
 
     @Override
     public void run() {
-        List<Article> articles = ArticleFetcher.getInstance().fetch(subscription.getNewsSiteSubscriptions());
-        List<Tweet> tweets = TweetFetcher.getInstance().fetch(subscription.getTwitterSubscriptions());
+        try {
+            Fetcher fetcher = fetcherProvider.getFetcher(preferences.getDataProvider());
+            List<News> newsList = fetcher.fetch(preferences);
 
-        UserNews userNews = new UserNews(subscription.getUserId(), articles, tweets);
-        userNewsObserver.onNext(userNews);
+            NewsDTO newsDTO = new NewsDTO(newsList);
+            newsObserver.onNext(newsDTO);
+        } catch (Exception e) {
+            // TODO - for example retry after some time
+            e.printStackTrace();
+        }
     }
-
 }

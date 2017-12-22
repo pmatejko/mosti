@@ -1,5 +1,11 @@
 package interfaces;
 
-public interface Fetcher<T, U> {
-    U fetch(T arg);
+import exceptions.FetchingException;
+import model.News;
+import model.Preferences;
+
+import java.util.List;
+
+public interface Fetcher {
+    List<News> fetch(Preferences preferences) throws FetchingException;
 }
