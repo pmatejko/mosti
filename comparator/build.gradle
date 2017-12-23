@@ -1,6 +1,6 @@
 dependencies {
-    compile group: 'org.javatuples', name: 'javatuples', version: '1.2'
     testCompile group: 'org.mockito', name: 'mockito-core', version: '2.1.0'
+    compile group: 'org.javatuples', name: 'javatuples', version: '1.2'
     compile project(":persistence")
     compile project(":fetcher")
 }
