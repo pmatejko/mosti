@@ -1,14 +1,17 @@
 package notifier.message;
 
 import java.util.Iterator;
-import java.util.List;
-
 import model.News;
+import model.UserNewsDTO;
 
-public class UglyMessage implements Message{
+public class UglyMessageGenerator extends MessageGenerator{
+
+	public UglyMessageGenerator(UserNewsDTO userNewsDTO) {
+		super(userNewsDTO);
+	}
 
 	@Override
-	public String generateMessage(List<News> news) {
+	public String generateMessageContent() {
 		
 		Iterator<News> newsIterator = news.iterator();
 		String message ="";
@@ -27,5 +30,15 @@ public class UglyMessage implements Message{
 		
 		return message;
 	}
-	
+
+	@Override
+	public String getContact() {
+		return this.getEmail();
+	}
+
+	@Override
+	public String getTitle() {
+		return "ugly title";
+	}
+
 }

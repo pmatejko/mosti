@@ -2,18 +2,12 @@ package notifier.informer;
 
 
 import java.io.IOException;
-import java.util.List;
-
 import org.json.simple.parser.ParseException;
 
 import exceptions.SenderException;
-import model.News;
-import model.User;
 import model.UserNewsDTO;
-import notifier.message.Message;
-import notifier.message.UglyMessage;
-
-
+import notifier.message.MessageGenerator;
+import notifier.message.UglyMessageGenerator;
 import notifier.senders.MailSender;
 import notifier.senders.Sendable;
 import notifier.senders.SmsSender;
@@ -47,26 +41,24 @@ public class Informer {
 	}
 	
 	
-	public void informUser(UserNewsDTO userNewsDTO) {
-		User user = userNewsDTO.getUser();
-		List<News> news = userNewsDTO.getNewsList();
-		Message msg = new UglyMessage();
+	public void informUser(UserNewsDTO userNewsDTO) throws SenderException {
+		
+		
+		
 		//BEGIN  TODO 
 		
-			//we want to generate message appropriate to user
-			String message = msg.generateMessage(news);
-		
+			//we want to generate message appropriate to user or appropirate to kind of information
+			MessageGenerator msg = new UglyMessageGenerator(userNewsDTO);
+			
+			
 		//END    TODO
 		//BEGIN  TODO
 		
 			//we want to send with appropriate sender
 			
-			try {
-				gmailMailSender.send(user.getEmail(), "mail about your iterests", message);
-			} catch (SenderException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			
+			gmailMailSender.send(msg);
+			
 
 			
 		//END    TODO

@@ -12,6 +12,7 @@ import no.vianett.sms.Sms;
 import no.vianett.sms.SmsEvent;
 import no.vianett.sms.component.SmsTransceiver;
 import no.vianett.sms.log.SmsScreenLogger;
+import notifier.message.MessageGenerator;
 import no.vianett.sms.event.SmsDeliveredEvent;
 import no.vianett.sms.event.SmsSendingFailedEvent;
 import no.vianett.sms.event.SmsDeliveryFailedEvent;
@@ -66,10 +67,10 @@ public class SmsSender extends Sender implements SmsEventListener
     }
 
 	@Override
-	public void send(String contact, String title, String message) throws SenderException {
+	public void send(MessageGenerator messageGenerator) throws SenderException {
 		
 		
-		if(contact.length()<=8 || contact.length()>=11) {
+		if(messageGenerator.getContact().length()<=8 || messageGenerator.getContact().length()>=11) {
 			throw new SenderException(new BadLengthTelephoneNumberException());
 		}
 		
@@ -84,9 +85,9 @@ public class SmsSender extends Sender implements SmsEventListener
         sms.setId( ++this.counter );
         sms.setReplyPath( 100 );
         sms.setSender( "1963" ); // Set the sender number.
-        sms.setHeader(title);
-        sms.setMessage( message );
-        sms.setRecipient( contact ); // The recipients phone number.
+        sms.setHeader(messageGenerator.getTitle());
+        sms.setMessage( messageGenerator.generateMessageContent() );
+        sms.setRecipient( messageGenerator.getContact() ); // The recipients phone number.
  
        this.transceiver.send( sms );
 

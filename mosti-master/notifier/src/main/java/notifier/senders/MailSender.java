@@ -7,6 +7,7 @@ import org.json.simple.parser.ParseException;
 import com.sun.mail.smtp.SMTPTransport;
 
 import exceptions.SenderException;
+import notifier.message.MessageGenerator;
 
 import java.io.IOException;
 import java.security.Security;
@@ -14,6 +15,7 @@ import java.util.Date;
 import java.util.Properties;
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.SendFailedException;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -33,7 +35,7 @@ public class MailSender extends Sender{
 	}
 
 		
-	public void send(String contact, String title, String message) throws SenderException {
+	public void send(MessageGenerator messageGenerator) throws SenderException {
       
 		if(!this.configured) {
 			this.configure();
@@ -45,15 +47,17 @@ public class MailSender extends Sender{
 
 	        final MimeMessage msg = new MimeMessage(session);
 			msg.setFrom(new InternetAddress(this.nick + "@" + this.host));
-			msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(contact, false));
-	        msg.setSubject(title);
-	        msg.setText(message, "utf-8");
+			msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(messageGenerator.getContact(), false));
+	        msg.setSubject(messageGenerator.getTitle());
+	        msg.setText(messageGenerator.generateMessageContent(), "utf-8");
 	        msg.setSentDate(new Date());
 	        SMTPTransport t = (SMTPTransport)session.getTransport("smtps");
 
 	        t.connect("smtp." + this.host, this.nick, this.password);
 	        t.sendMessage(msg, msg.getAllRecipients());      
 	        t.close();
+		} catch (SendFailedException e) {
+			throw new SenderException(e);
 		} catch (MessagingException e) {
 			throw new SenderException(e);
 		}
