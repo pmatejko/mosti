@@ -6,6 +6,8 @@ import org.json.simple.parser.ParseException;
 
 import com.sun.mail.smtp.SMTPTransport;
 
+import exceptions.SenderException;
+
 import java.io.IOException;
 import java.security.Security;
 import java.util.Date;
@@ -13,7 +15,6 @@ import java.util.Properties;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
@@ -32,26 +33,33 @@ public class MailSender extends Sender{
 	}
 
 		
-	public void send(String contact, String title, String message) throws AddressException, MessagingException {
+	public void send(String contact, String title, String message) throws SenderException {
       
 		if(!this.configured) {
 			this.configure();
 		}
 
-        Session session = Session.getInstance(props, null);
+        	
+		try {
+			Session session = Session.getInstance(props, null);
 
-        final MimeMessage msg = new MimeMessage(session);	
-		msg.setFrom(new InternetAddress(this.nick + "@" + this.host));
-        msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(contact, false));
-        msg.setSubject(title);
-        msg.setText(message, "utf-8");
-        msg.setSentDate(new Date());
+	        final MimeMessage msg = new MimeMessage(session);
+			msg.setFrom(new InternetAddress(this.nick + "@" + this.host));
+			msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(contact, false));
+	        msg.setSubject(title);
+	        msg.setText(message, "utf-8");
+	        msg.setSentDate(new Date());
+	        SMTPTransport t = (SMTPTransport)session.getTransport("smtps");
 
-        SMTPTransport t = (SMTPTransport)session.getTransport("smtps");
+	        t.connect("smtp." + this.host, this.nick, this.password);
+	        t.sendMessage(msg, msg.getAllRecipients());      
+	        t.close();
+		} catch (MessagingException e) {
+			throw new SenderException(e);
+		}
+        
 
-        t.connect("smtp." + this.host, this.nick, this.password);
-        t.sendMessage(msg, msg.getAllRecipients());      
-        t.close();
+        
     }
 
 	@SuppressWarnings("restriction")

@@ -4,11 +4,9 @@ package notifier.informer;
 import java.io.IOException;
 import java.util.List;
 
-import javax.mail.MessagingException;
-
 import org.json.simple.parser.ParseException;
 
-import exceptions.BadLengthTelephoneNumberException;
+import exceptions.SenderException;
 import model.News;
 import model.User;
 import model.UserNewsDTO;
@@ -62,14 +60,10 @@ public class Informer {
 		//BEGIN  TODO
 		
 			//we want to send with appropriate sender
+			
 			try {
-				try {
-					gmailMailSender.send(user.getEmail(), "mail about your iterests", message);
-				} catch (BadLengthTelephoneNumberException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			} catch (MessagingException e) {
+				gmailMailSender.send(user.getEmail(), "mail about your iterests", message);
+			} catch (SenderException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}

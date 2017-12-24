@@ -1,11 +1,11 @@
 
 import java.io.IOException;
 
-import javax.mail.MessagingException;
 
 import org.json.simple.parser.ParseException;
 
 import exceptions.BadLengthTelephoneNumberException;
+import exceptions.SenderException;
 import notifier.senders.MailSender;
 import notifier.senders.Sendable;
 
@@ -24,7 +24,7 @@ public class ExampleTest {
 		try {
 			Sendable mailSender = new MailSender("configGmail.json");
 			mailSender.send("smalcerzszymonn@gmail.com", "asddsa", "asddsa");
-		} catch (MessagingException | IOException | ParseException e) {
+		} catch (SenderException | IOException | ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

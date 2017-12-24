@@ -7,6 +7,7 @@ import java.io.IOException;
 import org.json.simple.parser.ParseException;
 
 import exceptions.BadLengthTelephoneNumberException;
+import exceptions.SenderException;
 import no.vianett.sms.Sms;
 import no.vianett.sms.SmsEvent;
 import no.vianett.sms.component.SmsTransceiver;
@@ -65,11 +66,11 @@ public class SmsSender extends Sender implements SmsEventListener
     }
 
 	@Override
-	public void send(String contact, String title, String message) throws BadLengthTelephoneNumberException {
+	public void send(String contact, String title, String message) throws SenderException {
 		
 		
 		if(contact.length()<=8 || contact.length()>=11) {
-			throw new BadLengthTelephoneNumberException();
+			throw new SenderException(new BadLengthTelephoneNumberException());
 		}
 		
 		
