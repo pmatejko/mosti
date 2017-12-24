@@ -1,6 +1,10 @@
 package fetcher.impl;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import exceptions.FetchingException;
 import interfaces.Fetcher;
+import interfaces.PropertiesManager;
 import model.News;
 import model.Preferences;
 
@@ -20,29 +24,40 @@ import java.util.List;
 
 import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
 
+@Singleton
 public class NewsAPIFetcher implements Fetcher {
-    private static final String apiUrl = "https://newsapi.org/v2/everything?";
-    private static final String apiKey = "apiKey=cc36659c4c784994a77282ce4e4dc1ed";
+    private static final String API_URL = "https://newsapi.org/v2/everything?";
+
+    private final String API_KEY;
+
+
+    @Inject
+    public NewsAPIFetcher(PropertiesManager propertiesManager) {
+        API_KEY = propertiesManager.getProperty(PropertiesManager.Keys.NEWS_API_KEY);
+    }
+
 
     @Override
-    public List<News> fetch(Preferences preferences) throws IOException {
-        String queryString = buildQueryString(preferences);
+    public List<News> fetch(Preferences preferences) throws FetchingException {
+        try {
+            String queryString = buildQueryString(preferences);
 
-        URL apiQueryUrl = new URL(queryString);
-        BufferedReader in = new BufferedReader(new InputStreamReader(apiQueryUrl.openStream()));
-        JsonReader reader = Json.createReader(in);
-        JsonObject page = reader.readObject();
+            URL apiQueryUrl = new URL(queryString);
+            BufferedReader in = new BufferedReader(new InputStreamReader(apiQueryUrl.openStream()));
+            JsonReader reader = Json.createReader(in);
+            JsonObject page = reader.readObject();
+            reader.close();
 
-        reader.close();
-        in.close();
-
-        JsonArray jsonArticles = page.getJsonArray("articles");
-        return parseJsonArticleArray(jsonArticles, preferences);
+            JsonArray jsonArticles = page.getJsonArray("articles");
+            return parseJsonArticleArray(jsonArticles, preferences);
+        } catch (IOException e) {
+            throw new FetchingException(e);
+        }
     }
 
     private String buildQueryString(Preferences preferences) {
         StringBuilder stringBuilder = new StringBuilder(100);
-        stringBuilder.append(apiUrl);
+        stringBuilder.append(API_URL);
 
         if (preferences.getKeyword() != null) {
             stringBuilder.append("q=");
@@ -58,8 +73,8 @@ public class NewsAPIFetcher implements Fetcher {
             stringBuilder.append(preferences.getNewsSource());
         }
 
-        stringBuilder.append("&");
-        stringBuilder.append(apiKey);
+        stringBuilder.append("&apiKey=");
+        stringBuilder.append(API_KEY);
 
         return stringBuilder.toString();
     }

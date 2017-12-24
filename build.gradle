@@ -1,14 +1,53 @@
-group 'pl.edu.agh'
-version '1.0-SNAPSHOT'
+allprojects {
+    group 'pl.edu.agh'
+    version '1.0-SNAPSHOT'
 
-apply plugin: 'java'
+    apply plugin: 'java'
+//    apply plugin: 'jacoco'
 
-sourceCompatibility = 1.8
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
 
-repositories {
-    mavenCentral()
+    repositories {
+        mavenCentral()
+    }
+}
+
+subprojects {
+    dependencies {
+        testCompile group: 'junit', name: 'junit', version: '4.12'
+        testCompile group: 'org.jmockit', name: 'jmockit', version: '1.37'
+        compile group: 'org.hibernate', name: 'hibernate-core', version: '5.2.12.Final'
+        compile group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.1.7'
+        compile group: 'com.google.inject', name: 'guice', version: '4.1.0'
+        compile group: 'com.google.inject.extensions', name: 'guice-assistedinject', version: '4.1.0'
+    }
+
+    test.useJUnit()
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile project(":persistence")
+    compile project(":fetcher")
+    compile project(":comparator")
+    compile project(":notifier")
 }
+
+//task codeCoverageReport(type: JacocoReport) {
+//    executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
+//
+//    subprojects.each {
+//        sourceSets it.sourceSets.main
+//    }
+//
+//    reports {
+//        xml.enabled true
+//        xml.destination "${buildDir}/reports/jacoco/report.xml"
+//        html.enabled false
+//        csv.enabled false
+//    }
+//}
+//
+//codeCoverageReport.dependsOn {
+//    subprojects*.test
+//}

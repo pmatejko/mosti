@@ -8,10 +8,13 @@ public class NewsComparator extends  AbstractComparator{
         super(news);
     }
 
+
     @Override
     public void process() {
         if (isUsed() && isNew())
             newsDao.create(news);
+    }
+    public void setNews(News news){
 
     }
 

@@ -50,7 +50,8 @@ public class Preferences {
     public Preferences() {
     }
 
-    public Preferences(String newsSource, DataProvider dataProvider) {
+    public Preferences(String keyword, String newsSource, DataProvider dataProvider) {
+        this.keyword = keyword;
         this.newsSource = newsSource;
         this.dataProvider = dataProvider;
     }

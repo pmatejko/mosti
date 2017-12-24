@@ -10,7 +10,7 @@ import model.Preferences;
 import java.util.List;
 
 public class ComparatorFactory {
-    IComparator createComparator(News news) throws DataProviderCOnflictException {
+    public IComparator createComparator(News news) throws DataProviderCOnflictException {
         if(news.getPreferences().isEmpty())
             return new ScrapComparator(news);
         else
@@ -34,5 +34,4 @@ public class ComparatorFactory {
         return providerCandidate;
     }
 
-
-}
+    }

@@ -1,6 +1,3 @@
-# Compiled class file
-*.class
-
 # Log file
 *.log
 
@@ -27,13 +24,16 @@ hs_err_pid*
 .settings/
 
 # Intellij project files
-*.iml
 *.ipr
 *.iws
 .idea/
 
-#Gradle
+# Gradle
 .gradletasknamecache
 .gradle/
 build/
 bin/
+**/out
+
+# Properties file with API keys
+data-provider.properties

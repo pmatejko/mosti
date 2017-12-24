@@ -43,6 +43,15 @@ public class News {
         return preferences;
     }
 
+    public News(String url, String content) {
+        this.url = url;
+        this.content = content;
+    }
+
+    public void addPreference(Preferences preference){
+        preferences.add(preference);
+    }
+
     public long getId() { return id; }
 
     public String getUrl() {
@@ -82,6 +91,12 @@ public class News {
         return this.toString();
     }
 
+    @Override
+    public String toString() {
+        return url + "\n"
+                + timestamp + "\n"
+                + content;
+    }
 
     public static class Columns {
         public static final String ID = "id";
