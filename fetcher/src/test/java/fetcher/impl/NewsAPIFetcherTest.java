@@ -1,5 +1,6 @@
 package fetcher.impl;
 
+import exceptions.FetchingException;
 import model.DataProvider;
 import model.News;
 import org.junit.Before;
@@ -16,7 +17,7 @@ public class NewsAPIFetcherTest {
 
     @Before
     public void setUp() throws Exception {
-        newsAPIFetcher = new NewsAPIFetcher();
+//        newsAPIFetcher = new NewsAPIFetcher();
     }
 
     @Test
@@ -24,7 +25,7 @@ public class NewsAPIFetcherTest {
         Preferences preferences = new Preferences("bitcoin", "bbc", DataProvider.NEWS_API);
         try {
             List<News> news = newsAPIFetcher.fetch(preferences);
-        } catch (exceptions.FetchingException e) {
+        } catch (FetchingException e) {
             e.printStackTrace();
         }
 
