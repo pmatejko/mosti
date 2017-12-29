@@ -6,7 +6,7 @@ import model.User;
 import java.util.Optional;
 
 public interface NewsDao {
-    Optional<News> create(News news);
+    News getOrCreate(News news);
 
     Iterable<News> findByUrl(News news);
 
