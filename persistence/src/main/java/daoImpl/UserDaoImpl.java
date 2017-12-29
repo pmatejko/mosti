@@ -1,6 +1,7 @@
 package daoImpl;
 
 
+import dao.GenericDao;
 import dao.UserDao;
 import model.News;
 import model.User;
@@ -28,4 +29,7 @@ public class UserDaoImpl extends GenericDao<User> implements UserDao{
         return null;
     }
 
+    public UserDaoImpl() {
+        super();
+    }
 }
