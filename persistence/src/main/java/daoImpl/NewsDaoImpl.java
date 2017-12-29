@@ -4,29 +4,40 @@ package daoImpl;
 import dao.GenericDao;
 import dao.NewsDao;
 import model.News;
-import model.User;
 
+
+import java.util.List;
 import java.util.Optional;
 
-public class NewsDaoImpl extends GenericDao implements NewsDao{
+public class NewsDaoImpl extends GenericDao<News> implements NewsDao {
 
     @Override
-    public Optional<News> create(News news) {
-        return null;
+    public News getOrCreate(News news) {
+        Optional<News> matchingNews = findByUrl(news);
+        if (!matchingNews.isPresent()) {
+            // no news has the same url, so we have a new one
+            save(news);
+            return news;
+        } else {
+            News existingNews = matchingNews.get();
+            // fetcher sends the same article many times with diffrent keywords,
+            // so we add new keywords to existing ones.
+            news.getPreferences().forEach(existingNews::addPreference);
+            update(existingNews);
+            return existingNews;
+
+        }
     }
 
     @Override
-    public Iterable<News> findByUrl(News news) {
-        return null;
+    public Optional<News> findByUrl(News news) {
+        List<News> newsList = sessionFactory.openSession()
+                .createQuery("from News  n where n.url = :url", News.class)
+                .setParameter("url", news.getUrl())
+                .list();
+        if (newsList.isEmpty())
+            return Optional.empty();
+        else return Optional.of(newsList.get(0));
     }
 
-
-    public boolean isNew(News news) {
-        return false;
-    }
-
-    @Override
-    public boolean isUsed(News news) {
-        return false;
-    }
 }

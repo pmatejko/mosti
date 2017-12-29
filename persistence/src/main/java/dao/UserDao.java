@@ -9,9 +9,6 @@ import java.util.Optional;
 
 public interface UserDao {
 
-    Optional<User> create(String name, Date interval);
-
-    Iterable<News> getNews(User user);
 
     List<User> getUsersToNotify();
 
