@@ -4,6 +4,7 @@ package daoImpl;
 import dao.GenericDao;
 import dao.NewsDao;
 import model.News;
+import model.User;
 
 
 import java.util.List;

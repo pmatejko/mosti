@@ -95,6 +95,10 @@ public class Preferences {
         this.users = users;
     }
 
+    public  void addUser(User user){
+        users.add(user);
+    }
+
 
     public static class Columns {
         public static final String ID = "preferences_id";
