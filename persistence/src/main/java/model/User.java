@@ -25,6 +25,9 @@ public class User {
     @ManyToMany(mappedBy ="users")
     private List<Preferences> preferences = new LinkedList<>();
 
+    @ManyToMany(mappedBy = "users")
+    private List<CompareType> compareTypes  = new LinkedList<>();
+
 
     public User() {
     }
@@ -67,6 +70,12 @@ public class User {
     public void removePreferences(Preferences preferences) {
         this.preferences.remove(preferences);
     }
+
+    public void setCompareTypes(List<CompareType> compareTypes){this.compareTypes=compareTypes;}
+
+    public void addCompareType(CompareType compareType){compareTypes.add(compareType);}
+
+    public void removeCompareType(CompareType compareType){this.compareTypes.remove(compareType);}
 
 
 

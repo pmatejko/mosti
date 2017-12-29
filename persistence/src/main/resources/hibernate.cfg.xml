@@ -30,6 +30,7 @@
         <mapping class="model.User"/>
         <mapping class="model.News"/>
         <mapping class="model.Preferences"/>
+        <mapping class="model.CompareType"/>
 
     </session-factory>
 </hibernate-configuration>
