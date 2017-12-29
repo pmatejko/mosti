@@ -14,7 +14,7 @@ public class News {
     private long id;
 
     @Column(name = Columns.PREFERENCES)
-    @ManyToMany(mappedBy = Preferences.NEWS_PREFERENCES_JUNCTION_TABLE_NAME)
+    @ManyToMany(mappedBy = "news")
     private List<Preferences> preferences = new LinkedList<>();
 
     @Column(name = Columns.URL, nullable = false)
@@ -97,7 +97,7 @@ public class News {
     }
 
     public static class Columns {
-        public static final String ID = "id";
+        public static final String ID = "news_id";
         public static final String PREFERENCES = "preferences";
         public static final String URL = "url";
         public static final String CONTENT = "content";

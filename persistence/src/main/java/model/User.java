@@ -9,7 +9,7 @@ import java.util.*;
         @UniqueConstraint(columnNames = User.Columns.EMAIL)
 })
 public class User {
-    public static final String TABLE_NAME = "user";
+    public static final String TABLE_NAME = "subscriber";
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
@@ -20,9 +20,9 @@ public class User {
     private String email;
 
     @Column(name = Columns.INTERVAL, nullable = false)
-    private Date interval;
+    private int interval;
 
-    @ManyToMany(mappedBy = Preferences.USER_PREFERENCES_JUNCTION_TABLE_NAME)
+    @ManyToMany(mappedBy ="users")
     private List<Preferences> preferences = new LinkedList<>();
 
 
@@ -36,7 +36,7 @@ public class User {
         return email;
     }
 
-    public Date getInterval() {
+    public int getInterval() {
         return interval;
     }
 
@@ -52,7 +52,7 @@ public class User {
         this.email = email;
     }
 
-    public void setInterval(Date interval) {
+    public void setInterval(int interval) {
         this.interval = interval;
     }
 
@@ -71,7 +71,7 @@ public class User {
 
 
     public static class Columns {
-        public static final String ID = "id";
+        public static final String ID = "user_id";
         public static final String EMAIL = "email";
         public static final String INTERVAL = "interval";
     }
