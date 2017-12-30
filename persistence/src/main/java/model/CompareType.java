@@ -23,18 +23,18 @@ public class CompareType {
     @Column(name = model.CompareType.Columns.TYPE, nullable = false)
     private String type;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
-            name = COMPARE_TYPE_USERS_JUNCTION_TABLE_NAME,
+            name = COMPARE_TYPE_NEWS_JUNCTION_TABLE_NAME,
             joinColumns = @JoinColumn(name = "compare_type_id", referencedColumnName = CompareType.Columns.ID),
             inverseJoinColumns = @JoinColumn(name = "news_id", referencedColumnName = News.Columns.ID)
     )
     private List<News> news = new LinkedList<>();
 
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
-            name = COMPARE_TYPE_NEWS_JUNCTION_TABLE_NAME,
+            name = COMPARE_TYPE_USERS_JUNCTION_TABLE_NAME,
             joinColumns = @JoinColumn(name = "compare_type_id", referencedColumnName = CompareType.Columns.ID),
             inverseJoinColumns = @JoinColumn(name = "users_id", referencedColumnName = User.Columns.ID)
     )
@@ -68,6 +68,21 @@ public class CompareType {
      public  void addUser(User u){
         users.add(u);
      }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CompareType that = (CompareType) o;
+
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (id ^ (id >>> 32));
+    }
 
     public static class Columns {
         public static final String ID = "compare_type_id";

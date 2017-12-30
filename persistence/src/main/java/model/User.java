@@ -2,6 +2,7 @@ package model;
 
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.*;
 
 @Entity
@@ -19,17 +20,22 @@ public class User {
     @Column(name = Columns.EMAIL, nullable = false)
     private String email;
 
+    @Column(name = Columns.LAST_NOTIFICATION, nullable = false)
+    private Timestamp lastNotification;
+
     @Column(name = Columns.INTERVAL, nullable = false)
     private int interval;
 
-    @ManyToMany(mappedBy ="users")
+    @ManyToMany(mappedBy ="users",cascade = {CascadeType.ALL})
     private List<Preferences> preferences = new LinkedList<>();
 
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(mappedBy = "users",cascade = {CascadeType.ALL})
     private List<CompareType> compareTypes  = new LinkedList<>();
 
 
     public User() {
+        this.lastNotification= new Timestamp(System.currentTimeMillis());
+
     }
 
 
@@ -77,11 +83,34 @@ public class User {
 
     public void removeCompareType(CompareType compareType){this.compareTypes.remove(compareType);}
 
+    public void setLastNotification(Timestamp lastNotification) {
+        this.lastNotification = lastNotification;
+    }
 
+    public Timestamp getLastNotification() {
+        return lastNotification;
+    }
+
+    public List<CompareType> getCompareTypes() {
+        return compareTypes;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", lastNotification=" + lastNotification +
+                ", interval=" + interval +
+                ", preferences=" + preferences +
+                ", compareTypes=" + compareTypes +
+                '}';
+    }
 
     public static class Columns {
         public static final String ID = "user_id";
         public static final String EMAIL = "email";
         public static final String INTERVAL = "interval";
+        public static final String LAST_NOTIFICATION="last_notification";
     }
 }
