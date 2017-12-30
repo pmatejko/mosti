@@ -10,7 +10,6 @@ import java.util.List;
 public class ComparatorAggregate {
     private List<IComparator> activeComparators = new LinkedList<>();
     ComparatorAggregate(){
-        activeComparators.add(new DefaultComparator());
         activeComparators.add(new LengthComparator());
         activeComparators.add(new VocabularyComparator());
     }
