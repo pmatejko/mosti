@@ -15,6 +15,7 @@ import java.util.StringTokenizer;
 public class LengthComparator implements IComparator{
     @Inject
     private CompareTypeDao compareTypeDao;
+    @Inject private NewsDao newsDao;
 
 
     @Override
@@ -23,8 +24,8 @@ public class LengthComparator implements IComparator{
         int wordsAmount=stringTokenizer.countTokens();
         if(wordsAmount<130){
             CompareType compareType= compareTypeDao.getCompareTypeByName("length");
-            compareType.addNews(news);
-            compareTypeDao.update(compareType);
+            news.addCompareType(compareType);
+            newsDao.update(news);
         }
 
     }

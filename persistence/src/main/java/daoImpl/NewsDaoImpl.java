@@ -5,6 +5,7 @@ import dao.GenericDao;
 import dao.NewsDao;
 import model.News;
 import model.User;
+import org.hibernate.Session;
 
 
 import java.util.List;
@@ -32,13 +33,14 @@ public class NewsDaoImpl extends GenericDao<News> implements NewsDao {
 
     @Override
     public Optional<News> findByUrl(News news) {
-        List<News> newsList = sessionFactory.openSession()
+        try (final Session session = sessionFactory.openSession()) {
+        List<News> newsList = session
                 .createQuery("from News  n where n.url = :url", News.class)
                 .setParameter("url", news.getUrl())
                 .list();
         if (newsList.isEmpty())
             return Optional.empty();
         else return Optional.of(newsList.get(0));
-    }
+    }}
 
 }

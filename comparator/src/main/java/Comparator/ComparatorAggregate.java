@@ -1,6 +1,7 @@
 package Comparator;
 
 
+import com.google.inject.Inject;
 import interfaces.IComparator;
 import model.News;
 
@@ -9,10 +10,10 @@ import java.util.List;
 
 public class ComparatorAggregate {
     private List<IComparator> activeComparators = new LinkedList<>();
-    ComparatorAggregate(){
-        activeComparators.add(new DefaultComparator());
-        activeComparators.add(new LengthComparator());
-        activeComparators.add(new VocabularyComparator());
+    @Inject
+    ComparatorAggregate(LengthComparator lengthComparator, VocabularyComparator vocabularyComparator){
+        activeComparators.add(lengthComparator);
+        activeComparators.add(vocabularyComparator);
     }
     public void process(News news){
         activeComparators.forEach(

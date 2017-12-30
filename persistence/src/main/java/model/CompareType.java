@@ -23,9 +23,9 @@ public class CompareType {
     @Column(name = model.CompareType.Columns.TYPE, nullable = false)
     private String type;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
-            name = COMPARE_TYPE_USERS_JUNCTION_TABLE_NAME,
+            name = COMPARE_TYPE_NEWS_JUNCTION_TABLE_NAME,
             joinColumns = @JoinColumn(name = "compare_type_id", referencedColumnName = CompareType.Columns.ID),
             inverseJoinColumns = @JoinColumn(name = "news_id", referencedColumnName = News.Columns.ID)
     )
@@ -34,7 +34,7 @@ public class CompareType {
 
     @ManyToMany
     @JoinTable(
-            name = COMPARE_TYPE_NEWS_JUNCTION_TABLE_NAME,
+            name = COMPARE_TYPE_USERS_JUNCTION_TABLE_NAME,
             joinColumns = @JoinColumn(name = "compare_type_id", referencedColumnName = CompareType.Columns.ID),
             inverseJoinColumns = @JoinColumn(name = "users_id", referencedColumnName = User.Columns.ID)
     )

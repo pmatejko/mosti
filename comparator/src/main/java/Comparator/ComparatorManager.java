@@ -4,14 +4,13 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import dao.NewsDao;
 import dto.NewsDTO;
-import fetcher.FetchingManager;
-
+import interfaces.IFetchingManager;
 
 
 @Singleton
 public class ComparatorManager {
     @Inject
-    private FetchingManager fetchingManager;
+    private IFetchingManager fetchingManager;
 
     @Inject
     private NewsDao newsDao;
@@ -19,7 +18,9 @@ public class ComparatorManager {
     @Inject
     private ComparatorAggregate comparatorAggregate;
 
-    private ComparatorManager(){
+    public ComparatorManager(){
+    }
+    public void subscribe(){
         fetchingManager.getNewsObservable().subscribe(this::process);
     }
 

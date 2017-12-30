@@ -16,7 +16,7 @@ public class NewsAPIFetcherTest {
 
     @Before
     public void setUp() throws Exception {
-        newsAPIFetcher = new NewsAPIFetcher();
+      //  newsAPIFetcher = new NewsAPIFetcher();
     }
 
     @Test
