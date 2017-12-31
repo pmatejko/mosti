@@ -30,7 +30,7 @@ public class Preferences {
     @Enumerated(EnumType.STRING)
     private DataProvider dataProvider;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
             name = NEWS_PREFERENCES_JUNCTION_TABLE_NAME,
             joinColumns = @JoinColumn(name = "preferences_id", referencedColumnName = Preferences.Columns.ID),
@@ -38,7 +38,7 @@ public class Preferences {
     )
     private List<News> news = new LinkedList<>();
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
             name = USER_PREFERENCES_JUNCTION_TABLE_NAME,
             joinColumns = @JoinColumn(name ="preferences_id", referencedColumnName = Preferences.Columns.ID),
@@ -98,6 +98,8 @@ public class Preferences {
     public  void addUser(User user){
         users.add(user);
     }
+
+    public void addNews(News news) {this.news.add(news); }
 
 
     public static class Columns {

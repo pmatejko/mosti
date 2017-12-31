@@ -1,5 +1,6 @@
 package model;
 
+import java.sql.Timestamp;
 import java.util.*;
 import javax.persistence.*;
 
@@ -14,11 +15,11 @@ public class News {
     private long id;
 
     @Column(name = Columns.PREFERENCES)
-    @ManyToMany(mappedBy = "news")
+    @ManyToMany(mappedBy = "news",cascade = {CascadeType.ALL})
     private List<Preferences> preferences = new LinkedList<>();
 
     @Column(name = Columns.COMPARE_TYPES)
-    @ManyToMany(mappedBy = "news",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "news", cascade = {CascadeType.ALL})
     private List<CompareType> compareTypes  = new LinkedList<>();
 
     @Column(name = Columns.URL, nullable = false)
@@ -28,13 +29,13 @@ public class News {
     private String content;
 
     @Column(name = Columns.TIMESTAMP, nullable = false)
-    private Date timestamp;
+    private Timestamp timestamp;
 
 
     public News() {
     }
 
-    public News(Preferences preferences, String url, String content, Date timestamp) {
+    public News(Preferences preferences, String url, String content, Timestamp timestamp) {
         this.preferences.add(preferences);
         this.url = url;
         this.content = content;
@@ -64,7 +65,7 @@ public class News {
         return content;
     }
 
-    public Date getTimestamp() {
+    public Timestamp getTimestamp() {
         return timestamp;
     }
 
@@ -80,7 +81,7 @@ public class News {
         this.content = content;
     }
 
-    public void setTimestamp(Date timestamp) {
+    public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
     }
 
