@@ -24,7 +24,7 @@ public class UserDaoImpl extends GenericDao<User> implements UserDao {
         return session.createNativeQuery(sql, User.class).list();}
     }
 
-    public List getNewsToSend(User user) {
+    public List<News> getNewsToSend(User user) {
         try(final Session session=sessionFactory.openSession()){
         List<Long> preferences_ids = session.createQuery("select p.id from Preferences p join p.users u where u.id=:id ", Long.class)
                 .setParameter("id", user.getId()).list();

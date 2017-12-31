@@ -26,6 +26,7 @@ public class LengthComparator implements IComparator{
             CompareType compareType= compareTypeDao.getCompareTypeByName("length");
             news.addCompareType(compareType);
             newsDao.update(news);
+
         }
 
     }

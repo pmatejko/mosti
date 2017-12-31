@@ -14,6 +14,11 @@ import java.util.Optional;
 public class NewsDaoImpl extends GenericDao<News> implements NewsDao {
 
     @Override
+    public void openSession() {
+        sessionFactory.openSession();
+    }
+
+    @Override
     public News getOrCreate(News news) {
         Optional<News> matchingNews = findByUrl(news);
         if (!matchingNews.isPresent()) {
@@ -33,14 +38,16 @@ public class NewsDaoImpl extends GenericDao<News> implements NewsDao {
 
     @Override
     public Optional<News> findByUrl(News news) {
-        try (final Session session = sessionFactory.openSession()) {
+        final Session session = sessionFactory.getCurrentSession();
+        session.beginTransaction();
         List<News> newsList = session
                 .createQuery("from News  n where n.url = :url", News.class)
                 .setParameter("url", news.getUrl())
                 .list();
+        session.getTransaction().commit();
         if (newsList.isEmpty())
             return Optional.empty();
         else return Optional.of(newsList.get(0));
-    }}
+    }
 
 }

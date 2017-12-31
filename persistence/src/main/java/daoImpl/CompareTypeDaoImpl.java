@@ -10,17 +10,21 @@ import javax.persistence.PersistenceException;
 
 public class CompareTypeDaoImpl extends GenericDao<CompareType> implements CompareTypeDao {
     public CompareType getCompareTypeByName(String type) {
-        try (final Session session = sessionFactory.openSession()) {
-        return session
-                .createQuery("from CompareType c where c.type=:compare_type",CompareType.class)
-                .setParameter("compare_type",type)
+        final Session session = sessionFactory.getCurrentSession();
+        session.beginTransaction();
+        CompareType compareType = session
+                .createQuery("from CompareType c where c.type=:compare_type", CompareType.class)
+                .setParameter("compare_type", type)
                 .getSingleResult();
-        }
+        session.getTransaction().commit();
+        return compareType;
+
     }
 
     @Override
     public void bind(CompareType compareType, News news) {
         try (final Session session = sessionFactory.openSession()) {
+            compareType.addNews(news);
             news.addCompareType(compareType);
         }
         save(compareType);

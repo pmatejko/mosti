@@ -19,6 +19,8 @@
 
         <!-- Enable Hibernate's automatic session context management -->
         <property name="current_session_context_class">thread</property>
+        <!--property name="hibernate.enable_lazy_load_no_trans">true</property-->
+
 
         <!-- Echo all executed SQL to stdout -->
         <property name="show_sql">true</property>

@@ -8,18 +8,22 @@ import javax.persistence.*;
 @Table(name = News.TABLE_NAME)
 public class News {
     public static final String TABLE_NAME = "news";
+    public static final String COMPARE_TYPE_NEWS_JUNCTION_TABLE_NAME = "compare_type_news";
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
     @Column(name = Columns.ID)
     private long id;
 
-    @Column(name = Columns.PREFERENCES)
     @ManyToMany(mappedBy = "news",cascade = {CascadeType.ALL})
     private List<Preferences> preferences = new LinkedList<>();
 
-    @Column(name = Columns.COMPARE_TYPES)
-    @ManyToMany(mappedBy = "news", cascade = {CascadeType.ALL})
+    @ManyToMany(cascade = {CascadeType.ALL},fetch = FetchType.EAGER)
+    @JoinTable(
+            name = COMPARE_TYPE_NEWS_JUNCTION_TABLE_NAME,
+            joinColumns = @JoinColumn(name =  "news_id", referencedColumnName = News.Columns.ID),
+            inverseJoinColumns = @JoinColumn(name ="compare_type_id", referencedColumnName =CompareType.Columns.ID )
+    )
     private List<CompareType> compareTypes  = new LinkedList<>();
 
     @Column(name = Columns.URL, nullable = false)
@@ -29,13 +33,13 @@ public class News {
     private String content;
 
     @Column(name = Columns.TIMESTAMP, nullable = false)
-    private Timestamp timestamp;
+    private Date timestamp;
 
 
     public News() {
     }
 
-    public News(Preferences preferences, String url, String content, Timestamp timestamp) {
+    public News(Preferences preferences, String url, String content, Date timestamp) {
         this.preferences.add(preferences);
         this.url = url;
         this.content = content;
@@ -65,7 +69,7 @@ public class News {
         return content;
     }
 
-    public Timestamp getTimestamp() {
+    public Date getTimestamp() {
         return timestamp;
     }
 

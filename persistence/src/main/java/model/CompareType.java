@@ -10,7 +10,6 @@ import java.util.List;
 })
 public class CompareType {
     public static final String TABLE_NAME = "compare_type";
-    public static final String COMPARE_TYPE_NEWS_JUNCTION_TABLE_NAME = "compare_type_news";
     public static final String COMPARE_TYPE_USERS_JUNCTION_TABLE_NAME = "compare_type_users";
 
 
@@ -23,12 +22,7 @@ public class CompareType {
     @Column(name = model.CompareType.Columns.TYPE, nullable = false)
     private String type;
 
-    @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(
-            name = COMPARE_TYPE_NEWS_JUNCTION_TABLE_NAME,
-            joinColumns = @JoinColumn(name = "compare_type_id", referencedColumnName = CompareType.Columns.ID),
-            inverseJoinColumns = @JoinColumn(name = "news_id", referencedColumnName = News.Columns.ID)
-    )
+    @ManyToMany(mappedBy = "compareTypes", cascade = {CascadeType.ALL})
     private List<News> news = new LinkedList<>();
 
 
