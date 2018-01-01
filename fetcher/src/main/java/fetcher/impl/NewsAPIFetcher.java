@@ -100,4 +100,5 @@ public class NewsAPIFetcher implements Fetcher {
 
         return articles;
     }
+
 }
