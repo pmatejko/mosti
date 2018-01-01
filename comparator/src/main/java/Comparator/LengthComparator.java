@@ -31,13 +31,4 @@ public class LengthComparator implements IComparator{
 
     }
 
-
-//    @Override
-//    public boolean isNew() {
-////        Iterable<News> otherNews = newsDao.findByUrl(news);
-////        for(News newsPiece : otherNews)
-////            if (newsPiece.getContent().equals(news.getContent()))
-////                return false;
-//return true;
-//    }
 }

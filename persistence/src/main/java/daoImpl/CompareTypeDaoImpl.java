@@ -3,7 +3,6 @@ package daoImpl;
 import dao.CompareTypeDao;
 import dao.GenericDao;
 import model.CompareType;
-import model.News;
 import org.hibernate.Session;
 
 import javax.persistence.PersistenceException;
@@ -21,14 +20,6 @@ public class CompareTypeDaoImpl extends GenericDao<CompareType> implements Compa
 
     }
 
-    @Override
-    public void bind(CompareType compareType, News news) {
-        try (final Session session = sessionFactory.openSession()) {
-            compareType.addNews(news);
-            news.addCompareType(compareType);
-        }
-        save(compareType);
-    }
 
     @Override
     public void update(CompareType object) throws PersistenceException {

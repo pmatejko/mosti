@@ -33,13 +33,13 @@ public class News {
     private String content;
 
     @Column(name = Columns.TIMESTAMP, nullable = false)
-    private Date timestamp;
+    private Timestamp timestamp;
 
 
     public News() {
     }
 
-    public News(Preferences preferences, String url, String content, Date timestamp) {
+    public News(Preferences preferences, String url, String content, Timestamp timestamp) {
         this.preferences.add(preferences);
         this.url = url;
         this.content = content;

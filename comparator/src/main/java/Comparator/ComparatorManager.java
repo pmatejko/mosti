@@ -25,7 +25,6 @@ public class ComparatorManager {
     }
 
     public void process(NewsDTO news){
-        //newsDao.openSession();
         news.getNewsList().stream()
                 .map(newsDao::getOrCreate)
                 .forEach(comparatorAggregate::process);

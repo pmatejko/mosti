@@ -29,7 +29,7 @@ public class User {
     @ManyToMany(mappedBy ="users",cascade = {CascadeType.ALL})
     private List<Preferences> preferences = new LinkedList<>();
 
-    @ManyToMany(mappedBy = "users",cascade = {CascadeType.ALL})
+    @ManyToMany(mappedBy = "users",cascade = {CascadeType.ALL},fetch = FetchType.EAGER)
     private List<CompareType> compareTypes  = new LinkedList<>();
 
 
@@ -102,8 +102,6 @@ public class User {
                 ", email='" + email + '\'' +
                 ", lastNotification=" + lastNotification +
                 ", interval=" + interval +
-                ", preferences=" + preferences +
-                ", compareTypes=" + compareTypes +
                 '}';
     }
 

@@ -8,7 +8,6 @@ import model.CompareType;
 import model.News;
 
 import javax.inject.Inject;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.StringTokenizer;

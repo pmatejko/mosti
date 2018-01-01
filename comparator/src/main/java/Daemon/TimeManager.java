@@ -8,6 +8,6 @@ public class TimeManager {
 
     public boolean isAllowedToSend(){
         int currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-        return currentHour>=NIGHT_START || currentHour <=NIGHT_ENDS;
+        return currentHour<NIGHT_START && currentHour >=NIGHT_ENDS;
     }
 }

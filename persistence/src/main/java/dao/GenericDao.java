@@ -14,19 +14,21 @@ public abstract class GenericDao<T> {
             .buildSessionFactory();
 
     public void save(final T object) throws PersistenceException {
-        final Session session = sessionFactory.getCurrentSession();
+        try (final Session session = sessionFactory.openSession()) {
             final Transaction tx = session.beginTransaction();
             session.save(object);
             session.merge(object);
             tx.commit();
+        }
     }
 
     public void update(final T object) throws PersistenceException {
-        final Session session = sessionFactory.getCurrentSession();
+        try (final Session session = sessionFactory.openSession()) {
             final Transaction tx = session.beginTransaction();
             session.update(object);
             session.merge(object);
             tx.commit();
+        }
     }
 
 }
