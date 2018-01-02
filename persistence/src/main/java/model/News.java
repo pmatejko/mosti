@@ -91,7 +91,10 @@ public class News {
 
     @Override
     public String toString() {
-        return url + "\n"
+        Preferences p = preferences.get(0);
+        return "News Source: " + p.getNewsSource()
+                + ", Keyword: " + p.getKeyword() + "\n"
+                + url + "\n"
                 + timestamp + "\n"
                 + content;
     }

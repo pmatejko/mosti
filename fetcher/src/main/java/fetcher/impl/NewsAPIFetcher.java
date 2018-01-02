@@ -16,12 +16,16 @@ import javax.json.JsonValue;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
 
 @Singleton
@@ -55,13 +59,13 @@ public class NewsAPIFetcher implements Fetcher {
         }
     }
 
-    private String buildQueryString(Preferences preferences) {
+    private String buildQueryString(Preferences preferences) throws UnsupportedEncodingException {
         StringBuilder stringBuilder = new StringBuilder(100);
         stringBuilder.append(API_URL);
 
         if (preferences.getKeyword() != null) {
             stringBuilder.append("q=");
-            stringBuilder.append(preferences.getKeyword());
+            stringBuilder.append(URLEncoder.encode(preferences.getKeyword(), UTF_8.toString()));
         }
 
         if (preferences.getKeyword() != null && preferences.getNewsSource() != null) {
@@ -70,7 +74,7 @@ public class NewsAPIFetcher implements Fetcher {
 
         if (preferences.getNewsSource() != null) {
             stringBuilder.append("sources=");
-            stringBuilder.append(preferences.getNewsSource());
+            stringBuilder.append(URLEncoder.encode(preferences.getNewsSource(), UTF_8.toString()));
         }
 
         stringBuilder.append("&apiKey=");
@@ -96,4 +100,5 @@ public class NewsAPIFetcher implements Fetcher {
 
         return articles;
     }
+
 }
