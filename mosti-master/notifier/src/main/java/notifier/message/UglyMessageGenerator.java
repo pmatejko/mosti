@@ -5,7 +5,12 @@ import model.News;
 import model.UserNewsDTO;
 
 public class UglyMessageGenerator extends MessageGenerator{
-
+	
+	
+	public UglyMessageGenerator() {
+		
+	}
+	
 	public UglyMessageGenerator(UserNewsDTO userNewsDTO) {
 		super(userNewsDTO);
 	}
@@ -15,20 +20,21 @@ public class UglyMessageGenerator extends MessageGenerator{
 		
 		Iterator<News> newsIterator = news.iterator();
 		String message ="";
-		message += "\nMosti api wants to inform you about new notifications: \n\n";
+		StringBuilder sb = new StringBuilder(message);
+		sb.append("\nMosti api wants to inform you about new notifications: \n\n");
 		
 		while(newsIterator.hasNext()) {
 			News temp = newsIterator.next();
 			
-			message += "_______________________________________________________\n\n\n";
-			message += "source of notification: ";
-			message += temp.getUrl();
-			message += "\n\n\ncontent:";
-			message += temp.getContent();
+			sb.append("_______________________________________________________\n\n\n");
+			sb.append("source of notification: ");
+			sb.append(temp.getUrl());
+			sb.append("\n\n\ncontent:");
+			sb.append(temp.getContent());
 			
 		}
 		
-		return message;
+		return sb.toString();
 	}
 
 	@Override

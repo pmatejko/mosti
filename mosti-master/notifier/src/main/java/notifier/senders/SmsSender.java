@@ -13,6 +13,7 @@ import no.vianett.sms.SmsEvent;
 import no.vianett.sms.component.SmsTransceiver;
 import no.vianett.sms.log.SmsScreenLogger;
 import notifier.message.MessageGenerator;
+import notifier.senders.configuration.Configuration;
 import no.vianett.sms.event.SmsDeliveredEvent;
 import no.vianett.sms.event.SmsSendingFailedEvent;
 import no.vianett.sms.event.SmsDeliveryFailedEvent;
@@ -23,16 +24,16 @@ public class SmsSender extends Sender implements SmsEventListener
     private int counter = 0;
     
  
-    public SmsSender(String configFilePath) throws IOException, ParseException
+    public SmsSender(Configuration configuration) throws IOException, ParseException
     {
-    	super(configFilePath);   
+    	super(configuration);   
     }
     
     
     public synchronized void configure() {
     	if(!this.configured) {
     		this.transceiver = SmsTransceiver.getInstance(); // Get the transceiver object.
-            this.transceiver.initialize( this.host, Integer.parseInt( this.port ), this.nick, this.password, new SmsScreenLogger() );
+            this.transceiver.initialize( this.configuration.getHost(), Integer.parseInt( this.configuration.getPort() ), this.configuration.getNick(), this.configuration.getPassword(), new SmsScreenLogger() );
             this.transceiver.addSmsEventListener( this ); // Registrer this class as listener for SMS events.
             this.configured = true;
     	}

@@ -11,6 +11,7 @@ import notifier.message.UglyMessageGenerator;
 import notifier.senders.MailSender;
 import notifier.senders.Sendable;
 import notifier.senders.SmsSender;
+import notifier.senders.configuration.Configuration;
 
 public class Informer {
 	
@@ -22,18 +23,12 @@ public class Informer {
 	
 	private Informer() {
 		try {
-			this.gmailMailSender = new MailSender("configGmail.json");
-			this.vianettSmsSender = new SmsSender("configVianettSms.json");
-		} catch (IOException | ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 
-		
-		try {
-			this.gmailMailSender = new MailSender("configGmail.json");
-			this.vianettSmsSender = new SmsSender("configVianettSms.json");
+			Configuration gmailConfiguration = new Configuration("configGmail.json");
+			Configuration vianettConfiguration = new Configuration("configVianettSms.json");
+			
+			this.gmailMailSender = new MailSender(gmailConfiguration);
+			this.vianettSmsSender = new SmsSender(vianettConfiguration);
 		} catch (IOException | ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

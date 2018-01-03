@@ -11,6 +11,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+
+import notifier.senders.configuration.Configuration;
 @RunWith(Parameterized.class)
 public class SenderCreationTest {
 
@@ -32,28 +34,28 @@ public class SenderCreationTest {
 	@Parameters
 	public static Collection<Object[]> testConditions() throws IOException, ParseException {
 		Object expectedOutputs[][] = { 
-				{new MailSender("configGmail.json"), "gmail.com", "smalcerztest", "465" }, 
-				{new MailSender("configGmail2.json"), "asd.com", "smalcerztest2", "465" },
-				{new SmsSender("configVianettSms.json"), "cpa.vianett.no", "smalcerzszymonn@gmail.com", "31337" }};
+				{new MailSender(new Configuration("configGmail.json")), "gmail.com", "smalcerztest", "465" }, 
+				{new MailSender(new Configuration("configGmail2.json")), "asd.com", "smalcerztest2", "465" },
+				{new SmsSender(new Configuration("configVianettSms.json")), "cpa.vianett.no", "smalcerzszymonn@gmail.com", "31337" }};
 		return Arrays.asList(expectedOutputs);
 	}
 
 	@Test
 	public void testIfTwoHostsAreEqual() {
-		assertEquals(this.sender.getHost(), 
+		assertEquals(this.sender.getConfiguration().getHost(), 
 				expectedHost);
 	}
 	
 	@Test
 	public void testIfTwoPortsAreEqual() {
-		assertEquals(this.sender.getPort(), 
+		assertEquals(this.sender.getConfiguration().getPort(), 
 				expectedPort);
 	}
 	
 	
 	@Test
 	public void testIfTwoNicksAreEqual() {
-		assertEquals(this.sender.getNick(), 
+		assertEquals(this.sender.getConfiguration().getNick(), 
 				expectedNick);
 	}
 }

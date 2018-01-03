@@ -14,6 +14,10 @@ public abstract class MessageGenerator {
 	protected List<News> news;
 	protected User user;
 	
+	public MessageGenerator() {
+		
+	}
+	
 	public MessageGenerator(UserNewsDTO userNewsDTO) {
 		this.news = userNewsDTO.getNewsList();
 		this.user = userNewsDTO.getUser();
