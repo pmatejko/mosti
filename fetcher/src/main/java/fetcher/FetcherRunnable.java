@@ -3,6 +3,7 @@ package fetcher;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import dto.NewsDTO;
+import exceptions.FetchingException;
 import interfaces.Fetcher;
 import interfaces.FetcherProvider;
 import io.reactivex.Observer;
@@ -11,16 +12,17 @@ import model.Preferences;
 
 import java.util.List;
 import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicInteger;
 
-public class FetcherTask extends TimerTask {
+public class FetcherRunnable implements Runnable {
     private final Observer<NewsDTO> newsObserver;
     private final FetcherProvider fetcherProvider;
     private final Preferences preferences;
 
 
     @Inject
-    public FetcherTask(Observer<NewsDTO> newsObserver, FetcherProvider fetcherProvider,
-                       @Assisted Preferences preferences) {
+    public FetcherRunnable(Observer<NewsDTO> newsObserver, FetcherProvider fetcherProvider,
+                           @Assisted Preferences preferences) {
         this.newsObserver = newsObserver;
         this.fetcherProvider = fetcherProvider;
         this.preferences = preferences;
@@ -29,15 +31,10 @@ public class FetcherTask extends TimerTask {
 
     @Override
     public void run() {
-        try {
-            Fetcher fetcher = fetcherProvider.getFetcher(preferences.getDataProvider());
-            List<News> newsList = fetcher.fetch(preferences);
+        Fetcher fetcher = fetcherProvider.getFetcher(preferences.getDataProvider());
+        List<News> newsList = fetcher.fetch(preferences);
 
-            NewsDTO newsDTO = new NewsDTO(newsList);
-            newsObserver.onNext(newsDTO);
-        } catch (Exception e) {
-            // TODO - for example retry after some time
-            e.printStackTrace();
-        }
+        NewsDTO newsDTO = new NewsDTO(newsList);
+        newsObserver.onNext(newsDTO);
     }
 }
