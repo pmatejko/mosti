@@ -6,12 +6,10 @@ import model.User;
 import java.util.Optional;
 
 public interface NewsDao {
-    Optional<News> create(News news);
+    void openSession();
+    News getOrCreate(News news);
+    void save(News news);
+    void update(News news);
+    Optional<News>findByUrl(News news);
 
-    Iterable<News> findByUrl(News news);
-
-
-    boolean isNew(News news);
-
-    boolean isUsed(News news);
 }

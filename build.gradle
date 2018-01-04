@@ -37,7 +37,7 @@ dependencies {
 //    executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
 //
 //    subprojects.each {
-//        sourceSets it.sourceSets.main
+//        sourceSets it.sourceSets.Main
 //    }
 //
 //    reports {

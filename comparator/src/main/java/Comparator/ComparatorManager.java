@@ -2,34 +2,31 @@ package Comparator;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import dao.NewsDao;
 import dto.NewsDTO;
-import exceptions.DataProviderCOnflictException;
-import fetcher.FetchingManager;
-import model.News;
-
+import interfaces.IFetchingManager;
 
 
 @Singleton
 public class ComparatorManager {
     @Inject
-    private FetchingManager fetchingManager;
+    private IFetchingManager fetchingManager;
 
     @Inject
-    private ComparatorFactory comparatorFactory;
+    private NewsDao newsDao;
 
-    private ComparatorManager(){
+    @Inject
+    private ComparatorAggregate comparatorAggregate;
+
+    public ComparatorManager(){
+    }
+    public void subscribe(){
         fetchingManager.getNewsObservable().subscribe(this::process);
     }
 
     public void process(NewsDTO news){
-        for (News newsPiece: news.getNewsList()) {
-            try {
-                comparatorFactory
-                        .createComparator(newsPiece)
-                        .process();
-            } catch (DataProviderCOnflictException e) {
-                e.printStackTrace();
-            }
-        }
+        news.getNewsList().stream()
+                .map(newsDao::getOrCreate)
+                .forEach(comparatorAggregate::process);
     }
 }

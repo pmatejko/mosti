@@ -2,6 +2,7 @@ package model;
 
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.*;
 
 @Entity
@@ -9,7 +10,7 @@ import java.util.*;
         @UniqueConstraint(columnNames = User.Columns.EMAIL)
 })
 public class User {
-    public static final String TABLE_NAME = "user";
+    public static final String TABLE_NAME = "subscriber";
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
@@ -19,14 +20,22 @@ public class User {
     @Column(name = Columns.EMAIL, nullable = false)
     private String email;
 
-    @Column(name = Columns.INTERVAL, nullable = false)
-    private Date interval;
+    @Column(name = Columns.LAST_NOTIFICATION, nullable = false)
+    private Timestamp lastNotification;
 
-    @ManyToMany(mappedBy = Preferences.USER_PREFERENCES_JUNCTION_TABLE_NAME)
+    @Column(name = Columns.INTERVAL, nullable = false)
+    private int interval;
+
+    @ManyToMany(mappedBy ="users",cascade = {CascadeType.ALL})
     private List<Preferences> preferences = new LinkedList<>();
+
+    @ManyToMany(mappedBy = "users",cascade = {CascadeType.ALL},fetch = FetchType.EAGER)
+    private List<CompareType> compareTypes  = new LinkedList<>();
 
 
     public User() {
+        this.lastNotification= new Timestamp(System.currentTimeMillis());
+
     }
 
 
@@ -36,7 +45,7 @@ public class User {
         return email;
     }
 
-    public Date getInterval() {
+    public int getInterval() {
         return interval;
     }
 
@@ -52,7 +61,7 @@ public class User {
         this.email = email;
     }
 
-    public void setInterval(Date interval) {
+    public void setInterval(int interval) {
         this.interval = interval;
     }
 
@@ -68,11 +77,38 @@ public class User {
         this.preferences.remove(preferences);
     }
 
+    public void setCompareTypes(List<CompareType> compareTypes){this.compareTypes=compareTypes;}
 
+    public void addCompareType(CompareType compareType){compareTypes.add(compareType);}
+
+    public void removeCompareType(CompareType compareType){this.compareTypes.remove(compareType);}
+
+    public void setLastNotification(Timestamp lastNotification) {
+        this.lastNotification = lastNotification;
+    }
+
+    public Timestamp getLastNotification() {
+        return lastNotification;
+    }
+
+    public List<CompareType> getCompareTypes() {
+        return compareTypes;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", lastNotification=" + lastNotification +
+                ", interval=" + interval +
+                '}';
+    }
 
     public static class Columns {
-        public static final String ID = "id";
+        public static final String ID = "user_id";
         public static final String EMAIL = "email";
         public static final String INTERVAL = "interval";
+        public static final String LAST_NOTIFICATION="last_notification";
     }
 }

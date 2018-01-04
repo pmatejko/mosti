@@ -1,31 +1,53 @@
 package daoImpl;
 
 
+import dao.GenericDao;
 import dao.NewsDao;
 import model.News;
 import model.User;
+import org.hibernate.Session;
 
+
+import java.util.List;
 import java.util.Optional;
 
-public class NewsDaoImpl extends GenericDao implements NewsDao{
+public class NewsDaoImpl extends GenericDao<News> implements NewsDao {
 
     @Override
-    public Optional<News> create(News news) {
-        return null;
-    }
-
-    @Override
-    public Iterable<News> findByUrl(News news) {
-        return null;
-    }
-
-
-    public boolean isNew(News news) {
-        return false;
+    public void openSession() {
+        sessionFactory.openSession();
     }
 
     @Override
-    public boolean isUsed(News news) {
-        return false;
+    public News getOrCreate(News news) {
+        Optional<News> matchingNews = findByUrl(news);
+        if (!matchingNews.isPresent()) {
+            // no news has the same url, so we have a new one
+            save(news);
+            return news;
+        } else {
+            News existingNews = matchingNews.get();
+            // fetcher sends the same article many times with diffrent keywords,
+            // so we add new keywords to existing ones.
+            news.getPreferences().forEach(existingNews::addPreference);
+            update(existingNews);
+            return existingNews;
+
+        }
     }
+
+    @Override
+    public Optional<News> findByUrl(News news) {
+        final Session session = sessionFactory.getCurrentSession();
+        session.beginTransaction();
+        List<News> newsList = session
+                .createQuery("from News  n where n.url = :url", News.class)
+                .setParameter("url", news.getUrl())
+                .list();
+        session.getTransaction().commit();
+        if (newsList.isEmpty())
+            return Optional.empty();
+        else return Optional.of(newsList.get(0));
+    }
+
 }
