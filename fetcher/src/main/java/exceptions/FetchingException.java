@@ -1,6 +1,6 @@
 package exceptions;
 
-public class FetchingException extends Exception {
+public class FetchingException extends RuntimeException {
 
     public FetchingException(Throwable cause) {
         super(cause);

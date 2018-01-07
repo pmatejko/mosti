@@ -168,4 +168,5 @@ public class TwitterAPIFetcher implements Fetcher {
 
         return tweets;
     }
+
 }

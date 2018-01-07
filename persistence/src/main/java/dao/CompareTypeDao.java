@@ -1,11 +1,9 @@
 package dao;
 
-import com.sun.glass.ui.CommonDialogs;
-import model.CompareType;
-import model.News;
+import model.Condition;
 
 public interface CompareTypeDao {
-    CompareType getCompareTypeByName(String type);
-    void update(CompareType compareType);
-    void save(CompareType compareType);
+    Condition getCompareTypeByName(String type);
+    void update(Condition condition);
+    void save(Condition condition);
 }

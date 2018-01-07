@@ -1,5 +1,9 @@
 
 dependencies {
+
+    testCompile group: 'org.mockito', name: 'mockito-core', version: '2.1.0'
+    testCompile group: 'org.powermock', name: 'powermock-api-mockito2', version: '1.7.3'
+    testCompile "org.powermock:powermock-module-junit4:1.7.3"
     compile group: 'org.glassfish', name: 'javax.json', version: '1.0.4'
     compile project(":persistence")
 }

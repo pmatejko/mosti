@@ -1,16 +1,11 @@
-import Comparator.ComparatorManager;
 import Daemon.NotifierDeamon;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import daoImpl.CompareTypeDaoImpl;
-import daoImpl.NewsDaoImpl;
 import daoImpl.UserDaoImpl;
-import dto.NewsDTO;
 import model.*;
 
 import java.sql.Timestamp;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,13 +13,14 @@ public class Main {
 
 
     public static void main(String[] args){
+
         CompareTypeDaoImpl c= new CompareTypeDaoImpl();
-        CompareType compareType = new CompareType();
-        compareType.setType("length");
-        CompareType compareType1 = new CompareType();
-        compareType1.setType("vocabulary");
-        c.save(compareType);
-        c.save(compareType1);
+        Condition condition = new Condition();
+        condition.setType(ConditionType.LENGTH);
+        Condition condition1 = new Condition();
+        condition1.setType(ConditionType.VOCABULARY);
+        c.save(condition);
+        c.save(condition1);
 
         Injector injector = Guice.createInjector(new Config());
         NotifierDeamon notifierDeamon = injector.getInstance(NotifierDeamon.class);
@@ -71,8 +67,8 @@ public class Main {
         userDao.save(user);
         user.setLastNotification(t);
         user.setPreferences(p);
-        user.addCompareType(compareType);
-        user.addCompareType(compareType1);
+        user.addCompareType(condition);
+        user.addCompareType(condition1);
 
 
         news.setUrl("mamama");
@@ -81,19 +77,14 @@ public class Main {
         news1.setContent("llllllllllllllll");
         news.setTimestamp(t);
         news1.setTimestamp(tt);
-        news.addCompareType(compareType);
-        news1.addCompareType(compareType);
         news.addPreference(preferences);
         news.addPreference(preferences1);
         news1.addPreference(preferences);
         news1.addPreference(preferences1);
 
-        compareType.addUser(user);
-        compareType1.addUser(user);
-        compareType.addNews(news);
-        compareType.addNews(news1);
-        compareType1.addNews(news);
-        compareType1.addNews(news1);
+        condition.addUser(user);
+        condition1.addUser(user);
+
 
         //  NewsDaoImpl newsDao=new NewsDaoImpl();
         //  newsDao.save(news1);
@@ -102,8 +93,8 @@ public class Main {
         // CompareTypeDaoImpl compareTypeDao= new CompareTypeDaoImpl();
         //  newsDao.save(news);
 
-        // compareTypeDao.save(compareType);
-//        compareTypeDao.save(compareType1);
+        // compareTypeDao.save(condition);
+//        compareTypeDao.save(condition1);
         userDao.update(user);
 //        PreferencesDaoImpl pre=
 

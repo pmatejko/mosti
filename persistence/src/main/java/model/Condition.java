@@ -5,60 +5,68 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Entity
-@Table(name = model.CompareType.TABLE_NAME, uniqueConstraints = {
-        @UniqueConstraint(columnNames = model.CompareType.Columns.TYPE)
+@Table(name = Condition.TABLE_NAME, uniqueConstraints = {
+        @UniqueConstraint(columnNames = Condition.Columns.TYPE)
 })
-public class CompareType {
+public class Condition {
     public static final String TABLE_NAME = "compare_type";
-    public static final String COMPARE_TYPE_USERS_JUNCTION_TABLE_NAME = "compare_type_users";
+    public static final String CONDITION_USERS_JUNCTION_TABLE_NAME = "compare_type_users";
 
 
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
-    @Column(name = model.CompareType.Columns.ID)
+    @Column(name = Condition.Columns.ID)
     private long id;
 
-    @Column(name = model.CompareType.Columns.TYPE, nullable = false)
-    private String type;
 
-    @ManyToMany(mappedBy = "compareTypes", cascade = {CascadeType.ALL})
-    private List<News> news = new LinkedList<>();
+    @Column(name = Condition.Columns.TYPE, nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ConditionType type;
+
+    @Column(name = Columns.VALUE, nullable = false)
+    private int value;
 
 
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
-            name = COMPARE_TYPE_USERS_JUNCTION_TABLE_NAME,
-            joinColumns = @JoinColumn(name = "compare_type_id", referencedColumnName = CompareType.Columns.ID),
+            name = CONDITION_USERS_JUNCTION_TABLE_NAME,
+            joinColumns = @JoinColumn(name = "condition_id", referencedColumnName = Condition.Columns.ID),
             inverseJoinColumns = @JoinColumn(name = "users_id", referencedColumnName = User.Columns.ID)
     )
     private List<User> users = new LinkedList<>();
 
-    public CompareType() {
+    public Condition() {
     }
 
-    public String getType() {
+    public ConditionType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(ConditionType type) {
         this.type = type;
     }
 
-    public List<News> getNews() {
-        return news;
+    public int getValue() {
+        return value;
     }
 
-    public void setNews(List<News> news) {
-        this.news = news;
+    public void setValue(int value) {
+        this.value = value;
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 
     public long getId() {
         return id;
     }
-    public  void addNews(News n){
-        news.add(n);
-    }
+
      public  void addUser(User u){
         users.add(u);
      }
@@ -68,7 +76,7 @@ public class CompareType {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        CompareType that = (CompareType) o;
+        Condition that = (Condition) o;
 
         return id == that.id;
     }
@@ -81,6 +89,7 @@ public class CompareType {
     public static class Columns {
         public static final String ID = "compare_type_id";
         public static final String TYPE = "type";
+        public static final String VALUE = "value";
     }
 }
 
