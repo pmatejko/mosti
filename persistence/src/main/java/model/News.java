@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Table(name = News.TABLE_NAME)
 public class News {
     public static final String TABLE_NAME = "news";
-    public static final String COMPARE_TYPE_NEWS_JUNCTION_TABLE_NAME = "compare_type_news";
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
@@ -18,13 +18,6 @@ public class News {
     @ManyToMany(mappedBy = "news",cascade = {CascadeType.ALL})
     private List<Preferences> preferences = new LinkedList<>();
 
-    @ManyToMany(cascade = {CascadeType.ALL},fetch = FetchType.EAGER)
-    @JoinTable(
-            name = COMPARE_TYPE_NEWS_JUNCTION_TABLE_NAME,
-            joinColumns = @JoinColumn(name =  "news_id", referencedColumnName = News.Columns.ID),
-            inverseJoinColumns = @JoinColumn(name ="compare_type_id", referencedColumnName =CompareType.Columns.ID )
-    )
-    private List<CompareType> compareTypes  = new LinkedList<>();
 
     @Column(name = Columns.URL, nullable = false)
     private String url;
@@ -89,13 +82,6 @@ public class News {
         this.timestamp = timestamp;
     }
 
-    public  void  addCompareType(CompareType compareType){
-        compareTypes.add(compareType);
-    }
-    public List<CompareType> getCompareTypes(){
-        return compareTypes;
-    }
-
     public boolean hasKeyword(){
         return preferences.get(0).getKeyword() != null;
     }
@@ -120,7 +106,7 @@ public class News {
         public static final String URL = "url";
         public static final String CONTENT = "content";
         public static final String TIMESTAMP = "timestamp";
-        public static final String COMPARE_TYPES= "compare_type";
+
 
     }
 }

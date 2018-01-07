@@ -30,7 +30,7 @@ public class User {
     private List<Preferences> preferences = new LinkedList<>();
 
     @ManyToMany(mappedBy = "users",cascade = {CascadeType.ALL},fetch = FetchType.EAGER)
-    private List<CompareType> compareTypes  = new LinkedList<>();
+    private List<Condition> conditions = new LinkedList<>();
 
 
     public User() {
@@ -77,11 +77,12 @@ public class User {
         this.preferences.remove(preferences);
     }
 
-    public void setCompareTypes(List<CompareType> compareTypes){this.compareTypes=compareTypes;}
+    public void setConditions(List<Condition> conditions){this.conditions = conditions;}
 
-    public void addCompareType(CompareType compareType){compareTypes.add(compareType);}
+    public void addCompareType(Condition condition){
+        conditions.add(condition);}
 
-    public void removeCompareType(CompareType compareType){this.compareTypes.remove(compareType);}
+    public void removeCompareType(Condition condition){this.conditions.remove(condition);}
 
     public void setLastNotification(Timestamp lastNotification) {
         this.lastNotification = lastNotification;
@@ -91,8 +92,8 @@ public class User {
         return lastNotification;
     }
 
-    public List<CompareType> getCompareTypes() {
-        return compareTypes;
+    public List<Condition> getConditions() {
+        return conditions;
     }
 
     @Override

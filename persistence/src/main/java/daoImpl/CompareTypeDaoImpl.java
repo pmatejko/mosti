@@ -2,27 +2,27 @@ package daoImpl;
 
 import dao.CompareTypeDao;
 import dao.GenericDao;
-import model.CompareType;
+import model.Condition;
 import org.hibernate.Session;
 
 import javax.persistence.PersistenceException;
 
-public class CompareTypeDaoImpl extends GenericDao<CompareType> implements CompareTypeDao {
-    public CompareType getCompareTypeByName(String type) {
+public class CompareTypeDaoImpl extends GenericDao<Condition> implements CompareTypeDao {
+    public Condition getCompareTypeByName(String type) {
         final Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
-        CompareType compareType = session
-                .createQuery("from CompareType c where c.type=:compare_type", CompareType.class)
+        Condition condition = session
+                .createQuery("from Condition c where c.type=:compare_type", Condition.class)
                 .setParameter("compare_type", type)
                 .getSingleResult();
         session.getTransaction().commit();
-        return compareType;
+        return condition;
 
     }
 
 
     @Override
-    public void update(CompareType object) throws PersistenceException {
+    public void update(Condition object) throws PersistenceException {
         super.update(object);
     }
 }
