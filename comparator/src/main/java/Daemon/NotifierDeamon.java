@@ -22,6 +22,5 @@ public class NotifierDeamon {
 
     public void run() {
         timer.scheduleAtFixedRate(notifyTask, 1000, delay);
-
     }
 }

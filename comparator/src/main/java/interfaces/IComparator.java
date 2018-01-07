@@ -4,5 +4,5 @@ package interfaces;
 import model.News;
 
 public interface IComparator {
-    void process(News news);
+    boolean process(News news);
 }

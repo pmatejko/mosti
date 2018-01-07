@@ -17,6 +17,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Date;
 import java.util.LinkedList;
@@ -90,7 +91,7 @@ public class NewsAPIFetcher implements Fetcher {
                 String content = jsonArticle.getString("title") + " " + jsonArticle.getString("description");
                 Date timestamp = Date.from(Instant.from(ISO_DATE_TIME.parse(jsonArticle.getString("publishedAt"))));
 
-                articles.add(new News(preferences, url, content, timestamp));
+                articles.add(new News(preferences, url, content, new Timestamp(System.currentTimeMillis())));
             }
         }
 

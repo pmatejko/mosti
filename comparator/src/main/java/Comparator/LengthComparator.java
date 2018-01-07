@@ -19,10 +19,10 @@ public class LengthComparator implements IComparator{
 
 
     @Override
-    public void process(News news) {
+    public boolean process(News news) { // wywalić zapis do bazy. Wgl kontakt z bazą. Ma sprawdzać, czy warunek spełniony i zwracać bool
         StringTokenizer stringTokenizer= new StringTokenizer(news.getContent());
         int wordsAmount=stringTokenizer.countTokens();
-        if(wordsAmount<130){
+        if(wordsAmount<130){ // dodać ustawianie ile słów
             CompareType compareType= compareTypeDao.getCompareTypeByName("length");
             news.addCompareType(compareType);
             newsDao.update(news);

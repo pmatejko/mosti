@@ -22,13 +22,13 @@ public class VocabularyComparator implements IComparator{
 
 
     @Override
-    public void process(News news) {
+    public boolean process(News news) {   // wywalić zapis do bazy. Wgl kontakt z bazą. Ma sprawdzać, czy warunek spełniony i zwracać bool
        StringTokenizer stringTokenizer= new StringTokenizer(news.getContent());
         Set<String> uniqueWords = new HashSet<>();
         while (stringTokenizer.hasMoreElements()){
             uniqueWords.add(stringTokenizer.nextToken());
         }
-        if(uniqueWords.size()<300){
+        if(uniqueWords.size()<300){ // dodać ustawianie ile słów
             CompareType compareType= compareTypeDao.getCompareTypeByName("vocabulary");
             news.addCompareType(compareType);
             newsDao.update(news);

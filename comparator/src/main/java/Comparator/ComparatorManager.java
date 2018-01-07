@@ -15,9 +15,6 @@ public class ComparatorManager {
     @Inject
     private NewsDao newsDao;
 
-    @Inject
-    private ComparatorAggregate comparatorAggregate;
-
     public ComparatorManager(){
     }
     public void subscribe(){
@@ -25,8 +22,7 @@ public class ComparatorManager {
     }
 
     public void process(NewsDTO news){
-        news.getNewsList().stream()
-                .map(newsDao::getOrCreate)
-                .forEach(comparatorAggregate::process);
+        news.getNewsList()
+                .forEach(newsDao::updateOrCreate);
     }
 }

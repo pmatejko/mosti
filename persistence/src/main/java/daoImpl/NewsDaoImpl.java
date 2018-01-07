@@ -19,7 +19,7 @@ public class NewsDaoImpl extends GenericDao<News> implements NewsDao {
     }
 
     @Override
-    public News getOrCreate(News news) {
+    public News updateOrCreate(News news) {
         Optional<News> matchingNews = findByUrl(news);
         if (!matchingNews.isPresent()) {
             // no news has the same url, so we have a new one
