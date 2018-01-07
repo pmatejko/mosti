@@ -10,7 +10,6 @@ import model.News;
 import model.User;
 import model.UserNewsDTO;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.TimerTask;
 import java.util.stream.Collectors;
@@ -41,7 +40,7 @@ public class NotifyTask extends TimerTask {
     }
 
     private List<News> getNewsToSend(User user) {
-        IComparator comparator = comparatorFactory.createComparator(user);
+        IComparator comparator = comparatorFactory.createComparatorForUser(user);
         return userDao.getNewsToSend(user).stream()
                 .filter(comparator::process)
                 .collect(Collectors.toList());
