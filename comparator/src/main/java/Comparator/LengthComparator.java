@@ -1,34 +1,24 @@
 package Comparator;
 
-import dao.CompareTypeDao;
 import interfaces.IComparator;
-import model.CompareType;
+import model.ConditionType;
 import model.News;
-import dao.NewsDao;
 
-import javax.inject.Inject;
 import java.util.StringTokenizer;
 
 
+public class LengthComparator implements IComparator {
+    private final int maxWords;
 
-
-public class LengthComparator implements IComparator{
-    @Inject
-    private CompareTypeDao compareTypeDao;
-    @Inject private NewsDao newsDao;
-
+    public LengthComparator(int maxWords) {
+        this.maxWords = maxWords;
+    }
 
     @Override
-    public boolean process(News news) { // wywalić zapis do bazy. Wgl kontakt z bazą. Ma sprawdzać, czy warunek spełniony i zwracać bool
-        StringTokenizer stringTokenizer= new StringTokenizer(news.getContent());
-        int wordsAmount=stringTokenizer.countTokens();
-        if(wordsAmount<130){ // dodać ustawianie ile słów
-            CompareType compareType= compareTypeDao.getCompareTypeByName("length");
-            news.addCompareType(compareType);
-            newsDao.update(news);
-
-        }
-
+    public boolean process(News news) {
+        StringTokenizer stringTokenizer = new StringTokenizer(news.getContent());
+        int wordsCount = stringTokenizer.countTokens();
+        return wordsCount <= maxWords;
     }
 
 }
