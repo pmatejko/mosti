@@ -22,8 +22,21 @@ public class VocabularyComparator implements IComparator {
         while (stringTokenizer.hasMoreElements()) {
             uniqueWords.add(stringTokenizer.nextToken());
         }
-        return uniqueWords.size() <= maxUniqueWords;
+        return uniqueWords.size() != 0 && uniqueWords.size() <= maxUniqueWords;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof VocabularyComparator)) return false;
 
+        VocabularyComparator that = (VocabularyComparator) o;
+
+        return maxUniqueWords == that.maxUniqueWords;
+    }
+
+    @Override
+    public int hashCode() {
+        return maxUniqueWords;
+    }
 }

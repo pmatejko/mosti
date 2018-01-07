@@ -18,7 +18,21 @@ public class LengthComparator implements IComparator {
     public boolean process(News news) {
         StringTokenizer stringTokenizer = new StringTokenizer(news.getContent());
         int wordsCount = stringTokenizer.countTokens();
-        return wordsCount <= maxWords;
+        return wordsCount != 0 && wordsCount <= maxWords;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof LengthComparator)) return false;
+
+        LengthComparator that = (LengthComparator) o;
+
+        return maxWords == that.maxWords;
+    }
+
+    @Override
+    public int hashCode() {
+        return maxWords;
+    }
 }
