@@ -45,7 +45,7 @@ public class Configuration {
 		return port;
 	}
 	
-	public void readConfFromFile(String configFilePath) throws IOException, ParseException {
+	private void readConfFromFile(String configFilePath) throws IOException, ParseException {
     	
     	InputStream inputStream = MailSender.class.getResourceAsStream(configFilePath);
 	 	BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));

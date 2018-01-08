@@ -14,6 +14,7 @@ public class UserNewsDTO {
         this.newsList = newsList;
     }
 
+
     public UserNewsDTO(User user) {
         this.user = user;
         this.newsList = new LinkedList<>();
@@ -29,5 +30,17 @@ public class UserNewsDTO {
 
     public List<News> getNewsList() {
         return newsList;
+    }
+    @Override
+    public String toString() {
+        StringBuilder str = new StringBuilder();
+        str.append("UserNewsDTO{" +
+                "user=" + user +
+                ", newsList=");
+        for(News news : newsList){
+            str.append(news);
+            System.out.println(news);
+        }
+        return  str.toString();
     }
 }
