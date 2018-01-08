@@ -2,23 +2,16 @@ package notifier.informer;
 
 
 import java.io.IOException;
-import java.util.List;
-
-import javax.mail.MessagingException;
-
 import org.json.simple.parser.ParseException;
 
-import exceptions.BadLengthTelephoneNumberException;
-import model.News;
-import model.User;
+import exceptions.SenderException;
 import model.UserNewsDTO;
-import notifier.message.Message;
-import notifier.message.UglyMessage;
-
-
+import notifier.message.MessageGenerator;
+import notifier.message.UglyMessageGenerator;
 import notifier.senders.MailSender;
 import notifier.senders.Sendable;
 import notifier.senders.SmsSender;
+import notifier.senders.configuration.Configuration;
 
 public class Informer {
 	
@@ -30,18 +23,12 @@ public class Informer {
 	
 	private Informer() {
 		try {
-			this.gmailMailSender = new MailSender("configGmail.json");
-			this.vianettSmsSender = new SmsSender("configVianettSms.json");
-		} catch (IOException | ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 
-		
-		try {
-			this.gmailMailSender = new MailSender("configGmail.json");
-			this.vianettSmsSender = new SmsSender("configVianettSms.json");
+			Configuration gmailConfiguration = new Configuration("configGmail.json");
+			Configuration vianettConfiguration = new Configuration("configVianettSms.json");
+			
+			this.gmailMailSender = new MailSender(gmailConfiguration);
+			this.vianettSmsSender = new SmsSender(vianettConfiguration);
 		} catch (IOException | ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -49,30 +36,24 @@ public class Informer {
 	}
 	
 	
-	public void informUser(UserNewsDTO userNewsDTO) {
-		User user = userNewsDTO.getUser();
-		List<News> news = userNewsDTO.getNewsList();
-		Message msg = new UglyMessage();
+	public void informUser(UserNewsDTO userNewsDTO) throws SenderException {
+		
+		
+		
 		//BEGIN  TODO 
 		
-			//we want to generate message appropriate to user
-			String message = msg.generateMessage(news);
-		
+			//we want to generate message appropriate to user or appropirate to kind of information
+			MessageGenerator msg = new UglyMessageGenerator(userNewsDTO);
+			
+			
 		//END    TODO
 		//BEGIN  TODO
 		
 			//we want to send with appropriate sender
-			try {
-				try {
-					gmailMailSender.send(user.getEmail(), "mail about your iterests", message);
-				} catch (BadLengthTelephoneNumberException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			} catch (MessagingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			
+			
+			gmailMailSender.send(msg);
+			
 
 			
 		//END    TODO

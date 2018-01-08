@@ -3,22 +3,26 @@ package fetcher;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import dto.NewsDTO;
-import interfaces.FetcherTaskFactory;
+import interfaces.FetcherRunnableFactory;
 import interfaces.IFetchingManager;
 import io.reactivex.Observable;
 import model.Preferences;
 
 import java.util.*;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 @Singleton
 public class FetchingManager implements IFetchingManager {
     @Inject
     private Observable<NewsDTO> newsObservable;
     @Inject
-    private FetcherTaskFactory fetcherTaskFactory;
+    private FetcherRunnableFactory fetcherRunnableFactory;
+    @Inject
+    private ScheduledExecutorService scheduledExecutorService;
 
-    private final Timer timer = new Timer();
-    private final Map<Long, FetcherTask> activeTasksMap = new HashMap<>();
+    private final Map<Long, ScheduledFuture<?>> activeRunnablesMap = new HashMap<>();
 
 
     @Override
@@ -27,17 +31,19 @@ public class FetchingManager implements IFetchingManager {
     }
 
     public void addSubscription(Preferences preferences) {
-        FetcherTask task = fetcherTaskFactory.create(preferences);
-        timer.schedule(task, 0, preferences.getDataProvider().getMillisecondInterval());
-        activeTasksMap.put(preferences.getId(), task);
+        Runnable fetcherRunnable = fetcherRunnableFactory.create(preferences);
+        ScheduledFuture<?> scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(fetcherRunnable, 0,
+                preferences.getDataProvider().getMillisecondInterval(), TimeUnit.MILLISECONDS);
+
+        activeRunnablesMap.put(preferences.getId(), scheduledFuture);
     }
 
     public void cancelSubscription(Preferences preferences) {
-        FetcherTask task = activeTasksMap.get(preferences.getId());
+        ScheduledFuture<?> scheduledFuture = activeRunnablesMap.get(preferences.getId());
 
-        if (task != null) {
-            task.cancel();
-            activeTasksMap.remove(preferences.getId());
+        if (scheduledFuture != null) {
+            scheduledFuture.cancel(false);
+            activeRunnablesMap.remove(preferences.getId());
         }
     }
 }

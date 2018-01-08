@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import org.json.simple.parser.ParseException;
 
-import exceptions.BadLengthTelephoneNumberException;
+import notifier.exceptions.BadLengthTelephoneNumberException;
 import no.vianett.sms.Sms;
 import no.vianett.sms.SmsEvent;
 import no.vianett.sms.component.SmsTransceiver;

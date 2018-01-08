@@ -11,7 +11,7 @@ import javax.mail.internet.AddressException;
 import org.json.simple.parser.ParseException;
 import org.junit.Test;
 
-import exceptions.BadLengthTelephoneNumberException;
+import notifier.exceptions.BadLengthTelephoneNumberException;
 
 public class MailSenderSendTest {
 

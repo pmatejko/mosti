@@ -7,10 +7,13 @@ import java.io.IOException;
 import org.json.simple.parser.ParseException;
 
 import exceptions.BadLengthTelephoneNumberException;
+import exceptions.SenderException;
 import no.vianett.sms.Sms;
 import no.vianett.sms.SmsEvent;
 import no.vianett.sms.component.SmsTransceiver;
 import no.vianett.sms.log.SmsScreenLogger;
+import notifier.message.MessageGenerator;
+import notifier.senders.configuration.Configuration;
 import no.vianett.sms.event.SmsDeliveredEvent;
 import no.vianett.sms.event.SmsSendingFailedEvent;
 import no.vianett.sms.event.SmsDeliveryFailedEvent;
@@ -21,16 +24,16 @@ public class SmsSender extends Sender implements SmsEventListener
     private int counter = 0;
     
  
-    public SmsSender(String configFilePath) throws IOException, ParseException
+    public SmsSender(Configuration configuration) throws IOException, ParseException
     {
-    	super(configFilePath);   
+    	super(configuration);   
     }
     
     
     public synchronized void configure() {
     	if(!this.configured) {
     		this.transceiver = SmsTransceiver.getInstance(); // Get the transceiver object.
-            this.transceiver.initialize( this.host, Integer.parseInt( this.port ), this.nick, this.password, new SmsScreenLogger() );
+            this.transceiver.initialize( this.configuration.getHost(), Integer.parseInt( this.configuration.getPort() ), this.configuration.getNick(), this.configuration.getPassword(), new SmsScreenLogger() );
             this.transceiver.addSmsEventListener( this ); // Registrer this class as listener for SMS events.
             this.configured = true;
     	}
@@ -65,11 +68,11 @@ public class SmsSender extends Sender implements SmsEventListener
     }
 
 	@Override
-	public void send(String contact, String title, String message) throws BadLengthTelephoneNumberException {
+	public void send(MessageGenerator messageGenerator) throws SenderException {
 		
 		
-		if(contact.length()<=8 || contact.length()>=11) {
-			throw new BadLengthTelephoneNumberException();
+		if(messageGenerator.getContact().length()<=8 || messageGenerator.getContact().length()>=11) {
+			throw new SenderException(new BadLengthTelephoneNumberException());
 		}
 		
 		
@@ -83,9 +86,9 @@ public class SmsSender extends Sender implements SmsEventListener
         sms.setId( ++this.counter );
         sms.setReplyPath( 100 );
         sms.setSender( "1963" ); // Set the sender number.
-        sms.setHeader(title);
-        sms.setMessage( message );
-        sms.setRecipient( contact ); // The recipients phone number.
+        sms.setHeader(messageGenerator.getTitle());
+        sms.setMessage( messageGenerator.generateMessageContent() );
+        sms.setRecipient( messageGenerator.getContact() ); // The recipients phone number.
  
        this.transceiver.send( sms );
 
