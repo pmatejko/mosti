@@ -5,7 +5,7 @@ import javax.mail.MessagingException;
 
 import org.json.simple.parser.ParseException;
 
-import exceptions.BadLengthTelephoneNumberException;
+import notifier.exceptions.BadLengthTelephoneNumberException;
 import notifier.senders.MailSender;
 import notifier.senders.Sendable;
 

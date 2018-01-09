@@ -1,7 +1,6 @@
 package dao;
 
 import model.News;
-import model.User;
 
 import java.util.Optional;
 

@@ -2,7 +2,12 @@ package exceptions;
 
 public class UnsupportedDataProviderException extends RuntimeException {
 
-    public UnsupportedDataProviderException() {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public UnsupportedDataProviderException() {
         super();
     }
 
