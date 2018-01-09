@@ -10,15 +10,19 @@ import java.util.Timer;
 
 @Singleton
 public class NotifierDeamon {
-    @Inject
+    private final long delay = 31000;
     private NotifyTask notifyTask;
+    private Timer timer = new Timer();
+
+    @Inject
+    public NotifierDeamon(NotifyTask notifyTask, Timer timer) {
+        this.notifyTask = notifyTask;
+        this.timer = timer;
+    }
 
     public Observable<UserNewsDTO> getUserNewsObservable() {
         return notifyTask.getUserNewsObservable();
     }
-
-    private Timer timer = new Timer();
-    private final long delay = 31000;
 
     public void run() {
         timer.scheduleAtFixedRate(notifyTask, 1000, delay);

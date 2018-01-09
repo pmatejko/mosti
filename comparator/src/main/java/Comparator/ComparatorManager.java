@@ -9,19 +9,23 @@ import interfaces.IFetchingManager;
 
 @Singleton
 public class ComparatorManager {
-    @Inject
-    private IFetchingManager fetchingManager;
 
-    @Inject
+    private IFetchingManager fetchingManager;
     private NewsDao newsDao;
 
-    public ComparatorManager(){
-    }
-    public void subscribe(){
-        fetchingManager.getNewsObservable().subscribe(this::process);
+    @Inject
+    public ComparatorManager(IFetchingManager fetchingManager, NewsDao newsDao) {
+        this.fetchingManager = fetchingManager;
+        this.newsDao = newsDao;
     }
 
-    public void process(NewsDTO news){
+    public void subscribe() {
+        fetchingManager
+                .getNewsObservable()
+                .subscribe(this::process);
+    }
+
+    public void process(NewsDTO news) {
         news.getNewsList()
                 .forEach(newsDao::updateOrCreate);
     }
