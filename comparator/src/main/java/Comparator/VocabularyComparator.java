@@ -12,11 +12,11 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 public class VocabularyComparator implements IConfigurableComparator {
-    private final ConditionType TYPE = ConditionType.VOCABULARY;
+    private static final ConditionType TYPE = ConditionType.VOCABULARY;
     private final int maxUniqueWords;
     private final boolean authorizedToProcess;
 
-    private VocabularyComparator(int maxUniqueWords) {
+    public VocabularyComparator(int maxUniqueWords) {
         this.maxUniqueWords = maxUniqueWords;
         this.authorizedToProcess = true;
     }
@@ -35,7 +35,7 @@ public class VocabularyComparator implements IConfigurableComparator {
             while (stringTokenizer.hasMoreElements()) {
                 uniqueWords.add(stringTokenizer.nextToken());
             }
-            return uniqueWords.size() <= maxUniqueWords;
+            return uniqueWords.size() <= maxUniqueWords && !uniqueWords.isEmpty();
         } else throw new IllegalStateException("s");
     }
 
@@ -49,5 +49,21 @@ public class VocabularyComparator implements IConfigurableComparator {
         return new VocabularyComparator(condition.getValue());
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        VocabularyComparator that = (VocabularyComparator) o;
+
+        if (maxUniqueWords != that.maxUniqueWords) return false;
+        return authorizedToProcess == that.authorizedToProcess;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = maxUniqueWords;
+        result = 31 * result + (authorizedToProcess ? 1 : 0);
+        return result;
+    }
 }

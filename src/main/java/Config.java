@@ -1,5 +1,3 @@
-import Comparator.ComparatorComposite;
-import Comparator.ComparatorFactory;
 import Comparator.LengthComparator;
 import Comparator.VocabularyComparator;
 import com.google.inject.*;
@@ -26,8 +24,6 @@ import util.DefaultPropertiesManager;
 import util.RetryingRunnable;
 import util.RetryingScheduledExecutor;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.concurrent.ScheduledExecutorService;
 
 public class Config extends AbstractModule {

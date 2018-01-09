@@ -12,14 +12,14 @@ import java.util.List;
 public class ComparatorComposite implements IComparator {
     private List<IConfigurableComparator> activeComparators = new LinkedList<>();
 
-    ComparatorComposite(List<IConfigurableComparator> activeComparators) {
+    public ComparatorComposite(List<IConfigurableComparator> activeComparators) {
         this.activeComparators = activeComparators;
     }
 
     public boolean process(News news) {
-        return activeComparators.stream().anyMatch(
-                comparator -> comparator.process(news) || noConditionsSpecified()
-        );
+        return activeComparators.stream().
+                anyMatch(comparator -> comparator.process(news)) || noConditionsSpecified();
+
     }
 
     @Override

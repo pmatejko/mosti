@@ -8,7 +8,7 @@ import model.News;
 import java.util.StringTokenizer;
 
 public class LengthComparator implements IConfigurableComparator {
-    private final ConditionType TYPE = ConditionType.VOCABULARY;
+    private static final ConditionType TYPE = ConditionType.LENGTH;
     private final int maxWords;
     private final boolean authorizedToProcess;
 
@@ -27,7 +27,7 @@ public class LengthComparator implements IConfigurableComparator {
         if (authorizedToProcess) {
             StringTokenizer stringTokenizer = new StringTokenizer(news.getContent());
             int wordsCount = stringTokenizer.countTokens();
-            return wordsCount <= maxWords;
+            return wordsCount <= maxWords && wordsCount>0;
         }else throw new IllegalStateException("s");
     }
 
@@ -41,5 +41,21 @@ public class LengthComparator implements IConfigurableComparator {
         return new LengthComparator(condition.getValue());
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        LengthComparator that = (LengthComparator) o;
+
+        if (maxWords != that.maxWords) return false;
+        return authorizedToProcess == that.authorizedToProcess;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = maxWords;
+        result = 31 * result + (authorizedToProcess ? 1 : 0);
+        return result;
+    }
 }

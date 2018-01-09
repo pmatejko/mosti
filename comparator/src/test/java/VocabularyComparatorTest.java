@@ -1,4 +1,3 @@
-import Comparator.LengthComparator;
 import Comparator.VocabularyComparator;
 import model.News;
 import org.junit.Test;

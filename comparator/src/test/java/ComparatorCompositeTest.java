@@ -1,7 +1,5 @@
 import Comparator.ComparatorComposite;
-import Comparator.LengthComparator;
-import Comparator.VocabularyComparator;
-import interfaces.IComparator;
+import interfaces.IConfigurableComparator;
 import model.News;
 import org.junit.Test;
 
@@ -16,7 +14,7 @@ import static org.mockito.Mockito.when;
 public class ComparatorCompositeTest {
     @Test
     public void noConditionSpecyfiedTest() {
-        List<IComparator> activeComparators= new LinkedList<>();
+        List<IConfigurableComparator> activeComparators= new LinkedList<>();
         News news = mock(News.class);
         ComparatorComposite comparatorComposite= new ComparatorComposite(activeComparators);
 
@@ -27,10 +25,10 @@ public class ComparatorCompositeTest {
 
     @Test
     public void satisfiedConditionTest() {
-        List<IComparator> activeComparators= new LinkedList<>();
+        List<IConfigurableComparator> activeComparators= new LinkedList<>();
         News news = mock(News.class);
-        IComparator comparator= mock(IComparator.class);
-        IComparator comparator1= mock(IComparator.class);
+        IConfigurableComparator comparator= mock(IConfigurableComparator.class);
+        IConfigurableComparator comparator1= mock(IConfigurableComparator.class);
         activeComparators.add(comparator);
         activeComparators.add(comparator1);
         ComparatorComposite comparatorComposite= new ComparatorComposite(activeComparators);
@@ -45,9 +43,9 @@ public class ComparatorCompositeTest {
 
     @Test
     public void noSatisfiedConditionTest() {
-        List<IComparator> activeComparators= new LinkedList<>();
-        IComparator comparator= mock(IComparator.class);
-        IComparator comparator1= mock(IComparator.class);
+        List<IConfigurableComparator> activeComparators= new LinkedList<>();
+        IConfigurableComparator comparator= mock(IConfigurableComparator.class);
+        IConfigurableComparator comparator1= mock(IConfigurableComparator.class);
         activeComparators.add(comparator);
         activeComparators.add(comparator1);
         News news = mock(News.class);

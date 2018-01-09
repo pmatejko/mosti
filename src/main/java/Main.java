@@ -5,15 +5,8 @@ import Daemon.NotifierDeamon;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import daoImpl.CompareTypeDaoImpl;
-import daoImpl.UserDaoImpl;
 import interfaces.IComparator;
 import model.*;
-
-import java.lang.reflect.InvocationTargetException;
-import java.sql.Timestamp;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
 
 public class Main {
 
