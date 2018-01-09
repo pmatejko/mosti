@@ -11,6 +11,7 @@ import model.Preferences;
 import javax.json.*;
 import java.io.*;
 import java.net.*;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -161,7 +162,7 @@ public class TwitterAPIFetcher implements Fetcher {
                 Date timestamp = new SimpleDateFormat(TWITTER_DATE_FORMAT, Locale.ENGLISH)
                         .parse(jsonArticle.getString("created_at"));
 
-                tweets.add(new News(preferences, url, content, timestamp));
+                tweets.add(new News(preferences, url, content, new Timestamp(System.currentTimeMillis())));
             }
         }
 

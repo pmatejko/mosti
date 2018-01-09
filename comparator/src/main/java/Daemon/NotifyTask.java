@@ -1,26 +1,18 @@
 package Daemon;
 
+import Comparator.ComparatorFactory;
 import com.google.inject.Inject;
 import dao.UserDao;
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-import io.reactivex.Observer;
-=======
+import interfaces.IComparator;
 import io.reactivex.Observable;
->>>>>>> d43e0d853fd35d9947ee0fa4ef94b8c1730fbd09
 import io.reactivex.subjects.PublishSubject;
+import model.News;
 import model.User;
->>>>>>> f6bf9f707452e51f0e1ecca10dce161bdc6de80e
 import model.UserNewsDTO;
 
-<<<<<<< HEAD
-
-=======
-import java.util.LinkedList;
 import java.util.List;
->>>>>>> d43e0d853fd35d9947ee0fa4ef94b8c1730fbd09
 import java.util.TimerTask;
+import java.util.stream.Collectors;
 
 
 public class NotifyTask extends TimerTask {
@@ -28,26 +20,32 @@ public class NotifyTask extends TimerTask {
     private UserDao userDao;
     @Inject
     private PublishSubject<UserNewsDTO> userNews;
+    @Inject
+    private ComparatorFactory comparatorFactory;
     private TimeManager timeManager = new TimeManager();
 
     @Override
     public void run() {
-        List<User> u = new LinkedList<>();
         if(timeManager.isAllowedToSend()){
-            u =userDao.getUsersToNotify();
-            System.out.println("dlugosc listy "+u.size());
-        u.stream()
-            .map(user -> new UserNewsDTO(user,userDao.getNewsToSend(user))) // add filter?
+            userDao.getUsersToNotify().stream()
+            .map(user -> new UserNewsDTO(user,getNewsToSend(user))) // add filter?
             .forEach(dto ->{
                 if(dto.getNewsList().isEmpty())
-                    System.out.println("empty newslist");
+                    System.out.println("empty newslist"); //logging needs to be added
                 else
                     userNews.onNext(dto);
-                System.out.println(dto.getUser().getLastNotification());
                 // TODO refactor, now it's for debug and its's ugly
             });
         }
     }
+
+    private List<News> getNewsToSend(User user) {
+        IComparator comparator = comparatorFactory.createComparatorForUser(user);
+        return userDao.getNewsToSend(user).stream()
+                .filter(comparator::process)
+                .collect(Collectors.toList());
+    }
+
     public Observable<UserNewsDTO> getUserNewsObservable() {
         return userNews;
     }

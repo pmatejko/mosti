@@ -20,6 +20,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Date;
 import java.util.LinkedList;
@@ -92,7 +93,7 @@ public class NewsAPIFetcher implements Fetcher {
 
                 String url = jsonArticle.getString("url");
                 String content = jsonArticle.getString("title") + " " + jsonArticle.getString("description");
-                Date timestamp = Date.from(Instant.from(ISO_DATE_TIME.parse(jsonArticle.getString("publishedAt"))));
+                Timestamp timestamp = Timestamp.from(Instant.from(ISO_DATE_TIME.parse(jsonArticle.getString("publishedAt"))));
 
                 articles.add(new News(preferences, url, content, timestamp));
             }

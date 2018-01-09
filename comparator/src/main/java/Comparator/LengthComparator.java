@@ -1,34 +1,61 @@
 package Comparator;
 
-import dao.CompareTypeDao;
-import interfaces.IComparator;
-import model.CompareType;
+import interfaces.IConfigurableComparator;
+import model.Condition;
+import model.ConditionType;
 import model.News;
-import dao.NewsDao;
 
-import javax.inject.Inject;
 import java.util.StringTokenizer;
 
+public class LengthComparator implements IConfigurableComparator {
+    private static final ConditionType TYPE = ConditionType.LENGTH;
+    private final int maxWords;
+    private final boolean authorizedToProcess;
 
-
-
-public class LengthComparator implements IComparator{
-    @Inject
-    private CompareTypeDao compareTypeDao;
-    @Inject private NewsDao newsDao;
-
-
-    @Override
-    public void process(News news) {
-        StringTokenizer stringTokenizer= new StringTokenizer(news.getContent());
-        int wordsAmount=stringTokenizer.countTokens();
-        if(wordsAmount<130){
-            CompareType compareType= compareTypeDao.getCompareTypeByName("length");
-            news.addCompareType(compareType);
-            newsDao.update(news);
-
-        }
-
+    public LengthComparator(int maxWords) {
+        this.maxWords = maxWords;
+        this.authorizedToProcess = true;
     }
 
+    public LengthComparator() {
+        this.maxWords = 0;
+        this.authorizedToProcess = false;
+    }
+
+    @Override
+    public boolean process(News news) {
+        if (authorizedToProcess) {
+            StringTokenizer stringTokenizer = new StringTokenizer(news.getContent());
+            int wordsCount = stringTokenizer.countTokens();
+            return wordsCount <= maxWords && wordsCount>0;
+        }else throw new IllegalStateException("s");
+    }
+
+    @Override
+    public boolean supports(Condition condition) {
+        return condition.getType() == TYPE;
+    }
+
+    @Override
+    public IConfigurableComparator createFor(Condition condition) {
+        return new LengthComparator(condition.getValue());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        LengthComparator that = (LengthComparator) o;
+
+        if (maxWords != that.maxWords) return false;
+        return authorizedToProcess == that.authorizedToProcess;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = maxWords;
+        result = 31 * result + (authorizedToProcess ? 1 : 0);
+        return result;
+    }
 }
