@@ -21,6 +21,8 @@ subprojects {
         compile group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.1.7'
         compile group: 'com.google.inject', name: 'guice', version: '4.1.0'
         compile group: 'com.google.inject.extensions', name: 'guice-assistedinject', version: '4.1.0'
+        compile group: 'com.google.inject.extensions', name: 'guice-multibindings', version: '4.1.0'
+
     }
 
     test.useJUnit()

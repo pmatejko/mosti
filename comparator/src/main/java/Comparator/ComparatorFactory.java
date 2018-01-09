@@ -1,30 +1,39 @@
 package Comparator;
 
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import interfaces.IComparator;
+import interfaces.IConfigurableComparator;
 import model.Condition;
 import model.User;
 
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+@Singleton
 public class ComparatorFactory {
+    private final Set<IConfigurableComparator> comparators;
 
+    @Inject
+    public ComparatorFactory(Set<IConfigurableComparator> comparators) {
+        this.comparators = comparators;
+    }
     public IComparator createComparatorForUser(User user){
-        List<IComparator> comparators = new LinkedList<>();
-        user.getConditions().forEach(condition ->
-                comparators.add(createComparatorByCondition(condition))
-        );
+        List<IConfigurableComparator> comparators =
+                user.getConditions().stream()
+                .map(this::createComparatorByCondition)
+                .collect(Collectors.toList());
+
         return new ComparatorComposite(comparators);
     }
 
-    private IComparator createComparatorByCondition(Condition condition) {
-    switch(condition.getType()){
-        case LENGTH:
-            return new LengthComparator(condition.getValue());
-        case VOCABULARY:
-            return new VocabularyComparator(condition.getValue());
+    private IConfigurableComparator createComparatorByCondition(Condition condition){
+        for(IConfigurableComparator comparator : comparators)
+            if(comparator.supports(condition))
+                return comparator.createFor(condition);
+        throw new IllegalArgumentException(condition.getType().toString());
     }
-        return null;
-    }
+
 }
