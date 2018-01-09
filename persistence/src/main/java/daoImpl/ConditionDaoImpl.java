@@ -7,7 +7,7 @@ import org.hibernate.Session;
 
 import javax.persistence.PersistenceException;
 
-public class CompareTypeDaoImpl extends GenericDao<Condition> implements CompareTypeDao {
+public class ConditionDaoImpl extends GenericDao<Condition> implements CompareTypeDao {
     public Condition getCompareTypeByName(String type) {
         final Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();

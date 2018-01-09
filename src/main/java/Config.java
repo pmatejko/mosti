@@ -8,7 +8,7 @@ import dao.CompareTypeDao;
 import dao.NewsDao;
 import dao.PreferencesDao;
 import dao.UserDao;
-import daoImpl.CompareTypeDaoImpl;
+import daoImpl.ConditionDaoImpl;
 import daoImpl.NewsDaoImpl;
 import daoImpl.PreferencesDaoImpl;
 import daoImpl.UserDaoImpl;
@@ -70,7 +70,7 @@ public class Config extends AbstractModule {
         bind(NewsDao.class).to(NewsDaoImpl.class);
         bind(UserDao.class).to(UserDaoImpl.class);
         bind(PreferencesDao.class).to(PreferencesDaoImpl.class);
-        bind(CompareTypeDao.class).to(CompareTypeDaoImpl.class);
+        bind(CompareTypeDao.class).to(ConditionDaoImpl.class);
 
 //
         Multibinder<IConfigurableComparator> compBinder = Multibinder.newSetBinder(binder(), IConfigurableComparator.class);

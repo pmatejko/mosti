@@ -4,22 +4,22 @@ import Comparator.LengthComparator;
 import Daemon.NotifierDeamon;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import daoImpl.CompareTypeDaoImpl;
+import daoImpl.ConditionDaoImpl;
+import daoImpl.UserDaoImpl;
 import interfaces.IComparator;
 import model.*;
+
+import java.sql.Timestamp;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Main {
 
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws InterruptedException {
 
-        CompareTypeDaoImpl c= new CompareTypeDaoImpl();
-        Condition condition = new Condition();
-        condition.setType(ConditionType.LENGTH);
-        Condition condition1 = new Condition();
-        condition1.setType(ConditionType.VOCABULARY);
-        c.save(condition);
-        c.save(condition1);
+
+
 
         Injector injector = Guice.createInjector(new Config());
         NotifierDeamon notifierDeamon = injector.getInstance(NotifierDeamon.class);
@@ -36,88 +36,83 @@ public class Main {
         IComparator comp1 = new LengthComparator();
 
 
+        createDatabase();
 
-//
-//        News news= new News();
-//        News news1= new News();
-//        User user= new User();
-//        UserDaoImpl userDao= new UserDaoImpl();
-//
-//        Preferences preferences=new Preferences();
-//
-//        List<Preferences> p= new LinkedList<>();
-//        Preferences preferences1=new Preferences();
-//        Timestamp t = new Timestamp(System.currentTimeMillis());
-//        try {
-//            Thread.sleep(100);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//        Timestamp tt = new Timestamp(System.currentTimeMillis());
-//
-//        preferences.setDataProvider(DataProvider.NEWS_API);
-//        preferences1.setDataProvider(DataProvider.NEWS_API);
-//
-//        preferences.addNews(news);
-//        preferences1.addNews(news);
-//        preferences1.addNews(news1);
-//        preferences.addNews(news1);
-//        preferences.addUser(user);
-//        preferences1.addUser(user);
-//
-//
-//        p.add(preferences);
-//        p.add(preferences1);
-//
-//        user.setEmail("nana");
-//        user.setInterval(1);
-//        userDao.save(user);
-//        user.setLastNotification(t);
-//        user.setPreferences(p);
-//        user.addCompareType(condition);
-//        user.addCompareType(condition1);
-//
-//
-//        news.setUrl("mamama");
-//        news.setContent("mamamam");
-//        news1.setUrl("superurl");
-//        news1.setContent("llllllllllllllll");
-//        news.setTimestamp(t);
-//        news1.setTimestamp(tt);
-//        news.addPreference(preferences);
-//        news.addPreference(preferences1);
-//        news1.addPreference(preferences);
-//        news1.addPreference(preferences1);
-//
-//        condition.addUser(user);
-//        condition1.addUser(user);
-//
-//
-//        //  NewsDaoImpl newsDao=new NewsDaoImpl();
-//        //  newsDao.save(news1);
-//
-//        //  PreferencesDaoImpl preferencesDao= new PreferencesDaoImpl();
-//        // CompareTypeDaoImpl compareTypeDao= new CompareTypeDaoImpl();
-//        //  newsDao.save(news);
-//
-//        // compareTypeDao.save(condition);
-////        compareTypeDao.save(condition1);
-//        userDao.update(user);
-////        PreferencesDaoImpl pre=
-//
-//
-//
-//
-//
-//
-//
-//        notifierDeamon.getUserNewsObservable().subscribe(System.out::println);
-//        notifierDeamon.run();
-//        try {
-//            Thread.sleep(6500);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
 
+    }
+
+    private static void createDatabase() {
+
+        ConditionDaoImpl c = new ConditionDaoImpl();
+        Condition condition = new Condition();
+        condition.setType(ConditionType.LENGTH);
+        Condition condition1 = new Condition();
+        condition1.setType(ConditionType.VOCABULARY);
+        condition.setValue(5);
+        condition1.setValue(10);
+
+        News news = new News();
+        News news1 = new News();
+        User user = new User();
+
+
+        Preferences preferences = new Preferences();
+
+        List<Preferences> p = new LinkedList<>();
+        Preferences preferences1 = new Preferences();
+        Timestamp t = new Timestamp(System.currentTimeMillis());
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Timestamp tt = new Timestamp(System.currentTimeMillis());
+
+        preferences.setDataProvider(DataProvider.NEWS_API);
+        preferences1.setDataProvider(DataProvider.TWITTER_API);
+        preferences.addNews(news);
+        preferences1.addNews(news);
+        preferences1.addNews(news1);
+        preferences.addNews(news1);
+        preferences.addUser(user);
+        preferences1.addUser(user);
+        preferences.setNewsSource("source");
+        preferences1.setNewsSource("source1");
+        preferences.setKeyword("key");
+        preferences1.setKeyword("word");
+
+        p.add(preferences);
+        p.add(preferences1);
+
+        user.setEmail("nana");
+        user.setInterval(1);
+        user.setLastNotification(t);
+        user.setPreferences(p);
+        user.addCompareType(condition);
+        user.addCondition(condition);
+        user.addCondition(condition1);
+        user.addCompareType(condition1);
+
+
+        news.setUrl("mamama");
+        news.setContent("mamamam na na naa an anna nna na na");
+        news1.setUrl("superurl");
+        news1.setContent("l 2 3 4 5 6 7 8 9 0 ");
+        news.setTimestamp(t);
+        news1.setTimestamp(tt);
+        news.addPreference(preferences);
+        news.addPreference(preferences1);
+        news1.addPreference(preferences);
+        news1.addPreference(preferences1);
+        news.setTimestamp(t);
+        news1.setTimestamp(tt);
+
+
+        condition.addUser(user);
+        condition1.addUser(user);
+
+
+        UserDaoImpl userDao = new UserDaoImpl();
+        userDao.save(user);
     }
 }

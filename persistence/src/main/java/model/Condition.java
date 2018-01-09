@@ -9,8 +9,8 @@ import java.util.List;
         @UniqueConstraint(columnNames = Condition.Columns.TYPE)
 })
 public class Condition {
-    public static final String TABLE_NAME = "compare_type";
-    public static final String CONDITION_USERS_JUNCTION_TABLE_NAME = "compare_type_users";
+    public static final String TABLE_NAME = "condition";
+    public static final String CONDITION_USERS_JUNCTION_TABLE_NAME = "condition_users";
 
 
 
@@ -87,7 +87,7 @@ public class Condition {
     }
 
     public static class Columns {
-        public static final String ID = "compare_type_id";
+        public static final String ID = "condition_id";
         public static final String TYPE = "type";
         public static final String VALUE = "value";
     }

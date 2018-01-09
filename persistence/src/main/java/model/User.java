@@ -106,6 +106,9 @@ public class User {
                 '}';
     }
 
+    public void addCondition(Condition condition) {conditions.add(condition);
+    }
+
     public static class Columns {
         public static final String ID = "user_id";
         public static final String EMAIL = "email";
