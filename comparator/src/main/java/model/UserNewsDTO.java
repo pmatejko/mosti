@@ -19,6 +19,9 @@ public class UserNewsDTO {
         this.user = user;
         this.newsList = new LinkedList<>();
     }
+    public boolean isNotEmpty(){
+        return !newsList.isEmpty();
+    }
 
     public void addNews(News news){
         newsList.add(news);
