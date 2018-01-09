@@ -40,6 +40,6 @@ public class UserDaoImpl extends GenericDao<User> implements UserDao {
         }
 
     }
- 
+
 
 }
