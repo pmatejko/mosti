@@ -1,10 +1,9 @@
 
-import notifier.exceptions.BadLengthTelephoneNumberException;
 
 
 public class ExampleTest {
 	
-	public static void main(String[] args) throws BadLengthTelephoneNumberException {
+	public static void main(String[] args) {
 		
 		
 		
