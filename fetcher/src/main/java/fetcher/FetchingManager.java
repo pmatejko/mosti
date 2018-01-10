@@ -5,6 +5,7 @@ import com.google.inject.Singleton;
 import dto.NewsDTO;
 import interfaces.FetcherRunnableFactory;
 import interfaces.IFetchingManager;
+import interfaces.SubscriptionManager;
 import io.reactivex.Observable;
 import model.Preferences;
 
@@ -14,7 +15,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 @Singleton
-public class FetchingManager implements IFetchingManager {
+public class FetchingManager implements IFetchingManager, SubscriptionManager {
     @Inject
     private Observable<NewsDTO> newsObservable;
     @Inject
@@ -30,6 +31,7 @@ public class FetchingManager implements IFetchingManager {
         return newsObservable;
     }
 
+    @Override
     public void addSubscription(Preferences preferences) {
         Runnable fetcherRunnable = fetcherRunnableFactory.create(preferences);
         ScheduledFuture<?> scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(fetcherRunnable, 0,
@@ -38,6 +40,7 @@ public class FetchingManager implements IFetchingManager {
         activeRunnablesMap.put(preferences.getId(), scheduledFuture);
     }
 
+    @Override
     public void cancelSubscription(Preferences preferences) {
         ScheduledFuture<?> scheduledFuture = activeRunnablesMap.get(preferences.getId());
 
