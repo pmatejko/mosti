@@ -10,7 +10,7 @@ import java.util.Timer;
 
 @Singleton
 public class NotifierDeamon {
-    private final long delay = 31000;
+    private final long delay = 60 * 1000;
     private NotifyTask notifyTask;
     private Timer timer = new Timer();
 
