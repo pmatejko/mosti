@@ -4,21 +4,16 @@ package daoImpl;
 import dao.GenericDao;
 import dao.NewsDao;
 import model.News;
-<<<<<<< HEAD
-=======
-import model.User;
+
 import org.hibernate.Session;
->>>>>>> d43e0d853fd35d9947ee0fa4ef94b8c1730fbd09
 
 
 import java.util.List;
 import java.util.Optional;
 
-<<<<<<< HEAD
-public class NewsDaoImpl extends GenericDao<News> implements NewsDao{
-=======
+
 public class NewsDaoImpl extends GenericDao<News> implements NewsDao {
->>>>>>> d43e0d853fd35d9947ee0fa4ef94b8c1730fbd09
+
 
     @Override
     public void openSession() {
