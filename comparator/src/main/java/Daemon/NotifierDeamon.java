@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import interfaces.IProvider;
 import io.reactivex.Observable;
-import io.reactivex.subjects.PublishSubject;
 import model.UserNewsDTO;
 
 import java.util.Timer;

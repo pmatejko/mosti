@@ -1,12 +1,7 @@
-import Comparator.ComparatorFactory;
 import Comparator.ComparatorManager;
-import Comparator.LengthComparator;
-import Daemon.NotifierDeamon;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import daoImpl.CompareTypeDaoImpl;
 import daoImpl.UserDaoImpl;
-import interfaces.IComparator;
 import interfaces.IProvider;
 import interfaces.SubscriptionManager;
 import model.*;

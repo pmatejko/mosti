@@ -4,7 +4,11 @@ package notifier.informer;
 import java.io.IOException;
 import org.json.simple.parser.ParseException;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
 import exceptions.SenderException;
+import interfaces.IProvider;
 import model.UserNewsDTO;
 import notifier.message.MessageGenerator;
 import notifier.message.UglyMessageGenerator;
@@ -13,17 +17,19 @@ import notifier.senders.Sendable;
 import notifier.senders.SmsSender;
 import notifier.senders.configuration.Configuration;
 
-public class Informer {
+@Singleton
+public class NotifierManager {
 	
-	private static Informer informer = new Informer();
+	@Inject
+	private IProvider iprovider;
 	Sendable gmailMailSender;
 //	sms sender ma limit 5ciu wyslan z czego : 3 wykorzystane, wiec lepiej nie wysylac 
 	Sendable vianettSmsSender;
 	
 	
-	private Informer() {
+	public NotifierManager(IProvider iprovider) {
 		try {
-
+			this.iprovider = iprovider;
 			Configuration gmailConfiguration = new Configuration("configGmail.json");
 			Configuration vianettConfiguration = new Configuration("configVianettSms.json");
 			
@@ -34,6 +40,12 @@ public class Informer {
 			e.printStackTrace();
 		}
 	}
+	
+	public void subscribe() {
+        this.iprovider
+                .getUserNewsObservable()
+                .subscribe(this::informUser);
+    }
 	
 	
 	public void informUser(UserNewsDTO userNewsDTO) throws SenderException {
@@ -63,8 +75,5 @@ public class Informer {
 		
 	}
 	
-	public static Informer getInstanceOfInformer() {
-		return informer;
-	}
 	
 }

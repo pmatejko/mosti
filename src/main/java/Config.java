@@ -1,7 +1,9 @@
 import com.google.inject.AbstractModule;
+
 import guice.ComparatorModule;
 import guice.FetcherModule;
 import guice.PersistanceModule;
+import notifier.guice.NotifierModule;
 
 public class Config extends AbstractModule {
 
@@ -10,6 +12,7 @@ public class Config extends AbstractModule {
         install(new PersistanceModule());
         install(new FetcherModule());
         install(new ComparatorModule());
+        install(new NotifierModule());
 
     }
 
