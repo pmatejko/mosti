@@ -7,6 +7,7 @@ import com.google.inject.Injector;
 import daoImpl.CompareTypeDaoImpl;
 import daoImpl.UserDaoImpl;
 import interfaces.IComparator;
+import interfaces.SubscriptionManager;
 import model.*;
 
 import java.sql.Timestamp;
@@ -18,33 +19,13 @@ public class Main {
 
     public static void main(String[] args){
 
-//        CompareTypeDaoImpl c= new CompareTypeDaoImpl();
-//        Condition condition = new Condition();
-//        condition.setType(ConditionType.LENGTH);
-//        condition.setValue(100);
-//        Condition condition1 = new Condition();
-//        condition1.setType(ConditionType.VOCABULARY);
-//        condition1.setValue(150);
-//        c.save(condition);
-//        c.save(condition1);
-
         Injector injector = Guice.createInjector(new Config());
         NotifierDeamon notifierDeamon = injector.getInstance(NotifierDeamon.class);
-//        Set<IComparator> x = Config.getSomeClass(injector);
-//        x.forEach(i -> System.out.println(i.getClass().toString()));
-//        News n1 = new News(new Preferences("k","g", DataProvider.NEWS_API),"asdasdas,uel","asdas",new Date());
-//        News n2 = new News(new Preferences("s","g", DataProvider.NEWS_API),"asdasdasdsadas,uel","asasdedwdas",new Date());
-//        NewsDTO x = new NewsDTO(Arrays.asList(n1,n2));
-//        comparatorManager.process(x);
-//        System.out.println("dupa");
         ComparatorManager cm = injector.getInstance(ComparatorManager.class);
+        SubscriptionManager sm = injector.getInstance(SubscriptionManager.class);
 
 
-
-
-//
-//        News news= new News();
-//        News news1= new News();
+/////////////////////////////////////////////////////////////////////
         User user= new User();
         UserDaoImpl userDao= new UserDaoImpl();
 
@@ -97,45 +78,15 @@ public class Main {
         userDao.save(user);
         user.setLastNotification(t);
         user.setPreferences(p);
-//        user.addCompareType(condition);
-//        user.addCompareType(condition1);
 
 
-//        news.setUrl("mamama");
-//        news.setContent("mamamam asd");
-//        news1.setUrl("superurl");
-//        news1.setContent("llllllllllllllll aawd  ");
-//        news.setTimestamp(t);
-//        news1.setTimestamp(tt);
-//        news.addPreference(preferences);
-//        news.addPreference(preferences1);
-//        news1.addPreference(preferences);
-//        news1.addPreference(preferences1);
 
-//        condition.addUser(user);
-//        condition1.addUser(user);
 
-//
-//        //  NewsDaoImpl newsDao=new NewsDaoImpl();
-//        //  newsDao.save(news1);
-//
-//        //  PreferencesDaoImpl preferencesDao= new PreferencesDaoImpl();
-//        // CompareTypeDaoImpl compareTypeDao= new CompareTypeDaoImpl();
-//        //  newsDao.save(news);
-//
-//        // compareTypeDao.save(condition);
-////        compareTypeDao.save(condition1);
         userDao.update(user);
-////        PreferencesDaoImpl pre=
-//
-//
-//
-//
-//
-//
-//
-//        for (Preferences pr : p)
-//            cm.fetchingManager.addSubscription(pr);
+///////////////////////////////////////////////////////////
+        
+        for (Preferences pr : p)
+            sm.addSubscription(pr);
         cm.subscribe();
         notifierDeamon.getUserNewsObservable().subscribe(System.out::println);
         notifierDeamon.run();
