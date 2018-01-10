@@ -30,7 +30,7 @@ public class UserDaoImpl extends GenericDao<User> implements UserDao {
             List<Long> preferences_ids = session.createQuery("select p.id from Preferences p join p.users u where u.id=:id ", Long.class)
                     .setParameter("id", user.getId()).list();
 
-            List<News> newsList = session.createQuery("select n from Preferences  p join p.news n where p.id in :id and n.timestamp>:l", News.class)
+            List<News> newsList = session.createQuery("select n from News  n join n.preferences p where p.id in :id and n.timestamp>:l", News.class)
                     .setParameter("l", user.getLastNotification())
                     .setParameterList("id", preferences_ids).list();
 

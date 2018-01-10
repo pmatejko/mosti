@@ -7,6 +7,7 @@ import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.name.Names;
 import dto.NewsDTO;
 import fetcher.FetcherRunnable;
+import fetcher.FetchingManager;
 import interfaces.*;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -35,6 +36,11 @@ public class FetcherModule extends AbstractModule {
         bindConstant()
                 .annotatedWith(Names.named(RetryingScheduledExecutor.CORE_POOL_SIZE))
                 .to(10);
+
+        bind(SubscriptionManager.class)
+                .to(FetchingManager.class);
+        bind(IFetchingManager.class)
+                .to(FetchingManager.class);
 
         bind(FetcherProvider.class)
                 .to(GuiceFetcherProvider.class);

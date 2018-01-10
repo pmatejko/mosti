@@ -1,7 +1,6 @@
 package interfaces;
 
 
-
 import model.Condition;
 import model.News;
 

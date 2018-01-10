@@ -6,6 +6,7 @@ import dao.NewsDao;
 import model.News;
 
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 
 import java.util.List;
@@ -13,7 +14,6 @@ import java.util.Optional;
 
 
 public class NewsDaoImpl extends GenericDao<News> implements NewsDao {
-
 
     @Override
     public void openSession() {
@@ -23,6 +23,7 @@ public class NewsDaoImpl extends GenericDao<News> implements NewsDao {
     @Override
     public News updateOrCreate(News news) {
         Optional<News> matchingNews = findByUrl(news);
+
         if (!matchingNews.isPresent()) {
             // no news has the same url, so we have a new one
             save(news);
@@ -36,20 +37,23 @@ public class NewsDaoImpl extends GenericDao<News> implements NewsDao {
             return existingNews;
 
         }
+
     }
 
     @Override
     public Optional<News> findByUrl(News news) {
-        final Session session = sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        List<News> newsList = session
-                .createQuery("from News  n where n.url = :url", News.class)
-                .setParameter("url", news.getUrl())
-                .list();
-        session.getTransaction().commit();
-        if (newsList.isEmpty())
-            return Optional.empty();
-        else return Optional.of(newsList.get(0));
+        try (final Session session = sessionFactory.openSession()) {
+
+            final Transaction tx = session.beginTransaction();
+            List<News> newsList = session
+                    .createQuery("from News  n where n.url = :url", News.class)
+                    .setParameter("url", news.getUrl())
+                    .list();
+            tx.commit();
+            if (newsList.isEmpty())
+                return Optional.empty();
+            else return Optional.of(newsList.get(0));
+        }
     }
 
 }
