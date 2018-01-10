@@ -20,7 +20,5 @@ public class ComparatorModule extends AbstractModule {
         compBinder.addBinding().to(LengthComparator.class);
         compBinder.addBinding().to(VocabularyComparator.class);
 
-
-
     }
 }
