@@ -7,6 +7,7 @@ import com.google.inject.Injector;
 import daoImpl.CompareTypeDaoImpl;
 import daoImpl.UserDaoImpl;
 import interfaces.IComparator;
+import interfaces.IProvider;
 import interfaces.SubscriptionManager;
 import model.*;
 
@@ -20,7 +21,7 @@ public class Main {
     public static void main(String[] args){
 
         Injector injector = Guice.createInjector(new Config());
-        NotifierDeamon notifierDeamon = injector.getInstance(NotifierDeamon.class);
+        IProvider iProvider = injector.getInstance(IProvider.class);
         ComparatorManager cm = injector.getInstance(ComparatorManager.class);
         SubscriptionManager sm = injector.getInstance(SubscriptionManager.class);
 
@@ -84,12 +85,11 @@ public class Main {
 
         userDao.update(user);
 ///////////////////////////////////////////////////////////
-        
+
         for (Preferences pr : p)
             sm.addSubscription(pr);
         cm.subscribe();
-        notifierDeamon.getUserNewsObservable().subscribe(System.out::println);
-        notifierDeamon.run();
+        iProvider.getUserNewsObservable().subscribe(System.out::println);
         try {
             Thread.sleep(650000);
         } catch (InterruptedException e) {
