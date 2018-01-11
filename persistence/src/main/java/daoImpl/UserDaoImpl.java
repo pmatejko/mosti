@@ -3,14 +3,12 @@ package daoImpl;
 
 import dao.GenericDao;
 import dao.UserDao;
-import model.Condition;
 import model.News;
 import model.User;
 import org.hibernate.Session;
 
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class UserDaoImpl extends GenericDao<User> implements UserDao {
 

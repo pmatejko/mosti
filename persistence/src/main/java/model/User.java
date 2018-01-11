@@ -25,8 +25,20 @@ public class User {
 
     @Column(name = Columns.INTERVAL, nullable = false)
     private int interval;
+    
+    @Column(name = Columns.WAY_OF_INFORMING, nullable = false)
+    private int wayOfInforming;
 
-    @ManyToMany(mappedBy ="users",cascade = {CascadeType.ALL})
+    public int getWayOfInforming() {
+		return wayOfInforming;
+	}
+
+
+	public void setWayOfInforming(int wayOfInforming) {
+		this.wayOfInforming = wayOfInforming;
+	}
+
+	@ManyToMany(mappedBy ="users",cascade = {CascadeType.ALL})
     private List<Preferences> preferences = new LinkedList<>();
 
     @ManyToMany(mappedBy = "users",cascade = {CascadeType.ALL},fetch = FetchType.EAGER)
@@ -107,9 +119,10 @@ public class User {
     }
 
     public static class Columns {
-        public static final String ID = "user_id";
+		public static final String ID = "user_id";
         public static final String EMAIL = "email";
         public static final String INTERVAL = "interval";
         public static final String LAST_NOTIFICATION="last_notification";
+        public static final String WAY_OF_INFORMING = "way_of_informing";
     }
 }

@@ -2,9 +2,9 @@ import Comparator.ComparatorManager;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import daoImpl.UserDaoImpl;
-import interfaces.IProvider;
 import interfaces.SubscriptionManager;
 import model.*;
+import notifier.informer.NotifierManager;
 
 import java.sql.Timestamp;
 import java.util.LinkedList;
@@ -16,10 +16,9 @@ public class Main {
     public static void main(String[] args){
 
         Injector injector = Guice.createInjector(new Config());
-        IProvider iProvider = injector.getInstance(IProvider.class);
         ComparatorManager cm = injector.getInstance(ComparatorManager.class);
         SubscriptionManager sm = injector.getInstance(SubscriptionManager.class);
-
+        NotifierManager notifierManager = injector.getInstance(NotifierManager.class);
 
 /////////////////////////////////////////////////////////////////////
         User user= new User();
@@ -39,9 +38,9 @@ public class Main {
         Timestamp tt = new Timestamp(System.currentTimeMillis());
 
         preferences.setDataProvider(DataProvider.NEWS_API);
-        preferences.setKeyword("Trump");
+        preferences.setKeyword("porn");
         preferences1.setDataProvider(DataProvider.TWITTER_API);
-        preferences1.setKeyword("bitcoin");
+        preferences1.setKeyword("porn");
 
 
         Preferences preferences2=new Preferences();
@@ -49,9 +48,9 @@ public class Main {
 
         Preferences preferences3=new Preferences();
         preferences2.setDataProvider(DataProvider.NEWS_API);
-        preferences3.setKeyword("Trump");
+        preferences3.setKeyword("hitler");
         preferences3.setDataProvider(DataProvider.TWITTER_API);
-        preferences2.setKeyword("bitcoin");
+        preferences2.setKeyword("hitler");
 
 
         preferences.addUser(user);
@@ -69,12 +68,12 @@ public class Main {
         p.add(preferences3);
         p.add(preferences5);
 
-        user.setEmail("nana");
+        user.setEmail("smalcerzszymonn@gmial.com");
         user.setInterval(1);
         userDao.save(user);
         user.setLastNotification(t);
         user.setPreferences(p);
-
+        user.setWayOfInforming(111);
 
 
 
@@ -84,7 +83,7 @@ public class Main {
         for (Preferences pr : p)
             sm.addSubscription(pr);
         cm.subscribe();
-        iProvider.getUserNewsObservable().subscribe(System.out::println);
+        notifierManager.subscribe();
         try {
             Thread.sleep(650000);
         } catch (InterruptedException e) {
