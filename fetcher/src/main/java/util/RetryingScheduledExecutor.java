@@ -11,14 +11,11 @@ import java.util.concurrent.*;
 
 @Singleton
 public class RetryingScheduledExecutor extends ScheduledThreadPoolExecutor implements RetryingExecutor {
-    public static final String CORE_POOL_SIZE = "corePoolSize";
-
     private RetryingRunnableFactory retryingRunnableFactory;
 
 
     @Inject
-    public RetryingScheduledExecutor(RetryingRunnableFactory retryingRunnableFactory,
-                                     @Named(CORE_POOL_SIZE) int corePoolSize) {
+    public RetryingScheduledExecutor(RetryingRunnableFactory retryingRunnableFactory, @CorePoolSize int corePoolSize) {
         super(corePoolSize);
         this.retryingRunnableFactory = retryingRunnableFactory;
         setRemoveOnCancelPolicy(true);
