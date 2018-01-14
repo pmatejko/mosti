@@ -92,6 +92,7 @@ public class News {
         return this.toString();
     }
 
+
     @Override
     public String toString() {
         Preferences p = preferences.get(0);
@@ -100,6 +101,21 @@ public class News {
                 + url + "\n"
                 + timestamp + "\n"
                 + content;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof News)) return false;
+
+        News news = (News) o;
+
+        return id == news.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (id ^ (id >>> 32));
     }
 
     public static class Columns {
