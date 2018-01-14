@@ -1,5 +1,7 @@
 package model;
 
+import org.hibernate.annotations.Type;
+
 import java.sql.Timestamp;
 import java.util.*;
 import javax.persistence.*;
@@ -27,10 +29,10 @@ public class News {
     private List<Preferences> preferences = new LinkedList<>();
 
 
-    @Column(name = Columns.URL, nullable = false)
+    @Column(name = Columns.URL, nullable = false,length = 1024)
     private String url;
 
-    @Column(name = Columns.CONTENT, nullable = false,columnDefinition = "text")
+    @Column(name = Columns.CONTENT, nullable = false,length = 4096)
     private String content;
 
     @Column(name = Columns.TIMESTAMP, nullable = false)

@@ -20,13 +20,13 @@ import notifier.senders.configuration.Configuration;
 @Singleton
 public class NotifierManager {
 	
-	@Inject
+
 	private IProvider iprovider;
 	Sendable gmailMailSender;
 //	sms sender ma limit 5ciu wyslan z czego : 3 wykorzystane, wiec lepiej nie wysylac 
 	Sendable vianettSmsSender;
-	
-	
+
+	@Inject
 	public NotifierManager(IProvider iprovider) {
 		try {
 			this.iprovider = iprovider;

@@ -22,7 +22,7 @@ public class Preferences {
     private String keyword;
 
     // for example BBC, Bloomberg
-    @Column(name = Columns.NEWS_SOURCE)
+    @Column(name = Columns.NEWS_SOURCE,length = 1024)
     private String newsSource;
 
     // for example newsApi or Twitter
