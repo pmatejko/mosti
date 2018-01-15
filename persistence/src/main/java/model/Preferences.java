@@ -10,7 +10,7 @@ import java.util.List;
 })
 public class Preferences {
     public static final String TABLE_NAME = "preferences";
-    public static final String NEWS_PREFERENCES_JUNCTION_TABLE_NAME = "news_preferences";
+
     public static final String USER_PREFERENCES_JUNCTION_TABLE_NAME = "user_preferences";
 
     @Id
@@ -22,7 +22,7 @@ public class Preferences {
     private String keyword;
 
     // for example BBC, Bloomberg
-    @Column(name = Columns.NEWS_SOURCE)
+    @Column(name = Columns.NEWS_SOURCE,length = 1024)
     private String newsSource;
 
     // for example newsApi or Twitter
@@ -30,13 +30,9 @@ public class Preferences {
     @Enumerated(EnumType.STRING)
     private DataProvider dataProvider;
 
-    @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(
-            name = NEWS_PREFERENCES_JUNCTION_TABLE_NAME,
-            joinColumns = @JoinColumn(name = "preferences_id", referencedColumnName = Preferences.Columns.ID),
-            inverseJoinColumns = @JoinColumn(name = "news_id", referencedColumnName = News.Columns.ID)
-    )
-    private List<News> news = new LinkedList<>();
+    //@ManyToMany(cascade = {CascadeType.ALL})
+
+    //private List<News> news = new LinkedList<>();
 
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
@@ -79,13 +75,13 @@ public class Preferences {
         this.keyword = keyword;
     }
 
-    public List<News> getNews() {
-        return news;
-    }
+//    public List<News> getNews() {
+//        return news;
+//    }
 
-    public void setNews(List<News> news) {
-        this.news = news;
-    }
+//    public void setNews(List<News> news) {
+//        this.news = news;
+//    }
 
     public List<User> getUsers() {
         return users;
@@ -99,7 +95,7 @@ public class Preferences {
         users.add(user);
     }
 
-    public void addNews(News news) {this.news.add(news); }
+//    public void addNews(News news) {this.news.add(news); }
 
 
     public static class Columns {

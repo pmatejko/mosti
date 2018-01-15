@@ -37,3 +37,4 @@ bin/
 
 # Properties file with API keys
 data-provider.properties
+/.gradle/

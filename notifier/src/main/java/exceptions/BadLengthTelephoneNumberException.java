@@ -1,4 +1,4 @@
-package notifier.exceptions;
+package exceptions;
 
 public class BadLengthTelephoneNumberException extends Exception{
 
@@ -8,7 +8,6 @@ public class BadLengthTelephoneNumberException extends Exception{
 	private static final long serialVersionUID = 1L;
 
 	public BadLengthTelephoneNumberException() {
-		super("Telephone number too short or too long!");
-
+		super(new Throwable("Bad length of telephone number"));
 	}
 }

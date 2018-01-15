@@ -1,5 +1,7 @@
 package model;
 
+import org.hibernate.annotations.Type;
+
 import java.sql.Timestamp;
 import java.util.*;
 import javax.persistence.*;
@@ -10,6 +12,7 @@ import javax.persistence.*;
 @Table(name = News.TABLE_NAME)
 public class News {
     public static final String TABLE_NAME = "news";
+    public static final String NEWS_PREFERENCES_JUNCTION_TABLE_NAME = "news_preferences";
 
 
     @Id
@@ -17,14 +20,19 @@ public class News {
     @Column(name = Columns.ID)
     private long id;
 
-    @ManyToMany(mappedBy = "news",cascade = {CascadeType.ALL})
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = NEWS_PREFERENCES_JUNCTION_TABLE_NAME,
+            joinColumns = @JoinColumn(name = "news_id", referencedColumnName = News.Columns.ID),
+            inverseJoinColumns = @JoinColumn(name = "preferences_id", referencedColumnName = Preferences.Columns.ID)
+    )
     private List<Preferences> preferences = new LinkedList<>();
 
 
-    @Column(name = Columns.URL, nullable = false)
+    @Column(name = Columns.URL, nullable = false,length = 1024)
     private String url;
 
-    @Column(name = Columns.CONTENT, nullable = false)
+    @Column(name = Columns.CONTENT, nullable = false,length = 4096)
     private String content;
 
     @Column(name = Columns.TIMESTAMP, nullable = false)
@@ -55,6 +63,10 @@ public class News {
     }
 
     public long getId() { return id; }
+
+    public void setPreferences(List<Preferences> preferences) {
+        this.preferences = preferences;
+    }
 
     public String getUrl() {
         return url;

@@ -15,6 +15,7 @@ public abstract class GenericDao<T> {
 
     public void save(final T object) throws PersistenceException {
         try (final Session session = sessionFactory.openSession()) {
+
             final Transaction tx = session.beginTransaction();
             session.save(object);
             session.merge(object);
@@ -24,6 +25,7 @@ public abstract class GenericDao<T> {
 
     public void update(final T object) throws PersistenceException {
         try (final Session session = sessionFactory.openSession()) {
+
             final Transaction tx = session.beginTransaction();
             session.update(object);
             session.merge(object);
