@@ -9,18 +9,18 @@ import interfaces.Fetcher;
 import interfaces.FetcherProvider;
 import model.DataProvider;
 
+import java.util.Set;
+
 public class GuiceFetcherProvider implements FetcherProvider {
-    @Inject private Provider<NewsAPIFetcher> newsAPIFetcherProvider;
-    @Inject private Provider<TwitterAPIFetcher> twitterAPIFetcherProvider;
+    @Inject
+    private Set<Fetcher> fetcherSet;
 
     public Fetcher getFetcher(DataProvider dataProvider) {
-        switch (dataProvider) {
-            case NEWS_API:
-                return newsAPIFetcherProvider.get();
-            case TWITTER_API:
-                return twitterAPIFetcherProvider.get();
-            default:
-                throw new UnsupportedDataProviderException(dataProvider.name() + " is not implemented");
+        for (Fetcher fetcher : fetcherSet) {
+            if (fetcher.isCompatible(dataProvider))
+                return fetcher;
         }
+
+        throw new UnsupportedDataProviderException(dataProvider.name() + " is not implemented or not bound");
     }
 }

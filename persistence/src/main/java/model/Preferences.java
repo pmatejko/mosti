@@ -10,7 +10,7 @@ import java.util.List;
 })
 public class Preferences {
     public static final String TABLE_NAME = "preferences";
-    public static final String NEWS_PREFERENCES_JUNCTION_TABLE_NAME = "news_preferences";
+
     public static final String USER_PREFERENCES_JUNCTION_TABLE_NAME = "user_preferences";
 
     @Id
@@ -30,19 +30,15 @@ public class Preferences {
     @Enumerated(EnumType.STRING)
     private DataProvider dataProvider;
 
-    @ManyToMany
-    @JoinTable(
-            name = NEWS_PREFERENCES_JUNCTION_TABLE_NAME,
-            joinColumns = @JoinColumn(name = Preferences.Columns.ID, referencedColumnName = News.Columns.ID),
-            inverseJoinColumns = @JoinColumn(name = News.Columns.ID, referencedColumnName = Preferences.Columns.ID)
-    )
-    private List<News> news = new LinkedList<>();
+    //@ManyToMany(cascade = {CascadeType.ALL})
 
-    @ManyToMany
+    //private List<News> news = new LinkedList<>();
+
+    @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
             name = USER_PREFERENCES_JUNCTION_TABLE_NAME,
-            joinColumns = @JoinColumn(name = Preferences.Columns.ID, referencedColumnName = User.Columns.ID),
-            inverseJoinColumns = @JoinColumn(name = User.Columns.ID, referencedColumnName = Preferences.Columns.ID)
+            joinColumns = @JoinColumn(name ="preferences_id", referencedColumnName = Preferences.Columns.ID),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = User.Columns.ID)
     )
     private List<User> users = new LinkedList<>();
 
@@ -79,13 +75,13 @@ public class Preferences {
         this.keyword = keyword;
     }
 
-    public List<News> getNews() {
-        return news;
-    }
+//    public List<News> getNews() {
+//        return news;
+//    }
 
-    public void setNews(List<News> news) {
-        this.news = news;
-    }
+//    public void setNews(List<News> news) {
+//        this.news = news;
+//    }
 
     public List<User> getUsers() {
         return users;
@@ -95,9 +91,15 @@ public class Preferences {
         this.users = users;
     }
 
+    public  void addUser(User user){
+        users.add(user);
+    }
+
+//    public void addNews(News news) {this.news.add(news); }
+
 
     public static class Columns {
-        public static final String ID = "id";
+        public static final String ID = "preferences_id";
         public static final String KEYWORD = "keyword";
         public static final String NEWS_SOURCE = "news_source";
         public static final String DATA_PROVIDER = "data_provider";

@@ -5,12 +5,14 @@ import com.google.inject.Singleton;
 import exceptions.FetchingException;
 import interfaces.Fetcher;
 import interfaces.PropertiesManager;
+import model.DataProvider;
 import model.News;
 import model.Preferences;
 
 import javax.json.*;
 import java.io.*;
 import java.net.*;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -18,7 +20,7 @@ import java.util.*;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Singleton
-public class TwitterAPIFetcher implements Fetcher {
+public class TwitterAPIFetcher extends AbstractFetcher {
     private static final String API_URL = "https://api.twitter.com/1.1/search/tweets.json?q=";
     private static final String BEARER_TOKEN_URL = "https://api.twitter.com/oauth2/token";
 
@@ -41,6 +43,8 @@ public class TwitterAPIFetcher implements Fetcher {
 
     @Inject
     public TwitterAPIFetcher(PropertiesManager propertiesManager) {
+        super(DataProvider.TWITTER_API);
+
         try {
             String consumerKey = propertiesManager.getProperty(PropertiesManager.Keys.TWITTER_API_KEY);
             String consumerSecret = propertiesManager.getProperty(PropertiesManager.Keys.TWITTER_API_SECRET);
@@ -161,7 +165,7 @@ public class TwitterAPIFetcher implements Fetcher {
                 Date timestamp = new SimpleDateFormat(TWITTER_DATE_FORMAT, Locale.ENGLISH)
                         .parse(jsonArticle.getString("created_at"));
 
-                tweets.add(new News(preferences, url, content, timestamp));
+                tweets.add(new News(preferences, url, content, new Timestamp(System.currentTimeMillis())));
             }
         }
 

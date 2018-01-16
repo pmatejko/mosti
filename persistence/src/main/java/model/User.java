@@ -2,6 +2,7 @@ package model;
 
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.*;
 
 @Entity
@@ -9,7 +10,7 @@ import java.util.*;
         @UniqueConstraint(columnNames = User.Columns.EMAIL)
 })
 public class User {
-    public static final String TABLE_NAME = "user";
+    public static final String TABLE_NAME = "subscriber";
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
@@ -19,14 +20,34 @@ public class User {
     @Column(name = Columns.EMAIL, nullable = false)
     private String email;
 
-    @Column(name = Columns.INTERVAL, nullable = false)
-    private Date interval;
+    @Column(name = Columns.LAST_NOTIFICATION, nullable = false)
+    private Timestamp lastNotification;
 
-    @ManyToMany(mappedBy = Preferences.USER_PREFERENCES_JUNCTION_TABLE_NAME)
+    @Column(name = Columns.INTERVAL, nullable = false)
+    private int interval;
+    
+    @Column(name = Columns.WAY_OF_INFORMING, nullable = false)
+    private int wayOfInforming;
+
+    public int getWayOfInforming() {
+		return wayOfInforming;
+	}
+
+
+	public void setWayOfInforming(int wayOfInforming) {
+		this.wayOfInforming = wayOfInforming;
+	}
+
+	@ManyToMany(mappedBy ="users",cascade = {CascadeType.ALL})
     private List<Preferences> preferences = new LinkedList<>();
+
+    @ManyToMany(mappedBy = "users",cascade = {CascadeType.ALL},fetch = FetchType.EAGER)
+    private List<Condition> conditions = new LinkedList<>();
 
 
     public User() {
+        this.lastNotification= new Timestamp(System.currentTimeMillis());
+
     }
 
 
@@ -36,7 +57,7 @@ public class User {
         return email;
     }
 
-    public Date getInterval() {
+    public int getInterval() {
         return interval;
     }
 
@@ -52,7 +73,7 @@ public class User {
         this.email = email;
     }
 
-    public void setInterval(Date interval) {
+    public void setInterval(int interval) {
         this.interval = interval;
     }
 
@@ -68,11 +89,40 @@ public class User {
         this.preferences.remove(preferences);
     }
 
+    public void setConditions(List<Condition> conditions){this.conditions = conditions;}
 
+    public void addCompareType(Condition condition){
+        conditions.add(condition);}
+
+    public void removeCompareType(Condition condition){this.conditions.remove(condition);}
+
+    public void setLastNotification(Timestamp lastNotification) {
+        this.lastNotification = lastNotification;
+    }
+
+    public Timestamp getLastNotification() {
+        return lastNotification;
+    }
+
+    public List<Condition> getConditions() {
+        return conditions;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", lastNotification=" + lastNotification +
+                ", interval=" + interval +
+                '}';
+    }
 
     public static class Columns {
-        public static final String ID = "id";
+		public static final String ID = "user_id";
         public static final String EMAIL = "email";
         public static final String INTERVAL = "interval";
+        public static final String LAST_NOTIFICATION="last_notification";
+        public static final String WAY_OF_INFORMING = "way_of_informing";
     }
 }

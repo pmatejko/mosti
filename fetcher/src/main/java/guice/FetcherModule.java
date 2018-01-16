@@ -4,13 +4,17 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
-import com.google.inject.name.Names;
+import com.google.inject.multibindings.Multibinder;
 import dto.NewsDTO;
 import fetcher.FetcherRunnable;
+import fetcher.FetchingManager;
+import fetcher.impl.NewsAPIFetcher;
+import fetcher.impl.TwitterAPIFetcher;
 import interfaces.*;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.subjects.PublishSubject;
+import util.CorePoolSize;
 import util.DefaultPropertiesManager;
 import util.RetryingRunnable;
 import util.RetryingScheduledExecutor;
@@ -33,8 +37,13 @@ public class FetcherModule extends AbstractModule {
                 .to(publishSubjectTypeLiteral);
 
         bindConstant()
-                .annotatedWith(Names.named(RetryingScheduledExecutor.CORE_POOL_SIZE))
+                .annotatedWith(CorePoolSize.class)
                 .to(10);
+
+        bind(SubscriptionManager.class)
+                .to(FetchingManager.class);
+        bind(IFetchingManager.class)
+                .to(FetchingManager.class);
 
         bind(FetcherProvider.class)
                 .to(GuiceFetcherProvider.class);
@@ -55,5 +64,9 @@ public class FetcherModule extends AbstractModule {
         install(new FactoryModuleBuilder()
                 .implement(RetryingRunnable.class, RetryingRunnable.class)
                 .build(RetryingRunnableFactory.class));
+
+        Multibinder<Fetcher> fetcherBinder = Multibinder.newSetBinder(binder(), Fetcher.class);
+        fetcherBinder.addBinding().to(NewsAPIFetcher.class);
+        fetcherBinder.addBinding().to(TwitterAPIFetcher.class);
     }
 }

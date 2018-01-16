@@ -30,10 +30,11 @@ hs_err_pid*
 
 # Gradle
 .gradletasknamecache
-.gradle/
+.gradle/*
 build/
 bin/
 **/out
 
 # Properties file with API keys
 data-provider.properties
+/.gradle/

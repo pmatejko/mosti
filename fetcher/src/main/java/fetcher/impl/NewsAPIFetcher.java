@@ -5,6 +5,7 @@ import com.google.inject.Singleton;
 import exceptions.FetchingException;
 import interfaces.Fetcher;
 import interfaces.PropertiesManager;
+import model.DataProvider;
 import model.News;
 import model.Preferences;
 
@@ -20,6 +21,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Date;
 import java.util.LinkedList;
@@ -29,7 +31,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
 
 @Singleton
-public class NewsAPIFetcher implements Fetcher {
+public class NewsAPIFetcher extends AbstractFetcher {
     private static final String API_URL = "https://newsapi.org/v2/everything?";
 
     private final String API_KEY;
@@ -37,6 +39,8 @@ public class NewsAPIFetcher implements Fetcher {
 
     @Inject
     public NewsAPIFetcher(PropertiesManager propertiesManager) {
+        super(DataProvider.NEWS_API);
+
         API_KEY = propertiesManager.getProperty(PropertiesManager.Keys.NEWS_API_KEY);
     }
 
@@ -92,7 +96,7 @@ public class NewsAPIFetcher implements Fetcher {
 
                 String url = jsonArticle.getString("url");
                 String content = jsonArticle.getString("title") + " " + jsonArticle.getString("description");
-                Date timestamp = Date.from(Instant.from(ISO_DATE_TIME.parse(jsonArticle.getString("publishedAt"))));
+                Timestamp timestamp = Timestamp.from(Instant.from(ISO_DATE_TIME.parse(jsonArticle.getString("publishedAt"))));
 
                 articles.add(new News(preferences, url, content, timestamp));
             }

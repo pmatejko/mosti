@@ -1,37 +1,39 @@
 package Comparator;
 
 
-import exceptions.DataProviderCOnflictException;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import interfaces.IComparator;
-import model.DataProvider;
-import model.News;
-import model.Preferences;
+import interfaces.IConfigurableComparator;
+import model.Condition;
+import model.User;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+@Singleton
 public class ComparatorFactory {
-    public IComparator createComparator(News news) throws DataProviderCOnflictException {
-        if(news.getPreferences().isEmpty())
-            return new ScrapComparator(news);
-        else
-            return chooseComparator(news);
+    private final Set<IConfigurableComparator> comparators;
 
+    @Inject
+    public ComparatorFactory(Set<IConfigurableComparator> comparators) {
+        this.comparators = comparators;
+    }
+    public IComparator createComparatorForUser(User user){
+        List<IConfigurableComparator> comparators =
+                user.getConditions().stream()
+                .map(this::createComparatorByCondition)
+                .collect(Collectors.toList());
+
+        return new ComparatorComposite(comparators);
     }
 
-    private IComparator chooseComparator(News news) throws DataProviderCOnflictException {
-        DataProvider provider  = readAndValidate(news.getPreferences());
-        if(provider.equals(DataProvider.NEWS_API))
-            return new NewsComparator(news);
-        else return new TwitterComparator(news);
+    private IConfigurableComparator createComparatorByCondition(Condition condition){
+        for(IConfigurableComparator comparator : comparators)
+            if(comparator.supports(condition))
+                return comparator.createFor(condition);
+        throw new IllegalArgumentException(condition.getType().toString());
     }
 
-    private DataProvider readAndValidate(List<Preferences> preferences) throws DataProviderCOnflictException {
-        DataProvider providerCandidate = preferences.get(0).getDataProvider();
-        for (Preferences preference : preferences)
-            if (! preference.getDataProvider().equals(providerCandidate))
-                throw new DataProviderCOnflictException(providerCandidate,preference.getDataProvider());
-
-        return providerCandidate;
-    }
-
-    }
+}

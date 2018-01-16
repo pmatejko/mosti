@@ -1,12 +1,11 @@
 package interfaces;
 
 
+import model.Condition;
 import model.News;
-import model.User;
 
 public interface IComparator {
-    void process();
-    boolean isUsed();
-    boolean isNew();
+    boolean process(News news);
+    boolean supports(Condition condition);
 
 }

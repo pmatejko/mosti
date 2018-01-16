@@ -1,36 +1,46 @@
 package model;
 
+import java.sql.Timestamp;
 import java.util.*;
 import javax.persistence.*;
+
+
 
 @Entity
 @Table(name = News.TABLE_NAME)
 public class News {
     public static final String TABLE_NAME = "news";
+    public static final String NEWS_PREFERENCES_JUNCTION_TABLE_NAME = "news_preferences";
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
     @Column(name = Columns.ID)
     private long id;
 
-    @Column(name = Columns.PREFERENCES)
-    @ManyToMany(mappedBy = Preferences.NEWS_PREFERENCES_JUNCTION_TABLE_NAME)
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = NEWS_PREFERENCES_JUNCTION_TABLE_NAME,
+            joinColumns = @JoinColumn(name = "news_id", referencedColumnName = News.Columns.ID),
+            inverseJoinColumns = @JoinColumn(name = "preferences_id", referencedColumnName = Preferences.Columns.ID)
+    )
     private List<Preferences> preferences = new LinkedList<>();
+
 
     @Column(name = Columns.URL, nullable = false)
     private String url;
 
-    @Column(name = Columns.CONTENT, nullable = false)
+    @Column(name = Columns.CONTENT, nullable = false,columnDefinition = "text")
     private String content;
 
     @Column(name = Columns.TIMESTAMP, nullable = false)
-    private Date timestamp;
+    private Timestamp timestamp;
 
 
     public News() {
     }
 
-    public News(Preferences preferences, String url, String content, Date timestamp) {
+    public News(Preferences preferences, String url, String content, Timestamp timestamp) {
         this.preferences.add(preferences);
         this.url = url;
         this.content = content;
@@ -51,6 +61,10 @@ public class News {
     }
 
     public long getId() { return id; }
+
+    public void setPreferences(List<Preferences> preferences) {
+        this.preferences = preferences;
+    }
 
     public String getUrl() {
         return url;
@@ -76,10 +90,9 @@ public class News {
         this.content = content;
     }
 
-    public void setTimestamp(Date timestamp) {
+    public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
     }
-
 
     public boolean hasKeyword(){
         return preferences.get(0).getKeyword() != null;
@@ -100,11 +113,13 @@ public class News {
     }
 
     public static class Columns {
-        public static final String ID = "id";
+        public static final String ID = "news_id";
         public static final String PREFERENCES = "preferences";
         public static final String URL = "url";
         public static final String CONTENT = "content";
         public static final String TIMESTAMP = "timestamp";
+
+
     }
 }
 
