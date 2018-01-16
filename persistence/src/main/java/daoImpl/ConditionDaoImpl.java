@@ -1,14 +1,14 @@
 package daoImpl;
 
-import dao.CompareTypeDao;
+import dao.ConditionDao;
 import dao.GenericDao;
 import model.Condition;
 import org.hibernate.Session;
 
 import javax.persistence.PersistenceException;
 
-public class ConditionDaoImpl extends GenericDao<Condition> implements CompareTypeDao {
-    public Condition getCompareTypeByName(String type) {
+public class ConditionDaoImpl extends GenericDao<Condition> implements ConditionDao {
+    public Condition getConditionByName(String type) {
         final Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
         Condition condition = session
@@ -21,8 +21,4 @@ public class ConditionDaoImpl extends GenericDao<Condition> implements CompareTy
     }
 
 
-    @Override
-    public void update(Condition object) throws PersistenceException {
-        super.update(object);
-    }
 }

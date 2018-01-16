@@ -1,7 +1,7 @@
 package guice;
 
 import com.google.inject.AbstractModule;
-import dao.CompareTypeDao;
+import dao.ConditionDao;
 import dao.NewsDao;
 import dao.PreferencesDao;
 import dao.UserDao;
@@ -16,6 +16,6 @@ public class PersistanceModule extends AbstractModule{
         bind(NewsDao.class).to(NewsDaoImpl.class);
         bind(UserDao.class).to(UserDaoImpl.class);
         bind(PreferencesDao.class).to(PreferencesDaoImpl.class);
-        bind(CompareTypeDao.class).to(ConditionDaoImpl.class);
+        bind(ConditionDao.class).to(ConditionDaoImpl.class);
     }
 }

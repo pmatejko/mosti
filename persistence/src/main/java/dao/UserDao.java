@@ -9,6 +9,7 @@ public interface UserDao {
 
 
     List<User> getUsersToNotify();
-
+    void save(final User object);
+    void update(final User object);
     List<News> getNewsToSend(User user);
 }

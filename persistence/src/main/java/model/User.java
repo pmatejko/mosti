@@ -29,7 +29,7 @@ public class User {
     @ManyToMany(mappedBy ="users",cascade = {CascadeType.ALL})
     private List<Preferences> preferences = new LinkedList<>();
 
-    @ManyToMany(mappedBy = "users",cascade = {CascadeType.ALL},fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user",cascade = {CascadeType.ALL},fetch = FetchType.EAGER)
     private List<Condition> conditions = new LinkedList<>();
 
 
