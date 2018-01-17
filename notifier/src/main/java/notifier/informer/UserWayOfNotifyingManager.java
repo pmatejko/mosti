@@ -7,6 +7,10 @@ import org.json.simple.parser.ParseException;
 
 import com.google.inject.Singleton;
 
+import model.User;
+import model.UserNewsDTO;
+import notifier.informer.struct.Struct;
+import notifier.message.UglyMessageGenerator;
 import notifier.senders.MailSender;
 import notifier.senders.Sender;
 import notifier.senders.SmsSender;
@@ -36,32 +40,38 @@ public class UserWayOfNotifyingManager {
 		}
 	}
 	
-	public ArrayList<Sender> getListOfSenders(int waysOfNotifying){
-		
-		ArrayList<Sender> list = new ArrayList<>();
-		
-		if(waysOfNotifying%2 == 1) {
-			list.add(this.gmailMailSender);
-			System.out.println("ADDING GMAIL");
-		}
-		
-		waysOfNotifying = shiftRight(waysOfNotifying);
-		
-		if(waysOfNotifying%2 == 1) {
-			list.add(this.vianettSmsSender);
-			System.out.println("ADDING SMS");
-		}
-		
-		
-		return list;
-		
-	}
-	
 	private int shiftRight(int binary) {
 		
 		binary = (binary - binary%2)/10;
 		
 		return binary;
+	}
+
+	public ArrayList<Struct> getListOfStructs(UserNewsDTO userNewsDTO) {
+		
+		User user = userNewsDTO.getUser();
+		int waysOfNotifying = user.getWayOfInforming();
+		
+		ArrayList<Struct> list = new ArrayList<>();
+		
+		if(waysOfNotifying%2 == 1) {
+			if(user.getEmail()!=null) {
+				list.add(new Struct(new UglyMessageGenerator(userNewsDTO), this.gmailMailSender));
+				System.out.println("ADDING GMAIL");
+			}
+		}
+		
+		waysOfNotifying = shiftRight(waysOfNotifying);
+		
+		if(waysOfNotifying%2 == 1) {
+			if(user.getTelephoneNumer() != null) {
+				list.add(new Struct(new UglyMessageGenerator(userNewsDTO), this.vianettSmsSender));
+				System.out.println("ADDING SMS");
+			}
+		}
+		
+		
+		return list;
 	}
 	
 }
