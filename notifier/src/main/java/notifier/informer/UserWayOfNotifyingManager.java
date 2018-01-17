@@ -1,6 +1,7 @@
 package notifier.informer;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.ArrayList;
 
 import org.json.simple.parser.ParseException;
@@ -9,12 +10,15 @@ import com.google.inject.Singleton;
 
 import model.User;
 import model.UserNewsDTO;
+import model.News;
 import notifier.informer.struct.Struct;
 import notifier.message.UglyMessageGenerator;
 import notifier.senders.MailSender;
 import notifier.senders.Sender;
 import notifier.senders.SmsSender;
 import notifier.senders.configuration.Configuration;
+
+
 
 @Singleton
 public class UserWayOfNotifyingManager {
@@ -50,13 +54,14 @@ public class UserWayOfNotifyingManager {
 	public ArrayList<Struct> getListOfStructs(UserNewsDTO userNewsDTO) {
 		
 		User user = userNewsDTO.getUser();
+		List<News> news = userNewsDTO.getNewsList();
 		int waysOfNotifying = user.getWayOfInforming();
 		
 		ArrayList<Struct> list = new ArrayList<>();
 		
 		if(waysOfNotifying%2 == 1) {
 			if(user.getEmail()!=null) {
-				list.add(new Struct(new UglyMessageGenerator(userNewsDTO), this.gmailMailSender));
+				list.add(new Struct(new UglyMessageGenerator(news, user.getEmail()), this.gmailMailSender));
 				System.out.println("ADDING GMAIL");
 			}
 		}
@@ -65,7 +70,7 @@ public class UserWayOfNotifyingManager {
 		
 		if(waysOfNotifying%2 == 1) {
 			if(user.getTelephoneNumer() != null) {
-				list.add(new Struct(new UglyMessageGenerator(userNewsDTO), this.vianettSmsSender));
+				list.add(new Struct(new UglyMessageGenerator(news, user.getTelephoneNumer()), this.vianettSmsSender));
 				System.out.println("ADDING SMS");
 			}
 		}
