@@ -11,9 +11,6 @@ import exceptions.SenderException;
 import interfaces.IProvider;
 import model.UserNewsDTO;
 import notifier.informer.struct.Struct;
-import notifier.message.MessageGenerator;
-import notifier.message.UglyMessageGenerator;
-import notifier.senders.Sender;
 
 @Singleton
 public class NotifierManager {

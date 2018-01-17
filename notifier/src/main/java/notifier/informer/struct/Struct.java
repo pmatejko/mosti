@@ -1,25 +1,25 @@
 package notifier.informer.struct;
 
 import exceptions.SenderException;
-import notifier.message.UglyMessageGenerator;
+import notifier.message.MessageGenerator;
 import notifier.senders.Sender;
 
 public class Struct {
 	
 	
-	private UglyMessageGenerator message;
+	private MessageGenerator messageGenerator;
 	private Sender sender;
 	
-	public Struct(UglyMessageGenerator uglyMessageGenerator, Sender sender) {
+	public Struct(MessageGenerator messageGenerator, Sender sender) {
 		super();
-		this.message = uglyMessageGenerator;
+		this.messageGenerator = messageGenerator;
 		this.sender = sender;
 	}
-	public UglyMessageGenerator getMessageGenerator() {
-		return message;
+	public MessageGenerator getMessageGenerator() {
+		return messageGenerator;
 	}
-	public void setMessageGenerator(UglyMessageGenerator message) {
-		this.message = message;
+	public void setMessageGenerator(MessageGenerator message) {
+		this.messageGenerator = message;
 	}
 	public Sender getSender() {
 		return sender;
@@ -30,7 +30,7 @@ public class Struct {
 	
 	
 	public void sendMessage() throws SenderException {
-		this.sender.send(this.message);
+		this.sender.send(this.messageGenerator);
 	}
 	
 	
