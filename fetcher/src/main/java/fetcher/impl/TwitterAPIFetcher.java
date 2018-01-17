@@ -5,6 +5,7 @@ import com.google.inject.Singleton;
 import exceptions.FetchingException;
 import interfaces.Fetcher;
 import interfaces.PropertiesManager;
+import model.DataProvider;
 import model.News;
 import model.Preferences;
 
@@ -19,7 +20,7 @@ import java.util.*;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Singleton
-public class TwitterAPIFetcher implements Fetcher {
+public class TwitterAPIFetcher extends AbstractFetcher {
     private static final String API_URL = "https://api.twitter.com/1.1/search/tweets.json?q=";
     private static final String BEARER_TOKEN_URL = "https://api.twitter.com/oauth2/token";
 
@@ -42,6 +43,8 @@ public class TwitterAPIFetcher implements Fetcher {
 
     @Inject
     public TwitterAPIFetcher(PropertiesManager propertiesManager) {
+        super(DataProvider.TWITTER_API);
+
         try {
             String consumerKey = propertiesManager.getProperty(PropertiesManager.Keys.TWITTER_API_KEY);
             String consumerSecret = propertiesManager.getProperty(PropertiesManager.Keys.TWITTER_API_SECRET);
