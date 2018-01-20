@@ -5,6 +5,8 @@ import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.multibindings.Multibinder;
+import dao.PreferencesDao;
+import daoImpl.PreferencesDaoImpl;
 import dto.NewsDTO;
 import fetcher.FetcherRunnable;
 import fetcher.FetchingManager;
@@ -56,6 +58,9 @@ public class FetcherModule extends AbstractModule {
 
         bind(ScheduledExecutorService.class)
                 .to(RetryingScheduledExecutor.class);
+
+        bind(PreferencesDao.class)
+                .to(PreferencesDaoImpl.class);
 
         install(new FactoryModuleBuilder()
                 .implement(FetcherRunnable.class, FetcherRunnable.class)
