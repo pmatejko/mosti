@@ -19,24 +19,19 @@ public class User {
 
     @Column(name = Columns.EMAIL, nullable = false)
     private String email;
+    
+    @Column(name = Columns.TELEPHONE_NUMBER, nullable = true)
+    private String telephoneNumer = null;
 
     @Column(name = Columns.LAST_NOTIFICATION, nullable = false)
     private Timestamp lastNotification;
 
-    @Column(name = Columns.INTERVAL, nullable = false)
+	@Column(name = Columns.INTERVAL, nullable = false)
     private int interval;
     
     @Column(name = Columns.WAY_OF_INFORMING, nullable = false)
     private int wayOfInforming;
 
-    public int getWayOfInforming() {
-		return wayOfInforming;
-	}
-
-
-	public void setWayOfInforming(int wayOfInforming) {
-		this.wayOfInforming = wayOfInforming;
-	}
 
 	@ManyToMany(mappedBy ="users",cascade = {CascadeType.ALL})
     private List<Preferences> preferences = new LinkedList<>();
@@ -49,7 +44,26 @@ public class User {
         this.lastNotification= new Timestamp(System.currentTimeMillis());
 
     }
+    
 
+    public String getTelephoneNumer() {
+		return telephoneNumer;
+	}
+
+
+	public void setTelephoneNumer(String telephoneNumer) {
+		this.telephoneNumer = telephoneNumer;
+	}
+
+
+    public int getWayOfInforming() {
+		return wayOfInforming;
+	}
+
+
+	public void setWayOfInforming(int wayOfInforming) {
+		this.wayOfInforming = wayOfInforming;
+	}
 
     public long getId() { return id; }
 
@@ -121,6 +135,7 @@ public class User {
     public static class Columns {
 		public static final String ID = "user_id";
         public static final String EMAIL = "email";
+        public static final String TELEPHONE_NUMBER = "telephone_number";
         public static final String INTERVAL = "interval";
         public static final String LAST_NOTIFICATION="last_notification";
         public static final String WAY_OF_INFORMING = "way_of_informing";

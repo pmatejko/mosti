@@ -10,9 +10,7 @@ import com.google.inject.Singleton;
 import exceptions.SenderException;
 import interfaces.IProvider;
 import model.UserNewsDTO;
-import notifier.message.MessageGenerator;
-import notifier.message.UglyMessageGenerator;
-import notifier.senders.Sender;
+import notifier.informer.struct.Struct;
 
 @Singleton
 public class NotifierManager {
@@ -38,16 +36,15 @@ public class NotifierManager {
 	public void informUser(UserNewsDTO userNewsDTO) throws SenderException {
 		
 		System.out.println("IM IN NOTIFIER MANAGAER @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-		MessageGenerator msg = new UglyMessageGenerator(userNewsDTO);
+		
 			
+		ArrayList<Struct> structs = this.userWayOfNotifyingManager.getListOfStructs(userNewsDTO);
 			
-		ArrayList<Sender> senders = this.userWayOfNotifyingManager.getListOfSenders(userNewsDTO.getUser().getWayOfInforming());
-			
-			
-		Iterator<Sender> iterator = senders.iterator();
+		Iterator<Struct> iterator = structs.iterator();
 		while(iterator.hasNext()) {
-			iterator.next().send(msg);
+			iterator.next().sendMessage();
 		}
+
 		
 		
 	}
