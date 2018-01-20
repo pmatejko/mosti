@@ -15,13 +15,13 @@ import notifier.informer.struct.Struct;
 @Singleton
 public class NotifierManager {
 	
-	
+
 	private IProvider iprovider;
 	private UserWayOfNotifyingManager userWayOfNotifyingManager;
-	
+
 	@Inject
 	public NotifierManager(IProvider iprovider) {
-	
+
 			this.iprovider = iprovider;
 			this.userWayOfNotifyingManager = new UserWayOfNotifyingManager();
 	}
@@ -36,17 +36,17 @@ public class NotifierManager {
 	public void informUser(UserNewsDTO userNewsDTO) throws SenderException {
 		
 		System.out.println("IM IN NOTIFIER MANAGAER @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-		
-			
+
+
 		ArrayList<Struct> structs = this.userWayOfNotifyingManager.getListOfStructs(userNewsDTO);
-			
+
 		Iterator<Struct> iterator = structs.iterator();
 		while(iterator.hasNext()) {
 			iterator.next().sendMessage();
 		}
 
-		
-		
+
+
 	}
 	
 	

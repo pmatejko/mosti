@@ -1,5 +1,6 @@
 package dao;
 
+import model.Preferences;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -12,6 +13,8 @@ public abstract class GenericDao<T> {
     protected static final SessionFactory sessionFactory = new Configuration()
             .configure() // configures settings from hibernate.cfg.xml
             .buildSessionFactory();
+
+
 
     public void save(final T object) throws PersistenceException {
         try (final Session session = sessionFactory.openSession()) {

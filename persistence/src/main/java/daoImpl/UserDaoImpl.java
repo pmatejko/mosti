@@ -1,14 +1,17 @@
 package daoImpl;
 
 
+import java.util.Optional;
 import dao.GenericDao;
 import dao.UserDao;
+
 import model.News;
 import model.User;
 import org.hibernate.Session;
 
 import java.sql.Timestamp;
 import java.util.List;
+
 
 public class UserDaoImpl extends GenericDao<User> implements UserDao {
 
@@ -36,6 +39,21 @@ public class UserDaoImpl extends GenericDao<User> implements UserDao {
             update(user);
             return newsList;
         }
+
+    }
+    public Optional<User> findUser(String email){
+        final Session session = sessionFactory.getCurrentSession();
+        session.beginTransaction();
+        List<User> user = session
+                .createQuery("from User u where u.email=:e ",User.class)
+                .setParameter("e", email)
+                .getResultList();
+        session.getTransaction().commit();
+        if(user.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(user.get(0));
 
     }
 

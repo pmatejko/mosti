@@ -1,6 +1,9 @@
 package model;
 
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.*;
@@ -19,7 +22,7 @@ public class User {
 
     @Column(name = Columns.EMAIL, nullable = false)
     private String email;
-    
+
     @Column(name = Columns.TELEPHONE_NUMBER, nullable = true)
     private String telephoneNumer = null;
 
@@ -28,15 +31,16 @@ public class User {
 
 	@Column(name = Columns.INTERVAL, nullable = false)
     private int interval;
-    
+
     @Column(name = Columns.WAY_OF_INFORMING, nullable = false)
     private int wayOfInforming;
 
-
-	@ManyToMany(mappedBy ="users",cascade = {CascadeType.ALL})
+    @ManyToMany(mappedBy ="users",cascade = {CascadeType.ALL})
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Preferences> preferences = new LinkedList<>();
 
-    @ManyToMany(mappedBy = "users",cascade = {CascadeType.ALL},fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user",cascade = {CascadeType.ALL},fetch = FetchType.EAGER)
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Condition> conditions = new LinkedList<>();
 
 
@@ -44,7 +48,7 @@ public class User {
         this.lastNotification= new Timestamp(System.currentTimeMillis());
 
     }
-    
+
 
     public String getTelephoneNumer() {
 		return telephoneNumer;
@@ -130,6 +134,34 @@ public class User {
                 ", lastNotification=" + lastNotification +
                 ", interval=" + interval +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+
+        User user = (User) o;
+
+        return id == user.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (id ^ (id >>> 32));
+    }
+
+    public void addCondition(Condition condition) {conditions.add(condition);
+    }
+
+    public void removePreference(int id) {
+        if (id <preferences.size())
+            preferences.remove(id);
+    }
+
+    public void removeCondition(int id) {
+        if (id <conditions.size())
+            conditions.remove(id);
     }
 
     public static class Columns {

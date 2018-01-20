@@ -2,8 +2,9 @@ package dao;
 
 import model.Condition;
 
-public interface CompareTypeDao {
-    Condition getCompareTypeByName(String type);
+public interface ConditionDao {
+    Condition getConditionByName(String type);
     void update(Condition condition);
+    void delete(Long id);
     void save(Condition condition);
 }

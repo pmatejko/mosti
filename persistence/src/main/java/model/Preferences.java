@@ -22,7 +22,7 @@ public class Preferences {
     private String keyword;
 
     // for example BBC, Bloomberg
-    @Column(name = Columns.NEWS_SOURCE)
+    @Column(name = Columns.NEWS_SOURCE,length = 1024)
     private String newsSource;
 
     // for example newsApi or Twitter
@@ -97,6 +97,16 @@ public class Preferences {
 
 //    public void addNews(News news) {this.news.add(news); }
 
+
+    @Override
+    public String toString() {
+        return "Preferences{" +
+                "id=" + id +
+                ", keyword='" + keyword + '\'' +
+                ", newsSource='" + newsSource + '\'' +
+                ", dataProvider=" + dataProvider +
+                '}';
+    }
 
     public static class Columns {
         public static final String ID = "preferences_id";
