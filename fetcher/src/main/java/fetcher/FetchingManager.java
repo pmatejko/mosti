@@ -17,19 +17,18 @@ import java.util.concurrent.TimeUnit;
 
 @Singleton
 public class FetchingManager implements IFetchingManager, SubscriptionManager {
-    @Inject
     private Observable<NewsDTO> newsObservable;
-    @Inject
     private FetcherRunnableFactory fetcherRunnableFactory;
-    @Inject
     private ScheduledExecutorService scheduledExecutorService;
-    @Inject
-    private PreferencesDao preferencesDao;
-
     private final Map<Long, ScheduledFuture<?>> activeRunnablesMap = new HashMap<>();
 
+    @Inject
+    public FetchingManager(Observable<NewsDTO> newsObservable, FetcherRunnableFactory fetcherRunnableFactory,
+                           ScheduledExecutorService scheduledExecutorService, PreferencesDao preferencesDao) {
+        this.newsObservable = newsObservable;
+        this.fetcherRunnableFactory = fetcherRunnableFactory;
+        this.scheduledExecutorService = scheduledExecutorService;
 
-    public FetchingManager() {
         addAllSubscriptions(preferencesDao.getAllPreferences());
     }
 

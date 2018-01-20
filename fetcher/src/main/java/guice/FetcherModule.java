@@ -27,6 +27,8 @@ public class FetcherModule extends AbstractModule {
 
     @Override
     protected void configure() {
+        install(new PersistanceModule());
+
         TypeLiteral<PublishSubject<NewsDTO>> publishSubjectTypeLiteral = new TypeLiteral<PublishSubject<NewsDTO>>() {};
         TypeLiteral<Observable<NewsDTO>> observableTypeLiteral = new TypeLiteral<Observable<NewsDTO>>() {};
         TypeLiteral<Observer<NewsDTO>> observerTypeLiteral = new TypeLiteral<Observer<NewsDTO>>() {};
@@ -58,9 +60,6 @@ public class FetcherModule extends AbstractModule {
 
         bind(ScheduledExecutorService.class)
                 .to(RetryingScheduledExecutor.class);
-
-        bind(PreferencesDao.class)
-                .to(PreferencesDaoImpl.class);
 
         install(new FactoryModuleBuilder()
                 .implement(FetcherRunnable.class, FetcherRunnable.class)
