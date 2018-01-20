@@ -62,7 +62,7 @@ public class NewsAPIConnector implements Connector {
         }
 
         if (preferences.getNewsSource() != null) {
-            stringBuilder.append("sources=");
+            stringBuilder.append("domains=");
             stringBuilder.append(URLEncoder.encode(preferences.getNewsSource(), UTF_8.toString()));
         }
 

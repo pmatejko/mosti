@@ -40,4 +40,17 @@ public class PreferencesDaoImpl extends GenericDao<Preferences> implements Prefe
             }
         }
     }
+
+    @Override
+    public List<Preferences> getAllPreferences() {
+        final Session session = sessionFactory.getCurrentSession();
+
+        session.beginTransaction();
+        List<Preferences> preferences = session
+                .createQuery("from Preferences p", Preferences.class)
+                .getResultList();
+        session.getTransaction().commit();
+
+        return preferences;
+    }
 }
