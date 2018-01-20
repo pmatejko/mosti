@@ -1,8 +1,9 @@
 package notifier.message;
 
 import java.util.Iterator;
+import java.util.List;
+
 import model.News;
-import model.UserNewsDTO;
 
 public class UglyMessageGenerator extends MessageGenerator{
 	
@@ -11,8 +12,8 @@ public class UglyMessageGenerator extends MessageGenerator{
 		
 	}
 	
-	public UglyMessageGenerator(UserNewsDTO userNewsDTO) {
-		super(userNewsDTO);
+	public UglyMessageGenerator(List<News> news, String contact) {
+		super(news,contact);
 	}
 
 	@Override
@@ -26,8 +27,8 @@ public class UglyMessageGenerator extends MessageGenerator{
 		while(newsIterator.hasNext()) {
 			News temp = newsIterator.next();
 			
-			sb.append("_______________________________________________________\n\n\n");
-			sb.append("source of notification: ");
+			sb.append("\n\n\n_______________________________________________________\n\n\n");
+			sb.append("source of notification: \n\n");
 			sb.append(temp.getUrl());
 			sb.append("\n\n\ncontent:");
 			sb.append(temp.getContent());
@@ -35,11 +36,6 @@ public class UglyMessageGenerator extends MessageGenerator{
 		}
 		
 		return sb.toString();
-	}
-
-	@Override
-	public String getContact() {
-		return this.getEmail();
 	}
 
 	@Override

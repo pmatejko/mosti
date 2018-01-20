@@ -53,7 +53,6 @@ public class SendersExceptionsTest {
 
 		
 		when(um.getContact()).thenReturn("asd");
-		when(um.getEmail()).thenReturn("asd");
 		when(um.getTitle()).thenReturn("random title");
 		when(um.generateMessageContent()).thenReturn("content");
 	}
@@ -66,7 +65,7 @@ public class SendersExceptionsTest {
 		try {
 			//bad email of sender
 			sender = new MailSender(conf2);
-			when(um.getEmail()).thenReturn("asd");
+			when(um.getContact()).thenReturn("asd");
 			sender.send(um);
 		} catch (SenderException e) {
 			throw e.getCause();
@@ -80,7 +79,7 @@ public class SendersExceptionsTest {
 		try {
 			//non existing email of receiver
 			sender = new MailSender(conf);
-			when(um.getEmail()).thenReturn("asd");
+			when(um.getContact()).thenReturn("asd");
 			sender.send(um);
 			
 		} catch (SenderException e) {
@@ -96,7 +95,7 @@ public class SendersExceptionsTest {
 		try {
 			//bad telephone Number Of user - too short
 			sender = new SmsSender(confSms);
-			when(um.getEmail()).thenReturn("9");
+			when(um.getContact()).thenReturn("9");
 			sender.send(um);
 		} catch (SenderException e) {
 			throw e.getCause();
@@ -111,7 +110,7 @@ public class SendersExceptionsTest {
 		try {
 			//bad telephone Number Of user - too short
 			sender = new SmsSender(confSms);
-			when(um.getEmail()).thenReturn("98765432123456789");
+			when(um.getContact()).thenReturn("98765432123456789");
 			sender.send(um);
 		} catch (SenderException e) {
 			throw e.getCause();

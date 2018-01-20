@@ -3,8 +3,6 @@ package notifier.message;
 import java.util.List;
 
 import model.News;
-import model.User;
-import model.UserNewsDTO;
 
 public abstract class MessageGenerator {
 	
@@ -12,22 +10,19 @@ public abstract class MessageGenerator {
 	protected String title;
 	protected String content;
 	protected List<News> news;
-	protected User user;
 	
 	public MessageGenerator() {
 		
 	}
 	
-	public MessageGenerator(UserNewsDTO userNewsDTO) {
-		this.news = userNewsDTO.getNewsList();
-		this.user = userNewsDTO.getUser();
+	public MessageGenerator(List<News> news,String contact) {
+		this.news = news;
+		this.contact = contact;
 	}
 	
-	public String getEmail() {
-		return this.user.getEmail();
+	public String getContact() {
+		return this.contact;
 	}
-	
-	public abstract String getContact();
 	
 	public abstract String getTitle();
 	

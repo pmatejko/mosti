@@ -3,6 +3,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.sun.xml.internal.bind.v2.TODO;
 import daoImpl.UserDaoImpl;
+import interfaces.IProvider;
 import interfaces.SubscriptionManager;
 import model.*;
 import notifier.informer.NotifierManager;

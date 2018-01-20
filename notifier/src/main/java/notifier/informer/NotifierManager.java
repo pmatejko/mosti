@@ -1,8 +1,8 @@
 package notifier.informer;
 
 
-import java.io.IOException;
-import org.json.simple.parser.ParseException;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -10,35 +10,20 @@ import com.google.inject.Singleton;
 import exceptions.SenderException;
 import interfaces.IProvider;
 import model.UserNewsDTO;
-import notifier.message.MessageGenerator;
-import notifier.message.UglyMessageGenerator;
-import notifier.senders.MailSender;
-import notifier.senders.Sendable;
-import notifier.senders.SmsSender;
-import notifier.senders.configuration.Configuration;
+import notifier.informer.struct.Struct;
 
 @Singleton
 public class NotifierManager {
 	
 
 	private IProvider iprovider;
-	Sendable gmailMailSender;
-//	sms sender ma limit 5ciu wyslan z czego : 3 wykorzystane, wiec lepiej nie wysylac 
-	Sendable vianettSmsSender;
+	private UserWayOfNotifyingManager userWayOfNotifyingManager;
 
 	@Inject
 	public NotifierManager(IProvider iprovider) {
-		try {
+
 			this.iprovider = iprovider;
-			Configuration gmailConfiguration = new Configuration("configGmail.json");
-			Configuration vianettConfiguration = new Configuration("configVianettSms.json");
-			
-			this.gmailMailSender = new MailSender(gmailConfiguration);
-			this.vianettSmsSender = new SmsSender(vianettConfiguration);
-		} catch (IOException | ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			this.userWayOfNotifyingManager = new UserWayOfNotifyingManager();
 	}
 	
 	public void subscribe() {
@@ -50,29 +35,18 @@ public class NotifierManager {
 	
 	public void informUser(UserNewsDTO userNewsDTO) throws SenderException {
 		
-		
-		
-		//BEGIN  TODO 
-		
-			//we want to generate message appropriate to user or appropirate to kind of information
-			MessageGenerator msg = new UglyMessageGenerator(userNewsDTO);
-			
-			
-		//END    TODO
-		//BEGIN  TODO
-		
-			//we want to send with appropriate sender
-			
-			
-			gmailMailSender.send(msg);
-			
+		System.out.println("IM IN NOTIFIER MANAGAER @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 
-			
-		//END    TODO
-		
 
-		
-		
+		ArrayList<Struct> structs = this.userWayOfNotifyingManager.getListOfStructs(userNewsDTO);
+
+		Iterator<Struct> iterator = structs.iterator();
+		while(iterator.hasNext()) {
+			iterator.next().sendMessage();
+		}
+
+
+
 	}
 	
 	

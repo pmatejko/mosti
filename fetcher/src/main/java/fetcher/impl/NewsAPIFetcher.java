@@ -5,6 +5,7 @@ import com.google.inject.Singleton;
 import exceptions.FetchingException;
 import interfaces.Fetcher;
 import interfaces.PropertiesManager;
+import model.DataProvider;
 import model.News;
 import model.Preferences;
 
@@ -30,7 +31,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
 
 @Singleton
-public class NewsAPIFetcher implements Fetcher {
+public class NewsAPIFetcher extends AbstractFetcher {
     private static final String API_URL = "https://newsapi.org/v2/everything?";
 
     private final String API_KEY;
@@ -38,6 +39,8 @@ public class NewsAPIFetcher implements Fetcher {
 
     @Inject
     public NewsAPIFetcher(PropertiesManager propertiesManager) {
+        super(DataProvider.NEWS_API);
+
         API_KEY = propertiesManager.getProperty(PropertiesManager.Keys.NEWS_API_KEY);
     }
 
