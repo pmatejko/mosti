@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface PreferencesDao {
     Optional<Preferences> findPreferences(String keyword, String newsSource, DataProvider dataProvider);
-
+    void delete(Long id);
     void save(Preferences preferences);
 
     void update(Preferences preferences);

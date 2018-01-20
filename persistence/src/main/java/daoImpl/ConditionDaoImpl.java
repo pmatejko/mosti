@@ -4,6 +4,7 @@ import dao.ConditionDao;
 import dao.GenericDao;
 import model.Condition;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import javax.persistence.PersistenceException;
 
@@ -18,6 +19,19 @@ public class ConditionDaoImpl extends GenericDao<Condition> implements Condition
         session.getTransaction().commit();
         return condition;
 
+    }
+
+    public void delete(Long id) {
+        try (final Session session = sessionFactory.openSession()) {
+            Transaction tx = session.beginTransaction();
+            int result = session.createQuery("delete Condition where id= :id")
+                    .setParameter("id",id)
+                    .executeUpdate();
+            tx.commit();
+            if (result > 0) {
+                System.out.println("Selected conditions removed");
+            }
+        }
     }
 
 

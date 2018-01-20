@@ -1,6 +1,9 @@
 package model;
 
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.*;
@@ -27,9 +30,11 @@ public class User {
     private int interval;
 
     @ManyToMany(mappedBy ="users",cascade = {CascadeType.ALL})
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Preferences> preferences = new LinkedList<>();
 
     @OneToMany(mappedBy = "user",cascade = {CascadeType.ALL},fetch = FetchType.EAGER)
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Condition> conditions = new LinkedList<>();
 
 
@@ -122,6 +127,16 @@ public class User {
     }
 
     public void addCondition(Condition condition) {conditions.add(condition);
+    }
+
+    public void removePreference(int id) {
+        if (id <preferences.size())
+            preferences.remove(id);
+    }
+
+    public void removeCondition(int id) {
+        if (id <conditions.size())
+            conditions.remove(id);
     }
 
     public static class Columns {

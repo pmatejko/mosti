@@ -86,5 +86,14 @@ public class Condition {
         public static final String TYPE = "type";
         public static final String VALUE = "value";
     }
+
+    @Override
+    public String toString() {
+        return "Condition{" +
+                "id=" + id +
+                ", type=" + type +
+                ", value=" + value +
+                '}';
+    }
 }
 

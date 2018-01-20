@@ -5,6 +5,7 @@ import dao.PreferencesDao;
 import model.DataProvider;
 import model.Preferences;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,5 +26,18 @@ public class PreferencesDaoImpl extends GenericDao<Preferences> implements Prefe
 
         return Optional.of(preference.get(0));
 
+    }
+
+    public void delete(Long id) {
+        try (final Session session = sessionFactory.openSession()) {
+            Transaction tx = session.beginTransaction();
+            int result = session.createQuery("delete Preferences where id= :id")
+                    .setParameter("id",id)
+                    .executeUpdate();
+            tx.commit();
+            if (result > 0) {
+                System.out.println("Selected preferences removed");
+            }
+        }
     }
 }

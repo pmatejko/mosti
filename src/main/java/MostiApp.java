@@ -7,6 +7,7 @@ import model.Preferences;
 import notifier.informer.NotifierManager;
 
 import java.io.IOException;
+import java.util.Scanner;
 
 public class MostiApp {
 //    private SubscriptionManager subscriptionManager;
@@ -28,11 +29,19 @@ public class MostiApp {
 //    }
 
     public void run() throws IOException {
+        System.out.println("Press:\n" +
+                "1 if you are a new user or if you want to modify your preferences/conditions\n" +
+                "any number if you want to run program ");
+        Scanner read = new Scanner(System.in);
+        int choice = read.nextInt();
+        if(choice==1)
+            gui.start();
         comparatorManager.subscribe();
         notifierManager.subscribe();
-        gui.start();
-
-
     }
+
+
+
+
 
 }

@@ -98,6 +98,16 @@ public class Preferences {
 //    public void addNews(News news) {this.news.add(news); }
 
 
+    @Override
+    public String toString() {
+        return "Preferences{" +
+                "id=" + id +
+                ", keyword='" + keyword + '\'' +
+                ", newsSource='" + newsSource + '\'' +
+                ", dataProvider=" + dataProvider +
+                '}';
+    }
+
     public static class Columns {
         public static final String ID = "preferences_id";
         public static final String KEYWORD = "keyword";
