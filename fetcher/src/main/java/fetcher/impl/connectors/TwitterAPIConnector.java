@@ -1,6 +1,8 @@
 package fetcher.impl.connectors;
 
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import exceptions.FetchingException;
 import interfaces.Connector;
 import interfaces.PropertiesManager;
@@ -17,6 +19,7 @@ import java.util.*;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+@Singleton
 public class TwitterAPIConnector implements Connector {
 
     private static final String API_URL = "https://api.twitter.com/1.1/search/tweets.json?q=";
@@ -37,7 +40,7 @@ public class TwitterAPIConnector implements Connector {
 
     private final String ACCESS_TOKEN;
 
-
+    @Inject
     public TwitterAPIConnector(PropertiesManager propertiesManager) {
 
         try {

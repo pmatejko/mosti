@@ -25,9 +25,9 @@ public class TwitterAPIFetcher extends AbstractFetcher {
 
 
     @Inject
-    public TwitterAPIFetcher(PropertiesManager propertiesManager) {
+    public TwitterAPIFetcher(TwitterAPIConnector twitterAPIConnector) {
         super(DataProvider.TWITTER_API);
-        twitterAPIConnector = new TwitterAPIConnector(propertiesManager);
+        this.twitterAPIConnector = twitterAPIConnector;
     }
 
 

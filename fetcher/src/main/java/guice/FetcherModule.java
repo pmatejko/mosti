@@ -12,6 +12,7 @@ import fetcher.FetcherRunnable;
 import fetcher.FetchingManager;
 import fetcher.impl.NewsAPIFetcher;
 import fetcher.impl.TwitterAPIFetcher;
+import fetcher.impl.connectors.TwitterAPIConnector;
 import interfaces.*;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -27,6 +28,8 @@ public class FetcherModule extends AbstractModule {
 
     @Override
     protected void configure() {
+        install(new PersistanceModule());
+
         TypeLiteral<PublishSubject<NewsDTO>> publishSubjectTypeLiteral = new TypeLiteral<PublishSubject<NewsDTO>>() {};
         TypeLiteral<Observable<NewsDTO>> observableTypeLiteral = new TypeLiteral<Observable<NewsDTO>>() {};
         TypeLiteral<Observer<NewsDTO>> observerTypeLiteral = new TypeLiteral<Observer<NewsDTO>>() {};
@@ -58,9 +61,6 @@ public class FetcherModule extends AbstractModule {
 
         bind(ScheduledExecutorService.class)
                 .to(RetryingScheduledExecutor.class);
-
-        bind(PreferencesDao.class)
-                .to(PreferencesDaoImpl.class);
 
         install(new FactoryModuleBuilder()
                 .implement(FetcherRunnable.class, FetcherRunnable.class)
