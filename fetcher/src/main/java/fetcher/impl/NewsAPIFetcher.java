@@ -19,6 +19,7 @@ import java.util.List;
 
 import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
 
+
 @Singleton
 public class NewsAPIFetcher extends AbstractFetcher {
 
@@ -27,9 +28,9 @@ public class NewsAPIFetcher extends AbstractFetcher {
 
 
     @Inject
-    public NewsAPIFetcher(PropertiesManager propertiesManager) {
+    public NewsAPIFetcher(NewsAPIConnector newsAPIConnector) {
         super(DataProvider.NEWS_API);
-        newsAPIConnector = new NewsAPIConnector(propertiesManager);
+        this.newsAPIConnector = newsAPIConnector;
 
     }
 

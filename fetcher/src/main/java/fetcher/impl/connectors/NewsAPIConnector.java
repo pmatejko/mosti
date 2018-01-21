@@ -1,6 +1,8 @@
 package fetcher.impl.connectors;
 
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import exceptions.FetchingException;
 import interfaces.Connector;
 import interfaces.PropertiesManager;
@@ -20,11 +22,13 @@ import java.net.URLEncoder;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+@Singleton
 public class NewsAPIConnector implements Connector {
 
     private static final String API_URL = "https://newsapi.org/v2/everything?";
     private final String API_KEY;
 
+    @Inject
     public NewsAPIConnector(PropertiesManager propertiesManager){
         API_KEY = propertiesManager.getProperty(PropertiesManager.Keys.NEWS_API_KEY);
     }

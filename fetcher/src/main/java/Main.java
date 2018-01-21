@@ -13,7 +13,7 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         List<Preferences> preferences = new LinkedList<>();
         preferences.add(new Preferences("maga", "realDonaldTrump", DataProvider.TWITTER_API));
-//        preferences.add(new Preferences("bitcoin", "bbc", DataProvider.NEWS_API));
+        preferences.add(new Preferences("bitcoin", "bbc", DataProvider.NEWS_API));
 //        preferences.add(new Preferences("star wars", "vice-news", DataProvider.NEWS_API));
 //        preferences.add(new Preferences(null, "thooorin", DataProvider.TWITTER_API));
 

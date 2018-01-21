@@ -25,8 +25,6 @@ import static org.junit.Assert.assertEquals;
 @PrepareForTest({NewsAPIConnector.class, NewsAPIFetcher.class})
 public class NewsAPIFetcherTest {
 
-    @org.mockito.Mock
-    private PropertiesManager propertiesManager;
 
     @org.mockito.Mock
     private Preferences preferences;
@@ -44,8 +42,7 @@ public class NewsAPIFetcherTest {
         Mockito.when(preferences.getKeyword()).thenReturn("audi");
         Mockito.when(preferences.getNewsSource()).thenReturn("Sport");
 
-        PowerMockito.whenNew(NewsAPIConnector.class).withArguments(Mockito.any()).thenReturn(newsAPIConnector);
-        newsAPIFetcher = new NewsAPIFetcher(propertiesManager);
+        newsAPIFetcher = new NewsAPIFetcher(newsAPIConnector);
 
         String data = "[{\"source\":{\"id\":null,\"name\":\"Flickr.com\"},\"author\":\"Dave Pinter\",\"title\":\"Audi\",\"description\":\"Explore Dave Pinter's photos on Flickr. Dave Pinter has uploaded 38462 photos to Flickr.\",\"url\":\"https://www.flickr.com/photos/davepinter/38198189512\",\"urlToImage\":\"https://c1.staticflickr.com/5/4473/38198189512_a888c0181f_b.jpg\",\"publishedAt\":\"2017-11-07T02:52:42Z\"},{\"source\":{\"id\":null,\"name\":\"Deviantart.com\"},\"author\":null,\"title\":\"audi\",\"description\":\"\",\"url\":\"https://travisty187.deviantart.com/art/audi-724147013\",\"urlToImage\":\"https://img00.deviantart.net/b543/i/2018/006/7/c/audi_by_travisty187-dbz4zet.jpg\",\"publishedAt\":\"2018-01-06T18:07:11Z\"}]";
 

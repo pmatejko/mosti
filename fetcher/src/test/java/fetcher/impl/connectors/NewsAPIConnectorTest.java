@@ -60,7 +60,7 @@ public class NewsAPIConnectorTest {
     public void buildQueryStringTest() throws Exception {
 
         String expectedResult =
-                "https://newsapi.org/v2/everything?q=bitcoin&sources=bbc&apiKey=" + testKey;
+                "https://newsapi.org/v2/everything?q=bitcoin&domains=bbc&apiKey=" + testKey;
 
         Class[] parametersClass = new Class[1];
         parametersClass[0] = Preferences.class;

@@ -12,6 +12,7 @@ import fetcher.FetcherRunnable;
 import fetcher.FetchingManager;
 import fetcher.impl.NewsAPIFetcher;
 import fetcher.impl.TwitterAPIFetcher;
+import fetcher.impl.connectors.TwitterAPIConnector;
 import interfaces.*;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
