@@ -31,7 +31,6 @@ public class RetryingRunnable implements Runnable {
 
     @Override
     public void run() {
-        // TODO maybe also logging?
         long before = System.nanoTime();
 
         try {
